@@ -13,13 +13,13 @@ public class LongUtils {
         return longUtils;
     }
 
-    public LongUtils with(Context _context) {
+    public static LongUtils with(Context _context) {
         LongUtils longUtils = new LongUtils();
         longUtils.context = _context;
         return longUtils;
     }
 
-    public LongUtils with(Core _core, Context _context) {
+    public static LongUtils with(Core _core, Context _context) {
         LongUtils longUtils = new LongUtils();
         longUtils.core = _core;
         longUtils.context = _context;

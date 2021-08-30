@@ -19,13 +19,13 @@ public class ActivityUtils {
         return activityUtils;
     }
 
-    public ActivityUtils with(Context _context) {
+    public static ActivityUtils with(Context _context) {
         ActivityUtils activityUtils = new ActivityUtils();
         activityUtils.context = _context;
         return activityUtils;
     }
 
-    public ActivityUtils with(Core _core, Context _context) {
+    public static ActivityUtils with(Core _core, Context _context) {
         ActivityUtils activityUtils = new ActivityUtils();
         activityUtils.core = _core;
         activityUtils.context = _context;

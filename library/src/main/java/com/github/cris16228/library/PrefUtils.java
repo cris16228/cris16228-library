@@ -6,19 +6,20 @@ public class PrefUtils {
 
     Core core;
     Context context;
+
     public static PrefUtils with(Core _core) {
         PrefUtils prefUtils = new PrefUtils();
         prefUtils.core = _core;
         return prefUtils;
     }
 
-    public PrefUtils with(Context _context) {
+    public static PrefUtils with(Context _context) {
         PrefUtils prefUtils = new PrefUtils();
         prefUtils.context = _context;
         return prefUtils;
     }
 
-    public PrefUtils with(Core _core, Context _context) {
+    public static PrefUtils with(Core _core, Context _context) {
         PrefUtils prefUtils = new PrefUtils();
         prefUtils.core = _core;
         prefUtils.context = _context;

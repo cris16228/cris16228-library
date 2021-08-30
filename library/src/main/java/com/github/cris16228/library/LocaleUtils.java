@@ -25,13 +25,13 @@ public class LocaleUtils {
         return localeUtils;
     }
 
-    public LocaleUtils with(Context _context) {
+    public static LocaleUtils with(Context _context) {
         LocaleUtils localeUtils = new LocaleUtils();
         localeUtils.context = _context;
         return localeUtils;
     }
 
-    public LocaleUtils with(Core _core, Context _context) {
+    public static LocaleUtils with(Core _core, Context _context) {
         LocaleUtils localeUtils = new LocaleUtils();
         localeUtils.core = _core;
         localeUtils.context = _context;

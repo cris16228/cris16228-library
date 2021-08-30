@@ -30,13 +30,13 @@ public class ThemeUtils {
         return themeUtils;
     }
 
-    public ThemeUtils with(Context _context) {
+    public static ThemeUtils with(Context _context) {
         ThemeUtils themeUtils = new ThemeUtils();
         themeUtils.context = _context;
         return themeUtils;
     }
 
-    public ThemeUtils with(Core _core, Context _context) {
+    public static ThemeUtils with(Core _core, Context _context) {
         ThemeUtils themeUtils = new ThemeUtils();
         themeUtils.core = _core;
         themeUtils.context = _context;
