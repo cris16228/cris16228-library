@@ -43,9 +43,9 @@ public class ThemeUtils {
         return themeUtils;
     }
 
-
     public ThemeUtils getTheme() {
         SharedPreferences pref = context.getSharedPreferences(core.PREF, MODE_PRIVATE);
+        System.out.println(pref.getString(THEME, LIGHT));
         switch (pref.getString(THEME, LIGHT)) {
             case DARK:
                 theme = Theme.DARK;
@@ -58,6 +58,7 @@ public class ThemeUtils {
     }
 
     public void applyTheme() {
+        System.out.println(theme.getClass().getSimpleName());
         if (theme == Theme.LIGHT)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         else if (theme == Theme.DARK)
