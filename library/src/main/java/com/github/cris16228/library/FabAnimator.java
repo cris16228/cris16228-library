@@ -18,9 +18,10 @@ public class FabAnimator {
     private Context context;
     private boolean clicked = false;
 
-    public FabAnimator with(Context _context) {
-        context = _context;
-        return this;
+    public static FabAnimator with(Context _context) {
+       FabAnimator fabAnimator = new FabAnimator();
+       fabAnimator.context = _context;
+       return fabAnimator;
     }
 
     public FabAnimator load() {
