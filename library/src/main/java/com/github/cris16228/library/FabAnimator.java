@@ -19,9 +19,9 @@ public class FabAnimator {
     private boolean clicked = false;
 
     public static FabAnimator with(Context _context) {
-       FabAnimator fabAnimator = new FabAnimator();
-       fabAnimator.context = _context;
-       return fabAnimator;
+        FabAnimator fabAnimator = new FabAnimator();
+        fabAnimator.context = _context;
+        return fabAnimator;
     }
 
     public FabAnimator load() {
@@ -43,6 +43,15 @@ public class FabAnimator {
     public FabAnimator onClick(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
         setVisibility(fab, clicked);
         setAnimation(main_fab, fab, clicked);
+        clicked = !clicked;
+        return this;
+    }
+
+    public FabAnimator onClicks(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        for (FloatingActionButton fab : fabs) {
+            setVisibility(fab, clicked);
+            setAnimation(main_fab, fab, clicked);
+        }
         clicked = !clicked;
         return this;
     }
