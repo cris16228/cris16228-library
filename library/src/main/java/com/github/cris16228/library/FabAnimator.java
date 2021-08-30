@@ -32,34 +32,21 @@ public class FabAnimator {
         return this;
     }
 
-    public View.OnClickListener  onClick(@NonNull FloatingActionButton fab) {
-        return v -> {
-            setVisibility(fab, clicked);
-            setAnimation(fab, clicked);
-            setClickable(fab, clicked);
-            clicked = !clicked;
-        };
+    public FabAnimator onClick(@NonNull FloatingActionButton fab, View.OnClickListener listener) {
+        fab.setOnClickListener(listener);
+        return this;
     }
 
-    public View.OnClickListener onClick(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
-        return v -> {
-            setVisibility(fab, clicked);
-            setAnimation(main_fab, fab, clicked);
-            setClickable(fab, clicked);
-            clicked = !clicked;
-        };
-    }
-
-    public View.OnClickListener onClicks(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
-
-        clicked = !clicked;
-        return v -> {
+    public FabAnimator animate(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        main_fab.setOnClickListener(v -> {
             for (FloatingActionButton fab : fabs) {
                 setVisibility(fab, clicked);
                 setAnimation(main_fab, fab, clicked);
                 setClickable(fab, clicked);
             }
-        };
+            clicked = !clicked;
+        });
+        return this;
     }
 
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
