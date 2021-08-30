@@ -54,23 +54,28 @@ public class PrefUtils {
         return context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).getLong(key, -1L);
     }
 
-    public void setString(String key, String value) {
+    public PrefUtils setString(String key, String value) {
         context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).edit().putString(key, value).apply();
+        return this;
     }
 
-    public void setInt(String key, int value) {
+    public PrefUtils setInt(String key, int value) {
         context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).edit().putInt(key, value).apply();
+        return this;
     }
 
-    public void setBoolean(String key, boolean value) {
+    public PrefUtils setBoolean(String key, boolean value) {
         context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).edit().putBoolean(key, value).apply();
+        return this;
     }
 
-    public void setFloat(String key, float value) {
+    public PrefUtils setFloat(String key, float value) {
         context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).edit().putFloat(key, value).apply();
+        return this;
     }
 
-    public void setLong(String key, long value) {
+    public PrefUtils setLong(String key, long value) {
         context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).edit().putLong(key, value).apply();
+        return this;
     }
 }

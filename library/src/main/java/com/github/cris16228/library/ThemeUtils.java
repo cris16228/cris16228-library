@@ -44,25 +44,25 @@ public class ThemeUtils {
     }
 
 
-    public Theme getTheme() {
+    public ThemeUtils getTheme() {
         SharedPreferences pref = context.getSharedPreferences(core.PREF, MODE_PRIVATE);
         switch (pref.getString(THEME, LIGHT)) {
             case DARK:
-                return Theme.DARK;
+                theme = Theme.DARK;
             case LIGHT:
-                return Theme.LIGHT;
+                theme = Theme.LIGHT;
             case AUTO:
-                return Theme.AUTO;
+                theme = Theme.AUTO;
         }
-        return Theme.LIGHT;
+        return this;
     }
 
     public void applyTheme() {
-        if (getTheme() == Theme.LIGHT)
+        if (theme == Theme.LIGHT)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        else if (getTheme() == Theme.DARK)
+        else if (theme == Theme.DARK)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        else if (getTheme() == Theme.AUTO)
+        else if (theme == Theme.AUTO)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 }
