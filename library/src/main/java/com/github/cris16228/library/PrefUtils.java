@@ -30,6 +30,10 @@ public class PrefUtils {
         core.PREF = pref;
     }
 
+    public boolean isKeyPresent(String key) {
+        return context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).contains(key);
+    }
+
     public String getString(String key) {
         return context.getSharedPreferences(core.PREF, Context.MODE_PRIVATE).getString(key, "");
     }
