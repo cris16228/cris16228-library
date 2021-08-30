@@ -24,49 +24,41 @@ public class ThemeUtils {
     Core core;
     Context context;
 
-    public static ThemeUtils with(Core _core) {
-        ThemeUtils themeUtils = new ThemeUtils();
-        themeUtils.core = _core;
-        return themeUtils;
-    }
-
-    public static ThemeUtils with(Context _context) {
-        ThemeUtils themeUtils = new ThemeUtils();
-        themeUtils.context = _context;
-        return themeUtils;
-    }
-
-    public static ThemeUtils with(Core _core, Context _context) {
-        ThemeUtils themeUtils = new ThemeUtils();
-        themeUtils.core = _core;
-        themeUtils.context = _context;
-        return themeUtils;
-    }
-
-    public ThemeUtils getTheme() {
-        SharedPreferences pref = context.getSharedPreferences(core.PREF, MODE_PRIVATE);
-        switch (pref.getString(THEME, LIGHT)) {
-            case DARK:
-                theme = Theme.DARK;
-            case LIGHT:
-                theme = Theme.LIGHT;
-            case AUTO:
-                theme = Theme.AUTO;
-        }
+    public ThemeUtils with(Core _core) {
+        core = _core;
         return this;
     }
 
-    public void applyTheme() {
-        switch (theme) {
-            case LIGHT:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
+    public ThemeUtils with(Context _context) {
+        context = _context;
+        return this;
+    }
+
+    public ThemeUtils with(Core _core, Context _context) {
+        context = _context;
+        core = _core;
+        return this;
+    }
+
+    public Theme getTheme() {
+        SharedPreferences pref = context.getSharedPreferences(core.PREF, MODE_PRIVATE);
+        switch (pref.getString(THEME, LIGHT)) {
             case DARK:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
+                return Theme.DARK;
+            case LIGHT:
+                return Theme.LIGHT;
             case AUTO:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
+                return Theme.AUTO;
         }
+        return Theme.LIGHT;
+    }
+
+    public void applyTheme() {
+        if (getTheme() == Theme.LIGHT)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        else if (getTheme() == Theme.DARK)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else if (getTheme() == Theme.AUTO)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 }
