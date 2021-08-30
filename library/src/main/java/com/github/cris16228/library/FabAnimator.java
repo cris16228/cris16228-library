@@ -32,31 +32,39 @@ public class FabAnimator {
         return this;
     }
 
-    public FabAnimator onClick(@NonNull FloatingActionButton fab) {
-        setVisibility(fab, clicked);
-        setAnimation(fab, clicked);
-        setClickable(fab, clicked);
-        clicked = !clicked;
-        return this;
+    public View.OnClickListener  onClick(@NonNull FloatingActionButton fab) {
+        return v -> {
+            setVisibility(fab, clicked);
+            setAnimation(fab, clicked);
+            setClickable(fab, clicked);
+            clicked = !clicked;
+        };
     }
 
-    public FabAnimator onClick(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
-        setVisibility(fab, clicked);
-        setAnimation(main_fab, fab, clicked);
-        clicked = !clicked;
-        return this;
-    }
-
-    public FabAnimator onClicks(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
-        for (FloatingActionButton fab : fabs) {
+    public View.OnClickListener onClick(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
+        return v -> {
             setVisibility(fab, clicked);
             setAnimation(main_fab, fab, clicked);
-        }
+            setClickable(fab, clicked);
+            clicked = !clicked;
+        };
+    }
+
+    public View.OnClickListener onClicks(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+
         clicked = !clicked;
-        return this;
+        return v -> {
+            for (FloatingActionButton fab : fabs) {
+                setVisibility(fab, clicked);
+                setAnimation(main_fab, fab, clicked);
+                setClickable(fab, clicked);
+            }
+        };
     }
 
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
+        if (main_fab == null) return;
+        if (fab == null) return;
         if (!clicked) {
             fab.startAnimation(from_bottom_anim);
             main_fab.startAnimation(rotate_open_anim);
@@ -67,6 +75,7 @@ public class FabAnimator {
     }
 
     private void setVisibility(FloatingActionButton fab, boolean clicked) {
+        if (fab == null) return;
         if (!clicked)
             fab.setVisibility(View.VISIBLE);
         else
@@ -74,6 +83,7 @@ public class FabAnimator {
     }
 
     private void setAnimation(FloatingActionButton fab, boolean clicked) {
+        if (fab == null) return;
         if (!clicked)
             fab.startAnimation(from_bottom_anim);
         else
@@ -81,6 +91,7 @@ public class FabAnimator {
     }
 
     private void setClickable(FloatingActionButton fab, boolean clicked) {
+        if (fab == null) return;
         fab.setClickable(!clicked);
     }
 }
