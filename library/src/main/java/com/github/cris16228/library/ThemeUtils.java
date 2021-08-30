@@ -24,21 +24,25 @@ public class ThemeUtils {
     Core core;
     Context context;
 
-    public ThemeUtils with(Core _core) {
-        core = _core;
-        return this;
+    public static ThemeUtils with(Core _core) {
+        ThemeUtils themeUtils = new ThemeUtils();
+        themeUtils.core = _core;
+        return themeUtils;
     }
 
     public ThemeUtils with(Context _context) {
-        context = _context;
-        return this;
+        ThemeUtils themeUtils = new ThemeUtils();
+        themeUtils.context = _context;
+        return themeUtils;
     }
 
     public ThemeUtils with(Core _core, Context _context) {
-        context = _context;
-        core = _core;
-        return this;
+        ThemeUtils themeUtils = new ThemeUtils();
+        themeUtils.core = _core;
+        themeUtils.context = _context;
+        return themeUtils;
     }
+
 
     public Theme getTheme() {
         SharedPreferences pref = context.getSharedPreferences(core.PREF, MODE_PRIVATE);

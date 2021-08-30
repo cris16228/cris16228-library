@@ -7,20 +7,23 @@ public class LongUtils {
     Core core;
     Context context;
 
-    public LongUtils with(Core _core) {
-        core = _core;
-        return this;
+    public static LongUtils with(Core _core) {
+        LongUtils longUtils = new LongUtils();
+        longUtils.core = _core;
+        return longUtils;
     }
 
     public LongUtils with(Context _context) {
-        context = _context;
-        return this;
+        LongUtils longUtils = new LongUtils();
+        longUtils.context = _context;
+        return longUtils;
     }
 
     public LongUtils with(Core _core, Context _context) {
-        context = _context;
-        core = _core;
-        return this;
+        LongUtils longUtils = new LongUtils();
+        longUtils.core = _core;
+        longUtils.context = _context;
+        return longUtils;
     }
 
     private void prependTimeAndUnit(StringBuffer timeBuf, long time, String unit) {

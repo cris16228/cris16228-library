@@ -13,21 +13,25 @@ public class ActivityUtils {
     Core core;
     Context context;
 
-    public ActivityUtils with(Core _core) {
-        core = _core;
-        return this;
+    public static ActivityUtils with(Core _core) {
+        ActivityUtils activityUtils = new ActivityUtils();
+        activityUtils.core = _core;
+        return activityUtils;
     }
 
     public ActivityUtils with(Context _context) {
-        context = _context;
-        return this;
+        ActivityUtils activityUtils = new ActivityUtils();
+        activityUtils.context = _context;
+        return activityUtils;
     }
 
     public ActivityUtils with(Core _core, Context _context) {
-        context = _context;
-        core = _core;
-        return this;
+        ActivityUtils activityUtils = new ActivityUtils();
+        activityUtils.core = _core;
+        activityUtils.context = _context;
+        return activityUtils;
     }
+
 
     public void restartApp(Context currentActivity, Class<?> destinationActivity) {
         ((Activity) currentActivity).finish();

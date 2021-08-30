@@ -6,21 +6,23 @@ public class PrefUtils {
 
     Core core;
     Context context;
-
-    public PrefUtils with(Core _core) {
-        core = _core;
-        return this;
+    public static PrefUtils with(Core _core) {
+        PrefUtils prefUtils = new PrefUtils();
+        prefUtils.core = _core;
+        return prefUtils;
     }
 
     public PrefUtils with(Context _context) {
-        context = _context;
-        return this;
+        PrefUtils prefUtils = new PrefUtils();
+        prefUtils.context = _context;
+        return prefUtils;
     }
 
     public PrefUtils with(Core _core, Context _context) {
-        context = _context;
-        core = _core;
-        return this;
+        PrefUtils prefUtils = new PrefUtils();
+        prefUtils.core = _core;
+        prefUtils.context = _context;
+        return prefUtils;
     }
 
     public void setSharedPref(String pref) {
