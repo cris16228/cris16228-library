@@ -63,35 +63,40 @@ public class FabAnimator {
     }
 
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
-        if (main_fab == null) return;
-        if (fab == null) return;
         if (!clicked) {
-            fab.startAnimation(from_bottom_anim);
-            main_fab.startAnimation(rotate_open_anim);
+            if (fab != null)
+                fab.startAnimation(from_bottom_anim);
+            if (main_fab != null)
+                main_fab.startAnimation(rotate_open_anim);
         } else {
-            fab.startAnimation(to_bottom_anim);
-            main_fab.startAnimation(rotate_close_anim);
+            if (fab != null)
+                fab.startAnimation(to_bottom_anim);
+            if (main_fab != null)
+                main_fab.startAnimation(rotate_close_anim);
         }
     }
 
     private void setVisibility(FloatingActionButton fab, boolean clicked) {
-        if (fab == null) return;
-        if (!clicked)
-            fab.setVisibility(View.VISIBLE);
-        else
-            fab.setVisibility(View.INVISIBLE);
+        if (fab != null) {
+            if (!clicked)
+                fab.setVisibility(View.VISIBLE);
+            else
+                fab.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setAnimation(FloatingActionButton fab, boolean clicked) {
-        if (fab == null) return;
-        if (!clicked)
-            fab.startAnimation(from_bottom_anim);
-        else
-            fab.startAnimation(to_bottom_anim);
+        if (fab != null) {
+            if (!clicked)
+                fab.startAnimation(from_bottom_anim);
+            else
+                fab.startAnimation(to_bottom_anim);
+        }
+
     }
 
     private void setClickable(FloatingActionButton fab, boolean clicked) {
-        if (fab == null) return;
-        fab.setClickable(!clicked);
+        if (fab != null)
+            fab.setClickable(!clicked);
     }
 }
