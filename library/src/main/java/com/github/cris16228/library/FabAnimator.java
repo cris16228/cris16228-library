@@ -49,6 +49,19 @@ public class FabAnimator {
         return this;
     }
 
+
+    public FabAnimator animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        main_fab.setOnClickListener(v -> {
+            for (FloatingActionButton fab : fabs) {
+                setVisibility(fab, !clicked);
+                setAnimation(main_fab, fab, !clicked);
+                setClickable(fab, !clicked);
+            }
+            clicked = !clicked;
+        });
+        return this;
+    }
+
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
         if (main_fab == null) return;
         if (fab == null) return;
