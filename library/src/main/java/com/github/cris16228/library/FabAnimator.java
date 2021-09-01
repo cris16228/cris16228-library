@@ -38,6 +38,19 @@ public class FabAnimator {
     }
 
     public FabAnimator animate(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        main_fab.setOnClickListener(v -> {
+            for (FloatingActionButton fab : fabs) {
+                setVisibility(fab, clicked);
+                setAnimation(main_fab, fab, clicked);
+                setClickable(fab, clicked);
+            }
+            clicked = !clicked;
+        });
+        return this;
+    }
+
+
+    public FabAnimator animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
         clicked = !clicked;
         main_fab.setOnClickListener(v -> {
             for (FloatingActionButton fab : fabs) {
@@ -45,19 +58,6 @@ public class FabAnimator {
                 setAnimation(main_fab, fab, clicked);
                 setClickable(fab, clicked);
             }
-        });
-        return this;
-    }
-
-
-    public FabAnimator animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
-        main_fab.setOnClickListener(v -> {
-            for (FloatingActionButton fab : fabs) {
-                setVisibility(fab, !clicked);
-                setAnimation(main_fab, fab, !clicked);
-                setClickable(fab, !clicked);
-            }
-            clicked = !clicked;
         });
         return this;
     }
