@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -89,5 +90,17 @@ public class ActivityUtils {
         Intent activity = new Intent(currentActivity, destinationActivity);
         activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         currentActivity.startActivity(activity);
+    }
+
+    public void startActivity(Context currentActivity, Class<?> destinationActivity, boolean finish) {
+        Intent activity = new Intent(currentActivity, destinationActivity);
+        activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        currentActivity.startActivity(activity);
+        if (finish)
+            try {
+                ((Activity) context).finish();
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), e.toString());
+            }
     }
 }

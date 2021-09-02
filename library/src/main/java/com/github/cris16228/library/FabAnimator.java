@@ -1,6 +1,7 @@
 package com.github.cris16228.library;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -65,14 +66,34 @@ public class FabAnimator {
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
         if (!clicked) {
             if (fab != null)
-                fab.startAnimation(from_bottom_anim);
+                if (from_bottom_anim != null)
+                    fab.startAnimation(from_bottom_anim);
+                else
+                    Log.e(getClass().getSimpleName(), "\"from_bottom_anim\" animation is null!");
+            else
+                Log.e(getClass().getSimpleName(), "fab is null!");
             if (main_fab != null)
-                main_fab.startAnimation(rotate_open_anim);
+                if (rotate_open_anim != null)
+                    main_fab.startAnimation(rotate_open_anim);
+                else
+                    Log.e(getClass().getSimpleName(), "\"rotate_open_anim\" animation is null!");
+            else
+                Log.e(getClass().getSimpleName(), "main_fab is null!");
         } else {
             if (fab != null)
-                fab.startAnimation(to_bottom_anim);
+                if (to_bottom_anim != null)
+                    fab.startAnimation(to_bottom_anim);
+                else
+                    Log.e(getClass().getSimpleName(), "\"to_bottom_anim\" animation is null!");
+            else
+                Log.e(getClass().getSimpleName(), "fab is null!");
             if (main_fab != null)
-                main_fab.startAnimation(rotate_close_anim);
+                if (rotate_close_anim != null)
+                    main_fab.startAnimation(rotate_close_anim);
+                else
+                    Log.e(getClass().getSimpleName(), "\"rotate_close_anim\" animation is null!");
+            else
+                Log.e(getClass().getSimpleName(), "main_fab is null!");
         }
     }
 
