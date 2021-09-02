@@ -71,13 +71,11 @@ public class FabAnimator {
 
     public FabAnimator animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
         clicked = false;
-        main_fab.setOnClickListener(v -> {
-            for (FloatingActionButton fab : fabs) {
-                setVisibility(fab, clicked);
-                setAnimation(main_fab, fab, clicked);
-                setClickable(fab, clicked);
-            }
-        });
+        for (FloatingActionButton fab : fabs) {
+            setVisibility(fab, clicked);
+            setAnimation(main_fab, fab, clicked);
+            setClickable(fab, clicked);
+        }
         return this;
     }
 
