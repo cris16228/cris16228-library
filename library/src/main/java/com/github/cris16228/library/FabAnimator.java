@@ -18,12 +18,23 @@ public class FabAnimator {
     private Animation to_bottom_anim;
     private Context context;
     private boolean clicked = false;
+    private FloatingActionButton _main_fab;
+    private FloatingActionButton[] _fabs;
 
     public static FabAnimator with(Context _context) {
         FabAnimator fabAnimator = new FabAnimator();
         fabAnimator.context = _context;
         return fabAnimator;
     }
+
+    public static FabAnimator with(Context _context, @NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        FabAnimator fabAnimator = new FabAnimator();
+        fabAnimator.context = _context;
+        fabAnimator._main_fab = main_fab;
+        fabAnimator._fabs = fabs;
+        return fabAnimator;
+    }
+
 
     public FabAnimator load() {
         rotate_open_anim = AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim);
@@ -35,6 +46,13 @@ public class FabAnimator {
 
     public FabAnimator onClick(@NonNull FloatingActionButton fab, View.OnClickListener listener) {
         fab.setOnClickListener(listener);
+        return this;
+    }
+
+    public FabAnimator onClick(@NonNull FloatingActionButton fab, boolean animateClose, View.OnClickListener listener) {
+        fab.setOnClickListener(listener);
+        if (animateClose)
+            animateClose(_main_fab, _fabs);
         return this;
     }
 
@@ -52,7 +70,7 @@ public class FabAnimator {
 
 
     public FabAnimator animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
-        clicked = !clicked;
+        clicked = false;
         main_fab.setOnClickListener(v -> {
             for (FloatingActionButton fab : fabs) {
                 setVisibility(fab, clicked);
