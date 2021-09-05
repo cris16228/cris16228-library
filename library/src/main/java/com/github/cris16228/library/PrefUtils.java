@@ -7,11 +7,6 @@ public class PrefUtils {
     public String PREF = "";
     Context context;
 
-    public static PrefUtils with(Core _core) {
-        PrefUtils prefUtils = new PrefUtils();
-        return prefUtils;
-    }
-
     public static PrefUtils with(Context _context) {
         PrefUtils prefUtils = new PrefUtils();
         prefUtils.context = _context;
