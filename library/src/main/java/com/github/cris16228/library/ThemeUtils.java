@@ -21,31 +21,32 @@ public class ThemeUtils {
     public final String DARK = "dark";
     public final String AUTO = "follow_system";
     public Theme theme;
-    Core core;
+    private PrefUtils prefUtils;
     Context context;
 
-    public static ThemeUtils with(Core _core) {
+    public static ThemeUtils with(PrefUtils prefUtils) {
         ThemeUtils themeUtils = new ThemeUtils();
-        themeUtils.core = _core;
+        themeUtils.prefUtils = prefUtils;
         return themeUtils;
     }
 
     public static ThemeUtils with(Context _context) {
         ThemeUtils themeUtils = new ThemeUtils();
         themeUtils.context = _context;
+        if (themeUtils.prefUtils == null)
+            themeUtils.prefUtils = new PrefUtils();
         return themeUtils;
     }
 
-    public static ThemeUtils with(Core _core, Context _context) {
+    public static ThemeUtils with(PrefUtils _prefUtils, Context _context) {
         ThemeUtils themeUtils = new ThemeUtils();
-        themeUtils.core = _core;
+        themeUtils.prefUtils = _prefUtils;
         themeUtils.context = _context;
         return themeUtils;
     }
 
-
     public Theme getTheme() {
-        SharedPreferences pref = context.getSharedPreferences(core.PREF, MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences(prefUtils.PREF, MODE_PRIVATE);
         switch (pref.getString(THEME, LIGHT)) {
             case DARK:
                 return Theme.DARK;

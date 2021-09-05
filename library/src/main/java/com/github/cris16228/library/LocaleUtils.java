@@ -15,32 +15,26 @@ public class LocaleUtils {
     public final String LOCALE = "locale";
     public final String EN = "en";
     public final String IT = "it";
-
-    Core core;
+    PrefUtils prefUtils;
     Context context;
-
-    public static LocaleUtils with(Core _core) {
-        LocaleUtils localeUtils = new LocaleUtils();
-        localeUtils.core = _core;
-        return localeUtils;
-    }
 
     public static LocaleUtils with(Context _context) {
         LocaleUtils localeUtils = new LocaleUtils();
         localeUtils.context = _context;
+        if (localeUtils.prefUtils == null)
+            localeUtils.prefUtils = new PrefUtils();
         return localeUtils;
     }
 
-    public static LocaleUtils with(Core _core, Context _context) {
+    public static LocaleUtils with(PrefUtils _prefUtils, Context _context) {
         LocaleUtils localeUtils = new LocaleUtils();
-        localeUtils.core = _core;
+        localeUtils.prefUtils = _prefUtils;
         localeUtils.context = _context;
         return localeUtils;
     }
 
-
     public void onStartSetLocale() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(core.PREF, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(prefUtils.PREF, MODE_PRIVATE);
         String language = sharedPreferences.getString(LOCALE, EN);
         setLocale(language);
     }

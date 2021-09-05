@@ -35,7 +35,6 @@ public class FabAnimator {
         return fabAnimator;
     }
 
-
     public FabAnimator load() {
         rotate_open_anim = AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim);
         rotate_close_anim = AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim);
@@ -52,7 +51,7 @@ public class FabAnimator {
     public FabAnimator onClick(@NonNull FloatingActionButton fab, boolean animateClose, View.OnClickListener listener) {
         fab.setOnClickListener(listener);
         if (animateClose)
-            animateClose(_main_fab, _fabs);
+           return animateClose(_main_fab, _fabs);
         return this;
     }
 
@@ -67,7 +66,6 @@ public class FabAnimator {
         });
         return this;
     }
-
 
     public FabAnimator animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
         clicked = false;

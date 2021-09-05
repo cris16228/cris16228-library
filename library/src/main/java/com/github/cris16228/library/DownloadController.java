@@ -17,7 +17,6 @@ public class DownloadController {
 
     private final Context context;
     private final String url;
-    private final String s = "/";
     private final String app_name;
 
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name) {
@@ -27,7 +26,7 @@ public class DownloadController {
     }
 
     public final void enqueueDownload() {
-        String destination = Environment.getExternalStorageDirectory().getAbsolutePath() + s + app_name + s + ".updates/";
+        String destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app_name + "/" + ".updates/";
         System.out.println(destination);
         File path = new File(destination);
         if (!path.exists()) {

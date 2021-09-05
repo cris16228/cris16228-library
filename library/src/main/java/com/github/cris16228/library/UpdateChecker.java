@@ -3,6 +3,7 @@ package com.github.cris16228.library;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.JsonElement;
@@ -19,10 +20,10 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
 
     private final WeakReference<Activity> weakActivity;
     private final Download download;
-    String json_link = "http://192.168.1.8/update.json";
-    String download_link = "http://192.168.1.8/update.apk";
+    String json_link;
+    String download_link;
     DownloadController downloadController;
-    Core core;
+    NetworkUtils networkUtils;
     private int patch = 0;
     private String version = "";
 
@@ -30,18 +31,40 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
     private String app_version = "";
     private String app_name = "";
 
-    public UpdateChecker(Activity activity, Download download, int _patch, String _version, String _app_name) {
+    public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name) {
         this.weakActivity = new WeakReference<>(activity);
+        this.json_link = _json_link;
+        this.download_link = _download_link;
         this.download = download;
-        app_patch = _patch;
-        app_version = _version;
-        app_name = _app_name;
+        this.app_patch = _patch;
+        this.app_version = _version;
+        this.app_name = _app_name;
+        if (networkUtils == null)
+            networkUtils = new NetworkUtils();
+    }
+
+    public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name,
+                         NetworkUtils _networkUtils) {
+        this.weakActivity = new WeakReference<>(activity);
+        this.json_link = _json_link;
+        this.download_link = _download_link;
+        this.download = download;
+        this.app_patch = _patch;
+        this.app_version = _version;
+        this.app_name = _app_name;
+        this.networkUtils = _networkUtils;
     }
 
     @Override
     protected Integer doInBackground(Integer... integers) {
-        if (core == null)
-            core = new Core();
+        if (TextUtils.isEmpty(json_link)) {
+            Log.e(UpdateChecker.class.getSimpleName(), weakActivity.get().getResources().getString(R.string.json_link_invalid));
+            return null;
+        }
+        if (TextUtils.isEmpty(download_link)) {
+            Log.e(UpdateChecker.class.getSimpleName(), weakActivity.get().getResources().getString(R.string.download_link_invalid));
+            return null;
+        }
         if (download == Download.JSON) {
             try {
                 version = getNewVersion(json_link);
@@ -58,6 +81,8 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
+        if (result == null)
+            return;
         Activity activity = weakActivity.get();
         if (activity == null
                 || activity.isFinishing()
@@ -71,13 +96,13 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
                     activity.getApplicationContext().getResources().getString(R.string.patch)));
             new_update.setPositiveButton(R.string.ok, (dialog, which) -> {
-                if (core.no_internet == null)
-                    core.showNoInternet(activity);
-                if (core.isConnectedTo(activity.getApplicationContext())) {
-                    UpdateChecker checker = new UpdateChecker(activity, Download.UPDATE, app_patch, app_version, app_name);
+                if (networkUtils.no_internet == null)
+                    networkUtils.showNoInternet(activity);
+                if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
+                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
                     checker.execute();
                 } else
-                    core.no_internet.show();
+                    networkUtils.no_internet.show();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });
@@ -89,13 +114,13 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
                     activity.getApplicationContext().getResources().getString(R.string.app_update)));
             new_update.setPositiveButton(R.string.ok, (dialog, which) -> {
-                if (core.no_internet == null)
-                    core.showNoInternet(activity);
-                if (core.isConnectedTo(activity.getApplicationContext())) {
-                    UpdateChecker checker = new UpdateChecker(activity, Download.UPDATE, app_patch, app_version, app_name);
+                if (networkUtils.no_internet == null)
+                    networkUtils.showNoInternet(activity);
+                if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
+                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
                     checker.execute();
                 } else
-                    core.no_internet.show();
+                    networkUtils.no_internet.show();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });

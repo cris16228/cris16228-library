@@ -11,14 +11,7 @@ import android.view.WindowManager;
 
 public class ActivityUtils {
 
-    Core core;
     Context context;
-
-    public static ActivityUtils with(Core _core) {
-        ActivityUtils activityUtils = new ActivityUtils();
-        activityUtils.core = _core;
-        return activityUtils;
-    }
 
     public static ActivityUtils with(Context _context) {
         ActivityUtils activityUtils = new ActivityUtils();
@@ -26,19 +19,10 @@ public class ActivityUtils {
         return activityUtils;
     }
 
-    public static ActivityUtils with(Core _core, Context _context) {
-        ActivityUtils activityUtils = new ActivityUtils();
-        activityUtils.core = _core;
-        activityUtils.context = _context;
-        return activityUtils;
-    }
-
-
     public void restartApp(Context currentActivity, Class<?> destinationActivity) {
         ((Activity) currentActivity).finish();
         startActivity(currentActivity, destinationActivity);
     }
-
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish) {
         if (delay <= 0) {

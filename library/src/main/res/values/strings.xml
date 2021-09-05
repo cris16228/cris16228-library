@@ -13,4 +13,6 @@
     <string name="updater_title">%s update</string>
     <string name="patch">patch</string>
     <string name="app_update">app update</string>
+    <string name="json_link_invalid">Invalid json link!</string>
+    <string name="download_link_invalid">Invalid download link!</string>
 </resources>
