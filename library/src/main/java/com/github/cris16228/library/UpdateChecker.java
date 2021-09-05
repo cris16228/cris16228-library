@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -81,13 +82,15 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
-        if (result == null)
-            return;
         Activity activity = weakActivity.get();
         if (activity == null
                 || activity.isFinishing()
                 || activity.isDestroyed()) {
             // activity is no longer valid, don't do anything!
+            return;
+        }
+        if (result == null) {
+            Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
             return;
         }
         if (result > 0 && result > app_patch && download == Download.JSON) {

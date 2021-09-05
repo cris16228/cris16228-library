@@ -14,6 +14,9 @@ public class NetworkReceiver extends BroadcastReceiver {
     private String json_link;
     private String download_link;
 
+    public NetworkReceiver() {
+    }
+
     public NetworkReceiver(String _json_link, String _download_link, int app_patch, String app_version, String app_name) {
         this.json_link = _json_link;
         this.download_link = _download_link;
