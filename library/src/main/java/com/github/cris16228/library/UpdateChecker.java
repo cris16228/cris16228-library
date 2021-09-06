@@ -1,5 +1,6 @@
 package com.github.cris16228.library;
 
+import android.Manifest;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -11,11 +12,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.util.List;
 
 public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
 
@@ -99,13 +106,26 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
                     activity.getApplicationContext().getResources().getString(R.string.patch)));
             new_update.setPositiveButton(R.string.ok, (dialog, which) -> {
-                if (networkUtils.no_internet == null)
-                    networkUtils.showNoInternet(activity);
-                if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
-                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                    checker.execute();
-                } else
-                    networkUtils.no_internet.show();
+                Dexter.withContext(activity).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                            if (networkUtils.no_internet == null)
+                                networkUtils.showNoInternet(activity);
+                            if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
+                                UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
+                                checker.execute();
+                            } else
+                                networkUtils.no_internet.show();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
+                    }
+                }).check();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });
@@ -117,13 +137,26 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
                     activity.getApplicationContext().getResources().getString(R.string.app_update)));
             new_update.setPositiveButton(R.string.ok, (dialog, which) -> {
-                if (networkUtils.no_internet == null)
-                    networkUtils.showNoInternet(activity);
-                if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
-                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                    checker.execute();
-                } else
-                    networkUtils.no_internet.show();
+                Dexter.withContext(activity).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                            if (networkUtils.no_internet == null)
+                                networkUtils.showNoInternet(activity);
+                            if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
+                                UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
+                                checker.execute();
+                            } else
+                                networkUtils.no_internet.show();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
+                    }
+                }).check();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });
