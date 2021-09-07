@@ -111,6 +111,7 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                         if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                            new_update.create().dismiss();
                             if (networkUtils.no_internet == null)
                                 networkUtils.showNoInternet(activity);
                             if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
@@ -128,8 +129,9 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
                 }).check();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
-            });
-            new_update.show();
+            }).create();
+
+            new_update.create().show();
         }
         if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
             MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
@@ -142,6 +144,7 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                         if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                            new_update.create().dismiss();
                             if (networkUtils.no_internet == null)
                                 networkUtils.showNoInternet(activity);
                             if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
@@ -160,7 +163,7 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });
-            new_update.show();
+            new_update.create().show();
         }
     }
 

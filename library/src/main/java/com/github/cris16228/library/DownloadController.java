@@ -52,7 +52,6 @@ public class DownloadController {
     private void showInstallOption(String destination) {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-
                 Uri contentUri = FileProvider.getUriForFile(
                         context,
                         BuildConfig.LIBRARY_PACKAGE_NAME + ".provider",
