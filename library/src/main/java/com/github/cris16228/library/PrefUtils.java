@@ -25,24 +25,24 @@ public class PrefUtils {
         return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).contains(key);
     }
 
-    public String getString(String key) {
-        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getString(key, "");
+    public String getString(String key, String value) {
+        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getString(key, value);
     }
 
-    public Integer getInt(String key) {
-        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getInt(key, -1);
+    public Integer getInt(String key, Integer value) {
+        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getInt(key, value);
     }
 
-    public Boolean getBoolean(String key) {
-        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getBoolean(key, false);
+    public Boolean getBoolean(String key, boolean value) {
+        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getBoolean(key, value);
     }
 
-    public Float getFloat(String key) {
-        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getFloat(key, -1.0F);
+    public Float getFloat(String key, float value) {
+        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getFloat(key, value);
     }
 
-    public Long getLong(String key) {
-        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getLong(key, -1L);
+    public Long getLong(String key, long value) {
+        return context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getLong(key, value);
     }
 
     public PrefUtils setString(String key, String value) {
