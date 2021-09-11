@@ -102,10 +102,7 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
                 new_update.create().dismiss();
                 if (networkUtils.no_internet == null)
                     networkUtils.showNoInternet(activity);
-                if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
-                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                    checker.execute();
-                } else
+                if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
                     networkUtils.no_internet.show();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
@@ -122,10 +119,7 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
                 new_update.create().dismiss();
                 if (networkUtils.no_internet == null)
                     networkUtils.showNoInternet(activity);
-                if (networkUtils.isConnectedTo(activity.getApplicationContext())) {
-                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                    checker.execute();
-                } else
+                if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
                     networkUtils.no_internet.show();
             });
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {

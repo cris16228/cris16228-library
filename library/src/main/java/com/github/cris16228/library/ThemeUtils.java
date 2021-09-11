@@ -59,9 +59,9 @@ public class ThemeUtils {
     }
 
     public void applyTheme() {
-        if (getTheme() == Theme.LIGHT)
+        if (getTheme() == Theme.LIGHT && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        else if (getTheme() == Theme.DARK)
+        else if (getTheme() == Theme.DARK && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         else if (getTheme() == Theme.AUTO)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
