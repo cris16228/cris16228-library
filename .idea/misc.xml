@@ -4,6 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/button_background.xml" value="0.126" />
+        <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_dot_gray.xml" value="0.1585" />
+        <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_dot_overlay.xml" value="0.1585" />
+        <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_number.xml" value="0.113" />
+        <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/wifi.xml" value="0.1585" />
+        <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/layout/layout_passcode.xml" value="0.22" />
         <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/layout/no_internet_connection.xml" value="0.21145833333333333" />
       </map>
     </option>
