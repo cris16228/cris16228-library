@@ -2,7 +2,7 @@ package com.github.cris16228.library;
 
 import android.util.Base64;
 
-public class Base64Util {
+public class Base64Utils {
 
     private static final String UNICODE_FORMAT = "UTF8";
 
