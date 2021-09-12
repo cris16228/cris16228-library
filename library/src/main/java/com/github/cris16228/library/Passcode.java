@@ -45,9 +45,9 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Passcode);
         try {
             passcode = typedArray.getString(R.styleable.Passcode_pass);
-            background = typedArray.getColor(R.styleable.Passcode_background, background);
-            overlay = typedArray.getColor(R.styleable.Passcode_overlay, overlay);
-            error = typedArray.getColor(R.styleable.Passcode_error, error);
+            background = typedArray.getColor(R.styleable.Passcode_passcode_background, background);
+            overlay = typedArray.getColor(R.styleable.Passcode_passcode_overlay, overlay);
+            error = typedArray.getColor(R.styleable.Passcode_passcode_error, error);
         } finally {
             typedArray.recycle();
         }
