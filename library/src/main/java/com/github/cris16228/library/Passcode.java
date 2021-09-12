@@ -3,6 +3,7 @@ package com.github.cris16228.library;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -11,6 +12,8 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -30,6 +33,10 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
     int background = 0xFFAAAAAA;
     int overlay = 0xFF448AFF;
     int error = 0xFFF24055;
+
+    Drawable code_background;
+    Drawable code_overlay;
+    Drawable code_error;
 
     public Passcode(@NonNull Context context) {
         super(context);
@@ -63,6 +70,21 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
     private void initView(Context context) {
         code = new char[4];
         View view = inflate(context, R.layout.layout_passcode, this);
+
+        code_background = ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_background, null);
+        if (code_background != null) {
+            DrawableCompat.setTint(code_background, Color.parseColor(String.format("#%06X", (0xFFFFFF & background))));
+        }
+        code_overlay = ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_overlay, null);
+        if (code_overlay != null) {
+            DrawableCompat.setTint(code_overlay, Color.parseColor(String.format("#%06X", (0xFFFFFF & overlay))));
+        }
+        code_error = ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_overlay, null);
+        if (code_error != null) {
+            DrawableCompat.setTint(code_error, Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
+        }
+
+
         dot_1 = view.findViewById(R.id.dot_1);
         dot_2 = view.findViewById(R.id.dot_2);
         dot_3 = view.findViewById(R.id.dot_3);
@@ -138,30 +160,33 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
 
     private void passNumber(ArrayList<String> numbers_list) {
         if (numbers_list.size() <= 0) {
-            dot_1.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & background))));
-            dot_2.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & background))));
-            dot_3.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & background))));
-            dot_4.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & background))));
+            dot_1.setBackgroundResource(R.drawable.passcode_background);
+            dot_2.setBackgroundResource(R.drawable.passcode_background);
+            dot_3.setBackgroundResource(R.drawable.passcode_background);
+            dot_4.setBackgroundResource(R.drawable.passcode_background);
         } else
             switch (numbers_list.size()) {
                 case 1:
+                    dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                    break;
                 case 2:
+                    dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                    break;
                 case 3:
-                    dot_1.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & overlay))));
+                    dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                     break;
                 case 4:
+                    dot_1.setBackgroundResource(R.drawable.passcode_overlay);
                     code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
-                    dot_1.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & overlay))));
                     Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
                     if (!TextUtils.isEmpty(passcode)) {
                         if (Arrays.toString(code).equals(decoder.decrypt(passcode)))
                             onPasswordListener.onPasswordMatch();
                         else {
-
-                            dot_1.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
-                            dot_2.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
-                            dot_3.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
-                            dot_4.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
+                            dot_1.setBackgroundResource(R.drawable.passcode_error);
+                            dot_2.setBackgroundResource(R.drawable.passcode_error);
+                            dot_3.setBackgroundResource(R.drawable.passcode_error);
+                            dot_4.setBackgroundResource(R.drawable.passcode_error);
                             new Handler().postDelayed(() -> {
                                 numbers_list.clear();
                                 passNumber(numbers_list);
