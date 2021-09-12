@@ -85,7 +85,6 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
             DrawableCompat.setTint(code_error, Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
         }
 
-
         dot_1 = view.findViewById(R.id.dot_1);
         dot_2 = view.findViewById(R.id.dot_2);
         dot_3 = view.findViewById(R.id.dot_3);
@@ -169,18 +168,22 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
             switch (numbers_list.size()) {
                 case 1:
                     dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                    System.out.println("You typed \"" + Arrays.toString(code) + "\"");
                     break;
                 case 2:
                     dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                    System.out.println("You typed \"" + Arrays.toString(code) + "\"");
                     break;
                 case 3:
                     dot_3.setBackgroundResource(R.drawable.passcode_overlay);
+                    System.out.println("You typed \"" + Arrays.toString(code) + "\"");
                     break;
                 case 4:
                     dot_1.setBackgroundResource(R.drawable.passcode_overlay);
                     code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
                     Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
                     if (!TextUtils.isEmpty(passcode)) {
+                        System.out.println("You typed \"" + Arrays.toString(code) + "\" but the password is \"" + decoder.decrypt(passcode, Base64.DEFAULT) + "\"");
                         if (Arrays.toString(code).equals(decoder.decrypt(passcode, Base64.DEFAULT)))
                             onPasswordListener.onPasswordMatch();
                         else {
