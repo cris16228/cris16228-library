@@ -144,17 +144,13 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         } else
             switch (numbers_list.size()) {
                 case 1:
-                    dot_1.setBackgroundColor(Integer.parseInt(String.format("#%06X", (0xFFFFFF & overlay))));
-                    break;
                 case 2:
-                    dot_2.setBackgroundColor(Integer.parseInt(String.format("#%06X", (0xFFFFFF & overlay))));
-                    break;
                 case 3:
-                    dot_3.setBackgroundColor(Integer.parseInt(String.format("#%06X", (0xFFFFFF & overlay))));
+                    dot_1.setBackgroundColor(Integer.parseInt(String.format("#%06X", (0xFFFFFF & overlay))));
                     break;
                 case 4:
                     code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
-                    dot_4.setBackgroundColor(Integer.parseInt(String.format("#%06X", (0xFFFFFF & overlay))));
+                    dot_1.setBackgroundColor(Integer.parseInt(String.format("#%06X", (0xFFFFFF & overlay))));
                     Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
                     if (!TextUtils.isEmpty(passcode)) {
                         if (Arrays.toString(code).equals(decoder.decrypt(passcode)))

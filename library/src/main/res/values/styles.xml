@@ -10,6 +10,12 @@
         <item name="behavior_peekHeight">512dp</item>
     </style>
 
+    <style name="Theme.Library.TextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <style name="roundedCornersImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">30dp</item>
