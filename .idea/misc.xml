@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/button_background.xml" value="0.126" />
+        <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_dot_background.xml" value="0.115" />
         <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_dot_gray.xml" value="0.1585" />
         <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_dot_overlay.xml" value="0.1585" />
         <entry key="..\:/Users/cpiva/AndroidStudioProjects/CommonUtils/library/src/main/res/drawable/passcode_number.xml" value="0.113" />
