@@ -2,8 +2,8 @@
 <resources>
     <declare-styleable name="Passcode">
         <attr name="pass" format="string" />
-        <attr name="background" format="color" />
-        <attr name="overlay" format="color" />
-        <attr name="error" format="color" />
+        <attr name="passcode_background" format="color" />
+        <attr name="passcode_overlay" format="color" />
+        <attr name="passcode_error" format="color" />
     </declare-styleable>
 </resources>
