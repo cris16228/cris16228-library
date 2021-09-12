@@ -17,32 +17,32 @@
 
             <View
                 android:id="@+id/dot_1"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_dot_background" />
 
             <View
                 android:id="@+id/dot_2"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_dot_background" />
 
             <View
                 android:id="@+id/dot_3"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_dot_background" />
 
             <View
                 android:id="@+id/dot_4"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_dot_background" />
