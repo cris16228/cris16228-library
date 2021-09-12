@@ -12,7 +12,7 @@ public class Base64Utils {
             String encryptedString = null;
             try {
                 byte[] plainText = unencryptedString.getBytes(UNICODE_FORMAT);
-                encryptedString = new String(Base64.encode(plainText, Base64.DEFAULT));
+                encryptedString = Base64.encodeToString(plainText, Base64.DEFAULT);
             } catch (Exception e) {
                 e.printStackTrace();
             }
