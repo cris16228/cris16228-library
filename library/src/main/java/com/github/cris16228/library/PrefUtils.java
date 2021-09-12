@@ -4,12 +4,19 @@ import android.content.Context;
 
 public class PrefUtils {
 
-    public String PREF = "";
+    public static String PREF = "";
     Context context;
 
     public static PrefUtils with(Context _context) {
         PrefUtils prefUtils = new PrefUtils();
         prefUtils.context = _context;
+        return prefUtils;
+    }
+
+    public static PrefUtils with(Context _context, String pref) {
+        PrefUtils prefUtils = new PrefUtils();
+        prefUtils.context = _context;
+        PREF = pref;
         return prefUtils;
     }
 
