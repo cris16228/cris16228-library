@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 public class Passcode extends FrameLayout implements View.OnClickListener {
 
+    onPasswordListener onPasswordListener;
     public String _pass = "";
     View dot_1, dot_2, dot_3, dot_4;
     MaterialButton btn_number_1, btn_number_2, btn_number_3, btn_number_4, btn_number_5, btn_number_6, btn_number_7, btn_number_8, btn_number_9, btn_number_0,
@@ -120,35 +121,50 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         }
     }
 
-    private boolean passNumber(ArrayList<String> numbers_list) {
+    public void onPasswordListener(onPasswordListener _onPasswordListener) {
+        onPasswordListener = _onPasswordListener;
+
+    }
+
+    private void passNumber(ArrayList<String> numbers_list) {
         if (numbers_list == null) {
             dot_1.setBackgroundResource(R.drawable.passcode_dot_background);
             dot_2.setBackgroundResource(R.drawable.passcode_dot_background);
             dot_3.setBackgroundResource(R.drawable.passcode_dot_background);
             dot_4.setBackgroundResource(R.drawable.passcode_dot_background);
-            return false;
         } else
             switch (numbers_list.size()) {
                 case 1:
                     pass[0] = numbers_list.get(0);
                     dot_1.setBackgroundResource(R.drawable.passcode_dot_overlay);
-                    return false;
+                    break;
                 case 2:
                     pass[2] = numbers_list.get(1);
                     dot_2.setBackgroundResource(R.drawable.passcode_dot_overlay);
-                    return false;
+                    break;
                 case 3:
                     pass[3] = numbers_list.get(2);
                     dot_3.setBackgroundResource(R.drawable.passcode_dot_overlay);
-                    return false;
+                    break;
                 case 4:
                     pass[4] = numbers_list.get(3);
                     dot_4.setBackgroundResource(R.drawable.passcode_dot_overlay);
                     Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
-                    if (!TextUtils.isEmpty(_pass))
-                        return Arrays.toString(pass).equals(decoder.decrypt(_pass));
-                    return false;
+                    if (!TextUtils.isEmpty(_pass)) {
+                        if (Arrays.toString(pass).equals(decoder.decrypt(_pass)))
+                            onPasswordListener.onPasswordMatch();
+                        else
+                            onPasswordListener.onPasswordNotMatch();
+                    }
+                    break;
             }
-        return false;
     }
+
+    public interface onPasswordListener {
+
+        void onPasswordMatch();
+
+        void onPasswordNotMatch();
+    }
+
 }
