@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Base64;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -79,7 +80,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         if (code_overlay != null) {
             DrawableCompat.setTint(code_overlay, Color.parseColor(String.format("#%06X", (0xFFFFFF & overlay))));
         }
-        code_error = ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_overlay, null);
+        code_error = ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_error, null);
         if (code_error != null) {
             DrawableCompat.setTint(code_error, Color.parseColor(String.format("#%06X", (0xFFFFFF & error))));
         }
@@ -180,7 +181,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                     code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
                     Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
                     if (!TextUtils.isEmpty(passcode)) {
-                        if (Arrays.toString(code).equals(decoder.decrypt(passcode)))
+                        if (Arrays.toString(code).equals(decoder.decrypt(passcode, Base64.DEFAULT)))
                             onPasswordListener.onPasswordMatch();
                         else {
                             dot_1.setBackgroundResource(R.drawable.passcode_error);
