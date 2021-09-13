@@ -325,7 +325,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                         break;
                     case 4:
-                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         if (TextUtils.isEmpty(firstInput)) {
                             firstInput = encoder.encrypt(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), Base64.DEFAULT, "");
                             message.setText(secondInputTip);
@@ -358,9 +358,8 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                         break;
                     case 4:
-                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
-
                         if (!TextUtils.isEmpty(passcode)) {
                             if (String.valueOf(code).equals(decoder.decrypt(passcode, Base64.DEFAULT))) {
                                 lock.setBackgroundResource(R.drawable.lock_open);
@@ -375,10 +374,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                                 dot_3.setBackgroundResource(R.drawable.passcode_error);
                                 dot_4.setBackgroundResource(R.drawable.passcode_error);
                                 message.setText(wrongInputTip);
-                                new Handler().postDelayed(() -> {
-                                    numbers_list.clear();
-                                    passNumber(numbers_list);
-                                }, 1500);
+                                delayClear(1500);
                                 onPasswordListener.onPasswordNotMatch();
                             }
                         }

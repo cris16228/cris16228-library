@@ -76,4 +76,8 @@ public class PrefUtils {
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit().putLong(key, value).apply();
         return this;
     }
+
+    public void deleteKey(String key) {
+        context.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit().remove(key).apply();
+    }
 }
