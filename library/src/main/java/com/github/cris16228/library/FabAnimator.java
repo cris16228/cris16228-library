@@ -47,6 +47,7 @@ public class FabAnimator {
     }
 
     public void animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        clicked = true;
         for (FloatingActionButton fab : fabs) {
             setVisibility(fab, false);
             setAnimation(main_fab, fab, false);
@@ -56,9 +57,9 @@ public class FabAnimator {
     }
 
     public void animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
-        setVisibility(fab, false);
-        setAnimation(main_fab, fab, false);
-        setClickable(fab, false);
+        setVisibility(fab, true);
+        setAnimation(main_fab, fab, true);
+        setClickable(fab, true);
         clicked = false;
     }
 
