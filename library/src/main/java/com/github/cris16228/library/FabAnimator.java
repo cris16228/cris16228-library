@@ -16,26 +16,48 @@ public class FabAnimator {
     private static Animation rotate_close_anim;
     private static Animation from_bottom_anim;
     private static Animation to_bottom_anim;
-    private final Context context;
+    private Context context;
     private boolean clicked = false;
+    private FloatingActionButton _main_fab;
+    private FloatingActionButton[] _fabs;
 
-    public FabAnimator(Context _context) {
-        context = _context;
-        clicked = false;
+    public static FabAnimator with(Context _context) {
+        FabAnimator fabAnimator = new FabAnimator();
+        fabAnimator.context = _context;
+        fabAnimator.clicked = false;
+        return fabAnimator;
     }
 
-    public void load() {
+    public static FabAnimator with(Context _context, @NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+        FabAnimator fabAnimator = new FabAnimator();
+        fabAnimator.context = _context;
+        fabAnimator._main_fab = main_fab;
+        fabAnimator._fabs = fabs;
+        fabAnimator.clicked = false;
+        return fabAnimator;
+    }
+
+    public FabAnimator load() {
         rotate_open_anim = AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim);
         rotate_close_anim = AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim);
         from_bottom_anim = AnimationUtils.loadAnimation(context, R.anim.from_bottom_anim);
         to_bottom_anim = AnimationUtils.loadAnimation(context, R.anim.to_bottom_anim);
+        return this;
     }
 
-    public void onClick(@NonNull FloatingActionButton fab, View.OnClickListener listener) {
+    public FabAnimator onClick(@NonNull FloatingActionButton fab, View.OnClickListener listener) {
         fab.setOnClickListener(listener);
+        return this;
     }
 
-    public void animate(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+    public FabAnimator onClick(@NonNull FloatingActionButton fab, boolean animateClose, View.OnClickListener listener) {
+        fab.setOnClickListener(listener);
+        if (animateClose)
+            animateClose(_main_fab, _fabs);
+        return this;
+    }
+
+    public FabAnimator animate(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
         main_fab.setOnClickListener(v -> {
             for (FloatingActionButton fab : fabs) {
                 setVisibility(fab, clicked);
@@ -44,27 +66,20 @@ public class FabAnimator {
             }
             clicked = !clicked;
         });
+        return this;
     }
 
     public void animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
         clicked = true;
         for (FloatingActionButton fab : fabs) {
-            setVisibility(fab, false);
-            setAnimation(main_fab, fab, false);
-            setClickable(fab, false);
+            setVisibility(fab, clicked);
+            setAnimation(main_fab, fab, clicked);
+            setClickable(fab, clicked);
         }
         clicked = false;
     }
 
-    public void animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
-        setVisibility(fab, true);
-        setAnimation(main_fab, fab, true);
-        setClickable(fab, true);
-        clicked = false;
-    }
-
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
-        System.out.println("setAnimation: " + clicked);
         if (!clicked) {
             if (fab != null)
                 if (from_bottom_anim != null)
@@ -100,7 +115,6 @@ public class FabAnimator {
 
     private void setVisibility(FloatingActionButton fab, boolean clicked) {
         if (fab != null) {
-            System.out.println("setVisibility: " + clicked);
             if (!clicked)
                 fab.setVisibility(View.VISIBLE);
             else
@@ -110,7 +124,6 @@ public class FabAnimator {
 
     private void setAnimation(FloatingActionButton fab, boolean clicked) {
         if (fab != null) {
-            System.out.println("setAnimation: " + clicked);
             if (!clicked)
                 fab.startAnimation(from_bottom_anim);
             else
@@ -120,7 +133,6 @@ public class FabAnimator {
     }
 
     private void setClickable(FloatingActionButton fab, boolean clicked) {
-        System.out.println("setClickable: " + clicked);
         if (fab != null)
             fab.setClickable(!clicked);
     }
