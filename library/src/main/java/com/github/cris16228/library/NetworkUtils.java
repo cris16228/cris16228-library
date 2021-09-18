@@ -25,6 +25,7 @@ public class NetworkUtils {
     public void showNoInternet(Context context) {
         no_internet = new Dialog(context, R.style.no_internet_dialog);
         no_internet.setContentView(R.layout.no_internet_connection);
+        no_internet.getWindow().setBackgroundDrawable(null);
         no_internet.setCancelable(false);
         no_internet.setCanceledOnTouchOutside(false);
         /*no_internet.findViewById(R.id.no_internet_turn_on_data_btn).setOnClickListener(v -> {

@@ -326,11 +326,11 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         break;
                     case 4:
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
-                        if (TextUtils.isEmpty(firstInput)) {
+                        if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             firstInput = encoder.encrypt(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), Base64.DEFAULT, "");
                             message.setText(secondInputTip);
                         }
-                        if (TextUtils.isEmpty(secondInput)) {
+                        if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             secondInput = encoder.encrypt(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), Base64.DEFAULT, "");
                             if (secondInput.equals(firstInput)) {
                                 delayClear(500);

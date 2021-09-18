@@ -100,6 +100,38 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
             return;
         }
+        if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
+            MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
+            new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_app, version));
+            new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
+                    activity.getApplicationContext().getResources().getString(R.string.app_update)));
+            new_update.setPositiveButton(R.string.ok, (dialog, which) -> Dexter.withContext(weakActivity.get()).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+                @Override
+                public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                    if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                        new_update.create().dismiss();
+                        if (networkUtils.no_internet == null)
+                            networkUtils.showNoInternet(activity);
+                        if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
+                            networkUtils.no_internet.show();
+                        else {
+                            UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
+                            checker.execute();
+                        }
+                    }
+                }
+
+                @Override
+                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                    permissionToken.continuePermissionRequest();
+                }
+            }).check());
+            new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            });
+            new_update.create().show();
+            return;
+        }
         if (result > 0 && result > app_patch && download == Download.JSON) {
             MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
             new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_patch, result));
@@ -130,37 +162,6 @@ public class UpdateChecker extends AsyncTask<Integer, Void, Integer> {
             new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
             }).create();
 
-            new_update.create().show();
-        }
-        if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
-            MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
-            new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_app, version));
-            new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
-                    activity.getApplicationContext().getResources().getString(R.string.app_update)));
-            new_update.setPositiveButton(R.string.ok, (dialog, which) -> Dexter.withContext(weakActivity.get()).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
-                @Override
-                public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                    if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                        new_update.create().dismiss();
-                        if (networkUtils.no_internet == null)
-                            networkUtils.showNoInternet(activity);
-                        if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
-                            networkUtils.no_internet.show();
-                        else {
-                            UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                            checker.execute();
-                        }
-                    }
-                }
-
-                @Override
-                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-                    permissionToken.continuePermissionRequest();
-                }
-            }).check());
-            new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
-            });
             new_update.create().show();
         }
     }

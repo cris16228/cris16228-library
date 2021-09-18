@@ -12,10 +12,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FabAnimator {
 
-    private Animation rotate_open_anim;
-    private Animation rotate_close_anim;
-    private Animation from_bottom_anim;
-    private Animation to_bottom_anim;
+    private static Animation rotate_open_anim;
+    private static Animation rotate_close_anim;
+    private static Animation from_bottom_anim;
+    private static Animation to_bottom_anim;
     private Context context;
     private boolean clicked = false;
     private FloatingActionButton _main_fab;
@@ -51,7 +51,7 @@ public class FabAnimator {
     public FabAnimator onClick(@NonNull FloatingActionButton fab, boolean animateClose, View.OnClickListener listener) {
         fab.setOnClickListener(listener);
         if (animateClose)
-           return animateClose(_main_fab, _fabs);
+            return animateClose(_main_fab, _fabs);
         return this;
     }
 

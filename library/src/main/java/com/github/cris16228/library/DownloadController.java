@@ -1,6 +1,5 @@
 package com.github.cris16228.library;
 
-import android.Manifest;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,14 +11,7 @@ import android.os.Environment;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
 import java.io.File;
-import java.util.List;
 
 public class DownloadController {
 
@@ -34,40 +26,27 @@ public class DownloadController {
     }
 
     public final void enqueueDownload() {
-        Dexter.withContext(context).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                    String destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app_name + "/" + ".updates/";
-                    File path = new File(destination);
-                    if (!path.exists()) {
-                        path.mkdirs();
-                    }
+        String destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app_name + "/" + ".updates/";
+        File path = new File(destination);
+        if (!path.exists()) {
+            path.mkdirs();
+        }
 
-                    destination = destination + "update.apk";
-                    Uri uri = Uri.parse("file://" + destination);
-                    File file = new File(destination);
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                    DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-                    Uri downloadUri = Uri.parse(url);
-                    DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-                    request.setMimeType("application/vnd.android.package-archive");
-                    request.setTitle(context.getResources().getString(R.string.updater_title, app_name));
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    request.setDestinationUri(uri);
-                    showInstallOption(destination);
-                    downloadManager.enqueue(request);
-                }
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-                permissionToken.continuePermissionRequest();
-            }
-        }).check();
+        destination = destination + "update.apk";
+        Uri uri = Uri.parse("file://" + destination);
+        File file = new File(destination);
+        if (file.exists()) {
+            file.delete();
+        }
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri downloadUri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+        request.setMimeType("application/vnd.android.package-archive");
+        request.setTitle(context.getResources().getString(R.string.updater_title, app_name));
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationUri(uri);
+        showInstallOption(destination);
+        downloadManager.enqueue(request);
     }
 
     private void showInstallOption(String destination) {
