@@ -16,15 +16,11 @@ public class FabAnimator {
     private static Animation rotate_close_anim;
     private static Animation from_bottom_anim;
     private static Animation to_bottom_anim;
-    private Context context;
+    private final Context context;
     private boolean clicked = false;
-    private FloatingActionButton _main_fab;
-    private FloatingActionButton[] _fabs;
 
-    public void FabAnimator(Context _context, @NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
+    public FabAnimator(Context _context) {
         context = _context;
-        _main_fab = main_fab;
-        _fabs = fabs;
         clicked = false;
     }
 
@@ -39,12 +35,6 @@ public class FabAnimator {
         fab.setOnClickListener(listener);
     }
 
-    public void onClick(@NonNull FloatingActionButton fab, boolean animateClose, View.OnClickListener listener) {
-        fab.setOnClickListener(listener);
-        if (animateClose)
-            animateClose(_main_fab, _fabs);
-    }
-
     public void animate(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
         main_fab.setOnClickListener(v -> {
             for (FloatingActionButton fab : fabs) {
@@ -57,12 +47,19 @@ public class FabAnimator {
     }
 
     public void animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton... fabs) {
-        clicked = false;
         for (FloatingActionButton fab : fabs) {
-            setVisibility(fab, clicked);
-            setAnimation(main_fab, fab, clicked);
-            setClickable(fab, clicked);
+            setVisibility(fab, false);
+            setAnimation(main_fab, fab, false);
+            setClickable(fab, false);
         }
+        clicked = false;
+    }
+
+    public void animateClose(@NonNull FloatingActionButton main_fab, @NonNull FloatingActionButton fab) {
+        setVisibility(fab, false);
+        setAnimation(main_fab, fab, false);
+        setClickable(fab, false);
+        clicked = false;
     }
 
     private void setAnimation(FloatingActionButton main_fab, FloatingActionButton fab, boolean clicked) {
