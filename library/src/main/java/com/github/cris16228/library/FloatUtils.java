@@ -18,8 +18,8 @@ public class FloatUtils {
         if (limit <= 0)
             throw new LibraryException(getClass(), limit + "is not valid! It must be higher than 0");
         NumberFormat format = NumberFormat.getCurrencyInstance();
-        format.setMinimumFractionDigits(2);
-        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(limit);
+        format.setMaximumFractionDigits(limit);
         if (value instanceof Float || value instanceof Double)
             return format.format(value);
         else
