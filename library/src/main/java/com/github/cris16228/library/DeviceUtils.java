@@ -21,7 +21,7 @@ public class DeviceUtils {
         return deviceUtils;
     }
 
-    public String getDisplaySize() throws LibraryException {
+    public String getDisplaySize(int limit) throws LibraryException {
         double x = 0, y = 0;
         int mWidthPixels, mHeightPixels;
         try {
@@ -41,7 +41,7 @@ public class DeviceUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return FloatUtils.with(context).getNumberFormat((double) Math.sqrt(x + y), 2, true, RoundingMode.HALF_UP) + "\"";
+        return FloatUtils.with(context).getNumberFormat((double) Math.sqrt(x + y), limit, true, RoundingMode.HALF_UP) + "\"";
     }
 
     public int getWidth() {
