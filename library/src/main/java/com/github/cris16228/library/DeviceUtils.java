@@ -2,6 +2,9 @@ package com.github.cris16228.library;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -41,7 +44,35 @@ public class DeviceUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return FloatUtils.with(context).getNumberFormat((double) Math.sqrt(x + y), limit, true, RoundingMode.HALF_UP) + "\"";
+        return FloatUtils.with(context).getNumberFormat(Math.sqrt(x + y), limit, true, RoundingMode.HALF_UP) + "\"";
+    }
+
+    public PackageInfo appFromPackage(String packageName) throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(packageName, 0);
+    }
+
+    public PackageInfo getPermissions(PackageInfo app) throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PERMISSIONS);
+    }
+
+    public PackageInfo getActivities(PackageInfo app) throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_ACTIVITIES);
+    }
+
+    public PackageInfo getReceivers(PackageInfo app) throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_RECEIVERS);
+    }
+
+    public PackageInfo getProviders(PackageInfo app) throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PROVIDERS);
+    }
+
+    public PackageInfo getServices(PackageInfo app) throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_SERVICES);
+    }
+
+    public boolean isSystemApp(PackageInfo p) {
+        return ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM);
     }
 
     public int getWidth() {
