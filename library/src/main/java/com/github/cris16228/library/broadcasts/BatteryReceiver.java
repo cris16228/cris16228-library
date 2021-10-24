@@ -106,11 +106,11 @@ public class BatteryReceiver extends BroadcastReceiver {
         current_mah = mBatteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER);
         energy_io_now = mBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
         energy_io_average = mBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE);
-        onBatteryChange.update();
+        if (onBatteryChange != null)
+            onBatteryChange.update();
     }
 
     public interface onBatteryChange {
-
         void update();
     }
 }
