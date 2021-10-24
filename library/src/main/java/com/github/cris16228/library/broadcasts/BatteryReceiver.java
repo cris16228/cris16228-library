@@ -7,11 +7,30 @@ import android.os.BatteryManager;
 
 import com.github.cris16228.library.R;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class BatteryReceiver extends BroadcastReceiver {
 
-    public String charging_status, battery_condition, power_source, technology;
-    public int level, scale, health, temperature_c, temperature_f, source, status, current_mah, voltage, energy_io_now, energy_io_average;
+    public String charging_status, battery_condition, power_source, technology, _voltage;
+    public int level;
+    public int scale;
+    public int health;
+    public int temperature_c;
+    public int temperature_f;
+    public int source;
+    public int status;
+    public long current_mah;
+    public int voltage;
+    public int energy_io_now;
+    public int energy_io_average;
+    public onBatteryChange onBatteryChange;
     private Context _context;
+
+    public void onBatteryChange(onBatteryChange _onBatteryChange) {
+        onBatteryChange = _onBatteryChange;
+
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -80,13 +99,18 @@ public class BatteryReceiver extends BroadcastReceiver {
         }
         technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
         voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+        _voltage = NumberFormat.getNumberInstance(Locale.US)
+                .format(voltage)
+                .replace(",", "،");
         BatteryManager mBatteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (mBatteryManager.computeChargeTimeRemaining() == 0)
-                String.valueOf(core.toReadableTime(mBatteryManager.computeChargeTimeRemaining()))))
-        }*/
-        current_mah = intent.getIntExtra(String.valueOf(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER), -1);
+        current_mah = mBatteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER);
         energy_io_now = mBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
         energy_io_average = mBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE);
+        onBatteryChange.update();
+    }
+
+    public interface onBatteryChange {
+
+        void update();
     }
 }
