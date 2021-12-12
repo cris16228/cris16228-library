@@ -33,7 +33,8 @@ public class FloatUtils {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        else throw new LibraryException(getClass(), value + "is not valid! It must be a \"float\" or a \"double\"");
+        else
+            throw new LibraryException(getClass(), value + "is not valid! It must be a \"float\" or a \"double\"");
         return (String) value;
     }
 
@@ -58,7 +59,8 @@ public class FloatUtils {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        else throw new LibraryException(getClass(), value + "is not valid! It must be a \"float\" or a \"double\"");
+        else
+            throw new LibraryException(getClass(), value + "is not valid! It must be a \"float\" or a \"double\"");
         return (String) value;
     }
 }
