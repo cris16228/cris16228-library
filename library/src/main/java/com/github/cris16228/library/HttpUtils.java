@@ -1,7 +1,6 @@
 package com.github.cris16228.library;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.net.URL;
 public class HttpUtils {
 
 
-    public static JSONObject getJSON(String urlString) throws IOException, JSONException {
+    public static String getJSON(String urlString) throws IOException, JSONException {
         HttpURLConnection urlConnection = null;
         URL url = new URL(urlString);
         urlConnection = (HttpURLConnection) url.openConnection();
@@ -35,7 +34,7 @@ public class HttpUtils {
         String jsonString = sb.toString();
         System.out.println("JSON: " + jsonString);
 
-        return new JSONObject(jsonString);
+        return jsonString;
     }
 
     public boolean isOnline(String site) throws MalformedURLException {
