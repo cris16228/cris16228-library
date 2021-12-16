@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
@@ -37,6 +38,20 @@ public class ActivityUtils {
         } else {
             new Handler().postDelayed(() -> {
                 startActivity(context, destinationActivity);
+                if (finish)
+                    ((Activity) context).finish();
+            }, delay);
+        }
+    }
+
+    public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, String name, Bundle value) {
+        if (delay <= 0) {
+            startActivity(context, destinationActivity, name, value);
+            if (finish)
+                ((Activity) context).finish();
+        } else {
+            new Handler().postDelayed(() -> {
+                startActivity(context, destinationActivity, name, value);
                 if (finish)
                     ((Activity) context).finish();
             }, delay);
@@ -102,12 +117,32 @@ public class ActivityUtils {
         currentActivity.startActivity(activity);
     }
 
+    public void startActivity(Context currentActivity, Class<?> destinationActivity, String name, Bundle value) {
+        Intent activity = new Intent(currentActivity, destinationActivity);
+        activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        activity.putExtra(name, value);
+        currentActivity.startActivity(activity);
+    }
+
     public void startActivity(Context currentActivity, Class<?> destinationActivity, @ContentInfoCompat.Flags int[] flags) {
         Intent activity = new Intent(currentActivity, destinationActivity);
         for (int flag : flags) {
             activity.addFlags(flag);
         }
         currentActivity.startActivity(activity);
+    }
+
+    public void startActivity(Context currentActivity, Class<?> destinationActivity, boolean finish, String name, Bundle value) {
+        Intent activity = new Intent(currentActivity, destinationActivity);
+        activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        activity.putExtra(name, value);
+        currentActivity.startActivity(activity);
+        if (finish)
+            try {
+                ((Activity) context).finish();
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), e.toString());
+            }
     }
 
     public void startActivity(Context currentActivity, Class<?> destinationActivity, boolean finish) {
