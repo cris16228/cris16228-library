@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorText">@color/white</color>
     <color name="app_background">#000000</color>
+    <color name="reverse_app_background">#FFFFFF</color>
     <color name="black_on_light_theme">@color/white</color>
 </resources>

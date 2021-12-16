@@ -10,6 +10,7 @@
     <color name="colorText">@color/black</color>
     <color name="colorTextError">#FF0000</color>
     <color name="app_background">#FFFFFF</color>
+    <color name="reverse_app_background">#000000</color>
     <color name="bottom_sheet_dialog_background">#448AFF</color>
     <color name="black_on_light_theme">@color/black</color>
     <color name="passcode_background">#AAAAAA</color>

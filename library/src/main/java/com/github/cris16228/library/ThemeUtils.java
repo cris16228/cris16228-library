@@ -46,7 +46,7 @@ public class ThemeUtils {
     }
 
     public Theme getTheme() {
-        SharedPreferences pref = context.getSharedPreferences(prefUtils.PREF, MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences(PrefUtils.PREF, MODE_PRIVATE);
         switch (pref.getString(THEME, LIGHT)) {
             case DARK:
                 return Theme.DARK;

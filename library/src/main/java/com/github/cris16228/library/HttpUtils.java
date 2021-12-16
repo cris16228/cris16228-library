@@ -11,8 +11,7 @@ import java.net.URL;
 
 public class HttpUtils {
 
-
-    public static String getJSON(String urlString) throws IOException, JSONException {
+    public static String getJSON(String urlString, boolean printJSON) throws IOException, JSONException {
         HttpURLConnection urlConnection = null;
         URL url = new URL(urlString);
         urlConnection = (HttpURLConnection) url.openConnection();
@@ -32,7 +31,8 @@ public class HttpUtils {
         br.close();
 
         String jsonString = sb.toString();
-        System.out.println("JSON: " + jsonString);
+        if (printJSON)
+            System.out.println("JSON: " + jsonString);
 
         return jsonString;
     }

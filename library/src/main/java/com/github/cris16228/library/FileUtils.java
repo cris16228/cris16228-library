@@ -4,6 +4,8 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class FileUtils {
@@ -16,6 +18,24 @@ public class FileUtils {
         fileUtils.folderName = folderName;
         fileUtils.position = position;
         return fileUtils;
+    }
+
+    private static String GetMD5Hash(String input) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(input.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) hexString.append(Integer.toHexString(0xFF & b));
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public int getIndex() throws LibraryException {
