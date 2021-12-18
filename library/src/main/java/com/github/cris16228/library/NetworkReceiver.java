@@ -43,7 +43,7 @@ public class NetworkReceiver extends BroadcastReceiver {
         if (networkUtils.isConnectedTo(context)) {
             networkUtils.no_internet.dismiss();
             UpdateChecker updateChecker = new UpdateChecker((Activity) context, json_link, download_link, UpdateChecker.Download.JSON, app_patch, app_version, app_name);
-            updateChecker.execute();
+            updateChecker.check();
         } else
             networkUtils.no_internet.show();
     }
