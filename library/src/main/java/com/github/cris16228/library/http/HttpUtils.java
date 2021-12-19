@@ -1,4 +1,4 @@
-package com.github.cris16228.library;
+package com.github.cris16228.library.http;
 
 import org.json.JSONException;
 
