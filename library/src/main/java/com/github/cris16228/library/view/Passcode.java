@@ -1,4 +1,4 @@
-package com.github.cris16228.library;
+package com.github.cris16228.library.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.github.cris16228.library.Base64Utils;
+import com.github.cris16228.library.R;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
