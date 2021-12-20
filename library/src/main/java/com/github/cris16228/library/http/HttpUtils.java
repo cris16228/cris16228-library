@@ -14,6 +14,10 @@ public class HttpUtils {
     private int readTimeout = 10000;
     private int connectionTimeout = 15000;
 
+    public static HttpUtils get() {
+        return new HttpUtils();
+    }
+
     public static String getJSON(String urlString, boolean printJSON) throws IOException, JSONException {
         HttpURLConnection urlConnection;
         URL url = new URL(urlString);
