@@ -11,13 +11,17 @@ import java.net.URL;
 
 public class HttpUtils {
 
+    private int readTimeout = 10000;
+    private int connectionTimeout = 15000;
+
     public static String getJSON(String urlString, boolean printJSON) throws IOException, JSONException {
-        HttpURLConnection urlConnection = null;
+        HttpURLConnection urlConnection;
         URL url = new URL(urlString);
+        HttpUtils httpUtils = new HttpUtils();
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
-        urlConnection.setReadTimeout(10000 /* milliseconds */);
-        urlConnection.setConnectTimeout(15000 /* milliseconds */);
+        urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
+        urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
         urlConnection.setDoOutput(true);
         urlConnection.connect();
 
@@ -35,6 +39,24 @@ public class HttpUtils {
             System.out.println("JSON: " + jsonString);
 
         return jsonString;
+    }
+
+    public int getReadTimeout() {
+        return readTimeout;
+    }
+
+    public HttpUtils setReadTimeout(int readTimeout) {
+        this.readTimeout = readTimeout;
+        return this;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public HttpUtils setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+        return this;
     }
 
     public boolean isOnline(String site) throws MalformedURLException {
