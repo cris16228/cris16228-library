@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Library"
         android:usesCleartextTraffic="true">
         <receiver
-            android:name="com.github.cris16228.library.NetworkReceiver"
+            android:name="com.github.cris16228.library.broadcasts.NetworkReceiver"
             android:enabled="true" />
         <provider
             android:name="androidx.core.content.FileProvider"

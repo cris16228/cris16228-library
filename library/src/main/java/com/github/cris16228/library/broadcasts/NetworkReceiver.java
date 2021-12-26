@@ -1,9 +1,12 @@
-package com.github.cris16228.library;
+package com.github.cris16228.library.broadcasts;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.github.cris16228.library.NetworkUtils;
+import com.github.cris16228.library.UpdateChecker;
 
 public class NetworkReceiver extends BroadcastReceiver {
 
