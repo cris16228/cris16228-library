@@ -76,7 +76,7 @@ public class ImageLoader {
 
     private Bitmap getBitmap(String url) {
         File file = fileCache.getFile(url);
-        Bitmap _image = null;
+        Bitmap _image;
         if (compress)
             _image = fileUtils.decodeFile(file, compress_size);
         else
@@ -100,7 +100,6 @@ public class ImageLoader {
             throwable.printStackTrace();
             if (throwable instanceof SocketTimeoutException)
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.broken_image);
-            ;
             if (throwable instanceof OutOfMemoryError)
                 memoryCache.clear();
             return null;
@@ -166,15 +165,14 @@ public class ImageLoader {
             this.bitmap = bitmap;
             this.photoToLoad = photoToLoad;
         }
-
         @Override
         public void run() {
             if (imageViewReused(photoToLoad))
                 return;
             if (bitmap != null)
                 photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
-            else
-                photoToLoad.imageView.setImageResource(R.drawable.broken_image);
+            /*else
+                photoToLoad.imageView.setImageResource(R.drawable.broken_image);*/
         }
     }
 }
