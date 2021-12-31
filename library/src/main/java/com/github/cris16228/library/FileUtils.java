@@ -27,7 +27,7 @@ public class FileUtils {
         return fileUtils;
     }
 
-    public static String getMD5Hash(String input) {
+    public String getMD5Hash(String input) {
         try {
             // Create MD5 Hash
             MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -68,11 +68,22 @@ public class FileUtils {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
+            return BitmapFactory.decodeStream(new FileInputStream(file), null, options);
+        } catch (FileNotFoundException exception) {
+            return null;
+        }
+    }
+
+    public Bitmap decodeFile(File file, int size) {
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(file), null, options);
-            final int REQUIRED_SIZE = 70;
+            if (size <= 0)
+                size = 70;
             int width_tmp = options.outWidth, height_tmp = options.outHeight;
             int scale = 1;
-            while (width_tmp / 2 >= REQUIRED_SIZE && height_tmp / 2 >= REQUIRED_SIZE) {
+            while (width_tmp / 2 >= size && height_tmp / 2 >= size) {
                 width_tmp /= 2;
                 height_tmp /= 2;
                 scale *= 2;

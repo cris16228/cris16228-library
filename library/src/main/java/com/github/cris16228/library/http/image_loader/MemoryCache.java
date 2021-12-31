@@ -17,7 +17,7 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
     }
 
-    private void setLimit(long _limit) {
+    public void setLimit(long _limit) {
         limit = _limit;
     }
 
