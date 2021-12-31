@@ -27,8 +27,6 @@ public class ImageLoader {
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     ExecutorService executor;
-    private String url;
-    private ImageView imageView;
     private FileUtils fileUtils;
     private int timeout = 0;
     private Context context;
@@ -42,35 +40,28 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public void into(ImageView _imageView) {
-        imageViews.put(imageView, url);
-        imageView = _imageView;
-        Bitmap img = memoryCache.get(url);
-        Log.i("", "Called into(): " + (img == null));
-        if (img != null)
-            _imageView.setImageDrawable(new BitmapDrawable(context.getResources(), img));
-        else
-            queuePhoto();
-    }
-
     public ImageLoader timeout(int timeout) {
         this.timeout = timeout;
         return this;
     }
 
-    public ImageLoader load(String _url) {
-        url = _url;
-        Log.i("ImageLoader", "URL: " + _url);
-        return this;
+    public void load(String url, ImageView imageView) {
+        imageViews.put(imageView, url);
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap != null)
+            imageView.setImageBitmap(bitmap);
+        else {
+            queuePhoto(url, imageView);
+        }
     }
 
-    public void queuePhoto() {
+    public void queuePhoto(String url, ImageView imageView) {
         Log.i("", "Called queuePhoto()");
         PhotoToLoad photoToLoad = new PhotoToLoad(url, imageView);
         executor.submit(new PhotoLoader(photoToLoad));
     }
 
-    private Bitmap getBitmap() {
+    private Bitmap getBitmap(String url) {
         File file = fileCache.getFile(url);
         Log.i("getBitmap", "File: " + file.getAbsolutePath());
         Bitmap _image = fileUtils.decodeFile(file);
@@ -100,9 +91,7 @@ public class ImageLoader {
     boolean imageViewReused(PhotoToLoad _photoToLoad) {
         String tag = imageViews.get(_photoToLoad.imageView);
         Log.i("imageViewReused: ", tag);
-        if (tag == null || !tag.equals(_photoToLoad.url))
-            return true;
-        return false;
+        return tag == null || !tag.equals(_photoToLoad.url);
     }
 
     public void clearCache() {
@@ -123,19 +112,21 @@ public class ImageLoader {
     class PhotoLoader implements Runnable {
 
         PhotoToLoad photoToLoad;
+
         PhotoLoader(PhotoToLoad _photoToLoad) {
             photoToLoad = _photoToLoad;
         }
+
         @Override
         public void run() {
             Log.i("", "imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
-            /*if (imageViewReused(photoToLoad))
-                return;*/
-            Bitmap bitmap = getBitmap();
-            memoryCache.put(url, bitmap);
+            if (imageViewReused(photoToLoad))
+                return;
+            Bitmap bitmap = getBitmap(photoToLoad.url);
+            memoryCache.put(photoToLoad.url, bitmap);
             Log.i("", "2 imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
-            /*if (imageViewReused(photoToLoad))
-                return;*/
+            if (imageViewReused(photoToLoad))
+                return;
             Displayer displayer = new Displayer(bitmap, photoToLoad);
             Activity activity = (Activity) photoToLoad.imageView.getContext();
             activity.runOnUiThread(displayer);
@@ -154,8 +145,8 @@ public class ImageLoader {
 
         @Override
         public void run() {
-            /*if (imageViewReused(photoToLoad))
-                return;*/
+            if (imageViewReused(photoToLoad))
+                return;
             if (bitmap != null)
                 photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
             /*else
