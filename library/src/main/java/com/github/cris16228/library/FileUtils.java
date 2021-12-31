@@ -97,7 +97,7 @@ public class FileUtils {
     }
 
     public void copyStream(InputStream is, OutputStream os) {
-        final int buffer_size = 1024;
+        final int buffer_size = 1024 * 16;
         try {
             byte[] bytes = new byte[buffer_size];
             for (; ; ) {
