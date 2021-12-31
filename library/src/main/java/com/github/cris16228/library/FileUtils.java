@@ -1,9 +1,16 @@
 package com.github.cris16228.library;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -20,7 +27,7 @@ public class FileUtils {
         return fileUtils;
     }
 
-    private static String GetMD5Hash(String input) {
+    private static String getMD5Hash(String input) {
         try {
             // Create MD5 Hash
             MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -55,5 +62,41 @@ public class FileUtils {
             sd_card.setVisibility(View.VISIBLE);
         else
             sd_card.setVisibility(View.GONE);
+    }
+
+    public Bitmap decodeFile(File file) {
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(file), null, options);
+            final int REQUIRED_SIZE = 70;
+            int width_tmp = options.outWidth, height_tmp = options.outHeight;
+            int scale = 1;
+            while (width_tmp / 2 >= REQUIRED_SIZE && height_tmp / 2 >= REQUIRED_SIZE) {
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            BitmapFactory.Options _options = new BitmapFactory.Options();
+            _options.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(file), null, _options);
+        } catch (FileNotFoundException exception) {
+            return null;
+        }
+    }
+
+    public void copyStream(InputStream is, OutputStream os) {
+        final int buffer_size = 1024;
+        try {
+            byte[] bytes = new byte[buffer_size];
+            for (; ; ) {
+                int count = is.read(bytes, 0, buffer_size);
+                if (count == 1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
