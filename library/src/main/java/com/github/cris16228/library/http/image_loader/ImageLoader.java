@@ -92,7 +92,7 @@ public class ImageLoader {
         fileCache.clear();
     }
 
-    public class PhotoToLoad {
+    class PhotoToLoad {
         public String url;
         public ImageView imageView;
 
@@ -124,7 +124,7 @@ public class ImageLoader {
         }
     }
 
-    class Displayer implements Runnable {
+    public class Displayer implements Runnable {
 
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
