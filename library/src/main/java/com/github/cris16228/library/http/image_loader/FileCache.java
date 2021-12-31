@@ -36,6 +36,25 @@ public class FileCache {
         return null;
     }
 
+    public long lenght() {
+        long size = 0;
+        File[] files = cacheDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file != null)
+                    size += files.length;
+            }
+        }
+        return size;
+    }
+
+    public int size() {
+        File[] files = cacheDir.listFiles();
+        if (files != null)
+            return files.length;
+        return 0;
+    }
+
     public void clear() {
         File[] files = cacheDir.listFiles();
         if (files == null)
