@@ -30,7 +30,7 @@ public class ImageLoader {
     private int timeout = 75000;
     private Context context;
     private boolean compress;
-    private int compress_size;
+    private int compress_size = 70;
 
     public static ImageLoader with(Context _context, boolean _compress) {
         ImageLoader imageLoader = new ImageLoader();
@@ -73,11 +73,7 @@ public class ImageLoader {
 
     private Bitmap getBitmap(String url) {
         File file = fileCache.getFile(url);
-        Bitmap _image = null;
-        if (compress)
-            _image = fileUtils.decodeFile(file, compress_size);
-        else
-            _image = fileUtils.decodeFile(file);
+        Bitmap _image = fileUtils.decodeFile(file, 70);
         if (_image != null)
             return _image;
         try {
