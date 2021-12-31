@@ -1,7 +1,6 @@
 package com.github.cris16228.library.http.image_loader;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -20,7 +19,6 @@ public class MemoryCache {
 
     private void setLimit(long _limit) {
         limit = _limit;
-        Log.i("", "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
     }
 
     public Bitmap get(String id) {
