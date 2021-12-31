@@ -72,7 +72,7 @@ public class ImageLoader {
 
     private Bitmap getBitmap() {
         File file = fileCache.getFile(url);
-        Log.i("ImageLoader", "File: " + file.getAbsolutePath());
+        Log.i("getBitmap", "File: " + file.getAbsolutePath());
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null)
             return _image;
@@ -110,7 +110,7 @@ public class ImageLoader {
         fileCache.clear();
     }
 
-    static class PhotoToLoad {
+    class PhotoToLoad {
         public String url;
         public ImageView imageView;
 
@@ -123,22 +123,19 @@ public class ImageLoader {
     class PhotoLoader implements Runnable {
 
         PhotoToLoad photoToLoad;
-
         PhotoLoader(PhotoToLoad _photoToLoad) {
             photoToLoad = _photoToLoad;
         }
-
         @Override
         public void run() {
-
             Log.i("", "imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
-            if (imageViewReused(photoToLoad))
-                return;
+            /*if (imageViewReused(photoToLoad))
+                return;*/
             Bitmap bitmap = getBitmap();
             memoryCache.put(url, bitmap);
             Log.i("", "2 imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
-            if (imageViewReused(photoToLoad))
-                return;
+            /*if (imageViewReused(photoToLoad))
+                return;*/
             Displayer displayer = new Displayer(bitmap, photoToLoad);
             Activity activity = (Activity) photoToLoad.imageView.getContext();
             activity.runOnUiThread(displayer);
@@ -157,8 +154,8 @@ public class ImageLoader {
 
         @Override
         public void run() {
-            if (imageViewReused(photoToLoad))
-                return;
+            /*if (imageViewReused(photoToLoad))
+                return;*/
             if (bitmap != null)
                 photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
             /*else
