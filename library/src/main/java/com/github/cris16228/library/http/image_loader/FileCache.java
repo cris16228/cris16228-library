@@ -16,6 +16,12 @@ public class FileCache {
             cacheDir.mkdirs();
     }
 
+    public FileCache(String path) {
+        cacheDir = new File(path);
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
+    }
+
     public File getFile(String url) {
         String file_name = null;
         try {

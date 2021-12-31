@@ -40,6 +40,15 @@ public class ImageLoader {
         return imageLoader;
     }
 
+    public static ImageLoader with(Context _context, String path) {
+        ImageLoader imageLoader = new ImageLoader();
+        imageLoader.fileCache = new FileCache(path);
+        imageLoader.executor = Executors.newFixedThreadPool(3);
+        imageLoader.fileUtils = new FileUtils();
+        imageLoader.context = _context;
+        return imageLoader;
+    }
+
     public ImageLoader timeout(int timeout) {
         this.timeout = timeout;
         return this;
