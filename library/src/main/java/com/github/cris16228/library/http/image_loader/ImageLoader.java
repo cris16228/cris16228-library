@@ -3,6 +3,7 @@ package com.github.cris16228.library.http.image_loader;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.github.cris16228.library.FileUtils;
@@ -26,7 +27,6 @@ public class ImageLoader {
     FileCache fileCache;
     ExecutorService executor;
     private String url;
-    private Bitmap image;
     private ImageView imageView;
     private FileUtils fileUtils;
     private int timeout = 0;
@@ -39,11 +39,12 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public void into(ImageView imageView) {
+    public void into(ImageView _imageView) {
         imageViews.put(imageView, url);
+        imageView = _imageView;
         Bitmap img = memoryCache.get(url);
         if (img != null)
-            imageView.setImageBitmap(img);
+            _imageView.setImageBitmap(img);
         else
             queuePhoto();
     }
@@ -55,7 +56,7 @@ public class ImageLoader {
 
     public ImageLoader load(String _url) {
         url = _url;
-        image = memoryCache.get(_url);
+        Log.i("ImageLoader", "URL: " + _url);
         return this;
     }
 
@@ -66,7 +67,7 @@ public class ImageLoader {
 
     private Bitmap getBitmap() {
         File file = fileCache.getFile(url);
-
+        Log.i("ImageLoader", "File: " + file.getAbsolutePath());
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null)
             return _image;
@@ -101,7 +102,7 @@ public class ImageLoader {
         fileCache.clear();
     }
 
-    class PhotoToLoad {
+    static class PhotoToLoad {
         public String url;
         public ImageView imageView;
 
