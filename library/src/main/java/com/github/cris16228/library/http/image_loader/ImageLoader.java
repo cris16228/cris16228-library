@@ -99,7 +99,10 @@ public class ImageLoader {
 
     boolean imageViewReused(PhotoToLoad _photoToLoad) {
         String tag = imageViews.get(_photoToLoad.imageView);
-        return tag == null || !tag.equals(_photoToLoad.url);
+        Log.i("imageViewReused: ", tag);
+        if (tag == null || !tag.equals(_photoToLoad.url))
+            return true;
+        return false;
     }
 
     public void clearCache() {
@@ -133,7 +136,7 @@ public class ImageLoader {
                 return;
             Bitmap bitmap = getBitmap();
             memoryCache.put(url, bitmap);
-            Log.i("", "imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
+            Log.i("", "2 imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
             if (imageViewReused(photoToLoad))
                 return;
             Displayer displayer = new Displayer(bitmap, photoToLoad);
