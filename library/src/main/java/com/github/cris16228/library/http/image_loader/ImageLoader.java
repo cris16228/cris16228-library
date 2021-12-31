@@ -3,6 +3,7 @@ package com.github.cris16228.library.http.image_loader;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -30,12 +31,14 @@ public class ImageLoader {
     private ImageView imageView;
     private FileUtils fileUtils;
     private int timeout = 0;
+    private Context context;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(_context);
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
+        imageLoader.context = _context;
         return imageLoader;
     }
 
@@ -45,7 +48,7 @@ public class ImageLoader {
         Bitmap img = memoryCache.get(url);
         Log.i("", "Called into(): " + (img == null));
         if (img != null)
-            _imageView.setImageBitmap(img);
+            _imageView.setImageDrawable(new BitmapDrawable(context.getResources(), img));
         else
             queuePhoto();
     }
@@ -154,7 +157,7 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             if (bitmap != null)
-                photoToLoad.imageView.setImageBitmap(bitmap);
+                photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
             /*else
                 photoToLoad.imageView.setImageBitmap(null);*/
         }
