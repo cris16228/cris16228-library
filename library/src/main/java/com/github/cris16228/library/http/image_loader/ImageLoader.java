@@ -39,13 +39,15 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public void timeout(int timeout) {
+    public ImageLoader timeout(int timeout) {
         this.timeout = timeout;
+        return this;
     }
 
-    public void load(String _url) {
+    public ImageLoader load(String _url) {
         url = _url;
         image = memoryCache.get(_url);
+        return this;
     }
 
     public void queuePhoto() {

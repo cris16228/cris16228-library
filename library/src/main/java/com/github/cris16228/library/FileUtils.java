@@ -27,7 +27,7 @@ public class FileUtils {
         return fileUtils;
     }
 
-    private static String getMD5Hash(String input) {
+    public static String getMD5Hash(String input) {
         try {
             // Create MD5 Hash
             MessageDigest digest = MessageDigest.getInstance("MD5");
