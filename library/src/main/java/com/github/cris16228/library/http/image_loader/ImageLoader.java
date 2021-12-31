@@ -43,6 +43,7 @@ public class ImageLoader {
         imageViews.put(imageView, url);
         imageView = _imageView;
         Bitmap img = memoryCache.get(url);
+        Log.i("", "Called into(): " + (img == null));
         if (img != null)
             _imageView.setImageBitmap(img);
         else
@@ -61,6 +62,7 @@ public class ImageLoader {
     }
 
     public void queuePhoto() {
+        Log.i("", "Called queuePhoto()");
         PhotoToLoad photoToLoad = new PhotoToLoad(url, imageView);
         executor.submit(new PhotoLoader(photoToLoad));
     }
@@ -122,10 +124,13 @@ public class ImageLoader {
 
         @Override
         public void run() {
+
+            Log.i("", "imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
             if (imageViewReused(photoToLoad))
                 return;
             Bitmap bitmap = getBitmap();
             memoryCache.put(url, bitmap);
+            Log.i("", "imageViewReused(photoToLoad)): " + imageViewReused(photoToLoad));
             if (imageViewReused(photoToLoad))
                 return;
             Displayer displayer = new Displayer(bitmap, photoToLoad);
