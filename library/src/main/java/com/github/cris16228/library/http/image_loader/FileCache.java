@@ -38,12 +38,10 @@ public class FileCache {
 
     public long lenght() {
         long size = 0;
-        File[] files = cacheDir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file != null)
-                    size += files.length;
-            }
+        size += cacheDir.length();
+        for (File file : cacheDir.listFiles()) {
+            if (file != null && file.isFile())
+                size += file.length();
         }
         return size;
     }
