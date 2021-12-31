@@ -3,19 +3,16 @@ package com.github.cris16228.library.http.image_loader;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 import com.github.cris16228.library.FileUtils;
-import com.github.cris16228.library.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
@@ -76,7 +73,7 @@ public class ImageLoader {
 
     private Bitmap getBitmap(String url) {
         File file = fileCache.getFile(url);
-        Bitmap _image;
+        Bitmap _image = null;
         if (compress)
             _image = fileUtils.decodeFile(file, compress_size);
         else
@@ -88,7 +85,7 @@ public class ImageLoader {
             URL imageURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
             connection.setConnectTimeout(timeout);
-            connection.setReadTimeout(timeout);
+            connection.setReadTimeout(3000);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
             OutputStream os = new FileOutputStream(file);
@@ -98,8 +95,6 @@ public class ImageLoader {
             return _webImage;
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-            if (throwable instanceof SocketTimeoutException)
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.broken_image);
             if (throwable instanceof OutOfMemoryError)
                 memoryCache.clear();
             return null;
@@ -165,6 +160,7 @@ public class ImageLoader {
             this.bitmap = bitmap;
             this.photoToLoad = photoToLoad;
         }
+
         @Override
         public void run() {
             if (imageViewReused(photoToLoad))
@@ -172,7 +168,7 @@ public class ImageLoader {
             if (bitmap != null)
                 photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
             /*else
-                photoToLoad.imageView.setImageResource(R.drawable.broken_image);*/
+                photoToLoad.imageView.setImageBitmap(null);*/
         }
     }
 }
