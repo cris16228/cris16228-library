@@ -39,6 +39,15 @@ public class ImageLoader {
         return imageLoader;
     }
 
+    public void into(ImageView imageView) {
+        imageViews.put(imageView, url);
+        Bitmap img = memoryCache.get(url);
+        if (img != null)
+            imageView.setImageBitmap(img);
+        else
+            queuePhoto();
+    }
+
     public ImageLoader timeout(int timeout) {
         this.timeout = timeout;
         return this;
