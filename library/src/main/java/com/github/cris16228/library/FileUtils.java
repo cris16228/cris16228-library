@@ -68,7 +68,20 @@ public class FileUtils {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            return BitmapFactory.decodeStream(new FileInputStream(file), null, options);
+            BitmapFactory.decodeStream(new FileInputStream(file), null, options);
+            int width_tmp = options.outWidth, height_tmp = options.outHeight;
+            int scale = 1;
+            int final_width, final_height;
+            final_width = width_tmp /= 2;
+            final_height = height_tmp /= 2;
+            while (width_tmp / 2 >= final_width && height_tmp / 2 >= final_height) {
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            BitmapFactory.Options _options = new BitmapFactory.Options();
+            _options.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(file), null, _options);
         } catch (FileNotFoundException exception) {
             return null;
         }

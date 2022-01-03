@@ -59,9 +59,10 @@ public class ImageLoader {
     public void load(String url, ImageView imageView) {
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
-        if (bitmap != null)
+        if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-        else {
+            imageView.invalidate();
+        } else {
             queuePhoto(url, imageView);
         }
     }
@@ -144,6 +145,7 @@ public class ImageLoader {
             Displayer displayer = new Displayer(bitmap, photoToLoad);
             Activity activity = (Activity) photoToLoad.imageView.getContext();
             activity.runOnUiThread(displayer);
+            photoToLoad.imageView.invalidate();
         }
     }
 
