@@ -1,9 +1,10 @@
 package com.github.cris16228.library.http.image_loader;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.ImageView;
 
 import com.github.cris16228.library.FileUtils;
@@ -25,12 +26,11 @@ public class ImageLoader {
     private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
-    ExecutorService executor;
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    Handler handler = new Handler(Looper.getMainLooper());
     private FileUtils fileUtils;
     private int timeout = 75000;
     private Context context;
-    private boolean compress;
-    private int compress_size = 70;
 
     public static ImageLoader with(Context _context, boolean _compress) {
         ImageLoader imageLoader = new ImageLoader();
@@ -38,7 +38,6 @@ public class ImageLoader {
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
-        imageLoader.compress = _compress;
         return imageLoader;
     }
 
@@ -74,7 +73,7 @@ public class ImageLoader {
 
     private Bitmap getBitmap(String url) {
         File file = fileCache.getFile(url);
-        Bitmap _image = fileUtils.decodeFile(file, 70);
+        Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null)
             return _image;
         try {
@@ -108,14 +107,6 @@ public class ImageLoader {
         fileCache.clear();
     }
 
-    public int getCompressSize() {
-        return compress_size;
-    }
-
-    public void setCompressSize(int compress_size) {
-        this.compress_size = compress_size;
-    }
-
     static class PhotoToLoad {
         public String url;
         public ImageView imageView;
@@ -143,8 +134,7 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             Displayer displayer = new Displayer(bitmap, photoToLoad);
-            Activity activity = (Activity) photoToLoad.imageView.getContext();
-            activity.runOnUiThread(displayer);
+            executor.execute(displayer);
             photoToLoad.imageView.invalidate();
         }
     }
@@ -161,12 +151,14 @@ public class ImageLoader {
 
         @Override
         public void run() {
-            if (imageViewReused(photoToLoad))
-                return;
-            if (bitmap != null)
-                photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
+            handler.post(() -> {
+                if (imageViewReused(photoToLoad))
+                    return;
+                if (bitmap != null)
+                    photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
             /*else
                 photoToLoad.imageView.setImageBitmap(null);*/
+            });
         }
     }
 }

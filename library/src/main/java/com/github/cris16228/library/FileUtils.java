@@ -93,7 +93,7 @@ public class FileUtils {
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(file), null, options);
             if (size <= 0)
-                size = 70;
+                size = 512;
             int width_tmp = options.outWidth, height_tmp = options.outHeight;
             int scale = 1;
             while (width_tmp / 2 >= size && height_tmp / 2 >= size) {
