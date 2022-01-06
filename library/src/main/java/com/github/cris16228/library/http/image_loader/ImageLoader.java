@@ -2,6 +2,7 @@ package com.github.cris16228.library.http.image_loader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -31,6 +33,7 @@ public class ImageLoader {
     private FileUtils fileUtils;
     private int timeout = 75000;
     private Context context;
+    private boolean asBitmap = false;
 
     public static ImageLoader with(Context _context, boolean _compress) {
         ImageLoader imageLoader = new ImageLoader();
@@ -50,6 +53,11 @@ public class ImageLoader {
         return imageLoader;
     }
 
+    public ImageLoader asBitmap() {
+        asBitmap = true;
+        return this;
+    }
+
     public ImageLoader timeout(int timeout) {
         this.timeout = timeout;
         return this;
@@ -66,8 +74,24 @@ public class ImageLoader {
         }
     }
 
+    public void load(byte[] bytes, ImageView imageView) {
+        imageViews.put(imageView, Arrays.toString(bytes));
+        Bitmap bitmap = memoryCache.get(Arrays.toString(bytes));
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            imageView.invalidate();
+        } else {
+            queuePhoto(bytes, imageView);
+        }
+    }
+
     public void queuePhoto(String url, ImageView imageView) {
         PhotoToLoad photoToLoad = new PhotoToLoad(url, imageView);
+        executor.submit(new PhotoLoader(photoToLoad));
+    }
+
+    public void queuePhoto(byte[] bytes, ImageView imageView) {
+        PhotoToLoad photoToLoad = new PhotoToLoad(bytes, imageView);
         executor.submit(new PhotoLoader(photoToLoad));
     }
 
@@ -97,6 +121,22 @@ public class ImageLoader {
         }
     }
 
+    private Bitmap getBitmap(byte[] bytes) {
+        File file = fileCache.getFile(Arrays.toString(bytes));
+        Bitmap _image = fileUtils.decodeFile(file);
+        if (_image != null)
+            return _image;
+        try {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            return bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            if (throwable instanceof OutOfMemoryError)
+                memoryCache.clear();
+            return null;
+        }
+    }
+
     boolean imageViewReused(PhotoToLoad _photoToLoad) {
         String tag = imageViews.get(_photoToLoad.imageView);
         return tag == null || !tag.equals(_photoToLoad.url);
@@ -110,9 +150,15 @@ public class ImageLoader {
     static class PhotoToLoad {
         public String url;
         public ImageView imageView;
+        public byte[] bytes;
 
         public PhotoToLoad(String _url, ImageView _imageView) {
             url = _url;
+            imageView = _imageView;
+        }
+
+        public PhotoToLoad(byte[] _bytes, ImageView _imageView) {
+            bytes = _bytes;
             imageView = _imageView;
         }
     }
@@ -129,8 +175,14 @@ public class ImageLoader {
         public void run() {
             if (imageViewReused(photoToLoad))
                 return;
-            Bitmap bitmap = getBitmap(photoToLoad.url);
-            memoryCache.put(photoToLoad.url, bitmap);
+            Bitmap bitmap;
+            if (asBitmap) {
+                bitmap = getBitmap(photoToLoad.bytes);
+                memoryCache.put(Arrays.toString(photoToLoad.bytes), bitmap);
+            } else {
+                bitmap = getBitmap(photoToLoad.url);
+                memoryCache.put(photoToLoad.url, bitmap);
+            }
             if (imageViewReused(photoToLoad))
                 return;
             Displayer displayer = new Displayer(bitmap, photoToLoad);
