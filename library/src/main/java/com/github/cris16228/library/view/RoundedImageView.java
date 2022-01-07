@@ -3,6 +3,7 @@ package com.github.cris16228.library.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -13,8 +14,6 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-
-import com.github.cris16228.library.R;
 
 public class RoundedImageView extends ImageView {
     public RoundedImageView(Context context) {
@@ -53,7 +52,9 @@ public class RoundedImageView extends ImageView {
         } else
             bitmap = bitmap_copy;
         Bitmap out = Bitmap.createBitmap(radius, radius, Bitmap.Config.ARGB_8888);
+
         Canvas canvas = new Canvas(out);
+        final String color = "#BAB399";
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, radius, radius);
 
@@ -61,7 +62,7 @@ public class RoundedImageView extends ImageView {
         paint.setFilterBitmap(true);
         paint.setDither(true);
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(getResources().getColor(R.color.transparent, null));
+        paint.setColor(Color.parseColor(color));
         canvas.drawCircle(radius / 2 + .7f, radius / 2 + .7f, radius / 2 + .1f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
