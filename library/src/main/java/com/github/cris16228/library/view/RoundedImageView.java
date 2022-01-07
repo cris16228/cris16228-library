@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -16,26 +15,39 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 
 public class RoundedImageView extends ImageView {
+
+    Bitmap bitmap;
+    Drawable drawable;
+
     public RoundedImageView(Context context) {
         super(context);
+        drawable = getDrawable();
+        if (drawable == null)
+            return;
+        bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
     }
 
     public RoundedImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        drawable = getDrawable();
+        if (drawable == null)
+            return;
+        bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
     }
 
     public RoundedImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        drawable = getDrawable();
+        if (drawable == null)
+            return;
+        bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Drawable drawable = getDrawable();
-        if (drawable == null)
-            return;
+
         if (getWidth() == 0 || getHeight() == 0)
             return;
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Bitmap bitmap_copy = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         int w = getWidth(), h = getHeight();
         Bitmap roundBitmap = getRoundBitmap(bitmap_copy, w);
