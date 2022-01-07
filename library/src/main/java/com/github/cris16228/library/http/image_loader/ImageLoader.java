@@ -42,7 +42,7 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
-    public static ImageLoader with(Context _context, boolean _compress) {
+    public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(_context);
         imageLoader.executor = Executors.newFixedThreadPool(3);
@@ -51,7 +51,7 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public static ImageLoader with(Context _context, String path, boolean _compress) {
+    public static ImageLoader with(Context _context, String path) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(path);
         imageLoader.executor = Executors.newFixedThreadPool(3);
@@ -71,6 +71,8 @@ public class ImageLoader {
     }
 
     public void load(String url, ImageView imageView) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null) {
@@ -82,6 +84,8 @@ public class ImageLoader {
     }
 
     public void load(byte[] bytes, ImageView imageView) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
         String url = encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null);
         imageViews.put(imageView, url);
@@ -95,6 +99,8 @@ public class ImageLoader {
 
 
     public void load(Bitmap bitmap, ImageView imageView) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
@@ -102,6 +108,8 @@ public class ImageLoader {
     }
 
     public void load(@RawRes @DrawableRes @NonNull Integer resourceId, ImageView imageView) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
