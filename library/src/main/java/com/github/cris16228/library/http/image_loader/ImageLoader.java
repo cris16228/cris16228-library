@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.github.cris16228.library.FileUtils;
@@ -16,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -75,13 +75,14 @@ public class ImageLoader {
     }
 
     public void load(byte[] bytes, ImageView imageView) {
-        imageViews.put(imageView, Arrays.toString(bytes));
-        Bitmap bitmap = memoryCache.get(Arrays.toString(bytes));
+        queuePhoto(bytes, imageView);
+    }
+
+
+    public void load(Bitmap bitmap, ImageView imageView) {
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
-        } else {
-            queuePhoto(bytes, imageView);
         }
     }
 
@@ -122,19 +123,7 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(byte[] bytes) {
-        File file = fileCache.getFile(Arrays.toString(bytes));
-        Bitmap _image = fileUtils.decodeFile(file);
-        if (_image != null)
-            return _image;
-        try {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            return bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-            if (throwable instanceof OutOfMemoryError)
-                memoryCache.clear();
-            return null;
-        }
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
     boolean imageViewReused(PhotoToLoad _photoToLoad) {
@@ -176,9 +165,9 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             Bitmap bitmap;
+            Log.i(PhotoToLoad.class.getSimpleName(), "asBitmap: " + asBitmap);
             if (asBitmap) {
                 bitmap = getBitmap(photoToLoad.bytes);
-                memoryCache.put(Arrays.toString(photoToLoad.bytes), bitmap);
             } else {
                 bitmap = getBitmap(photoToLoad.url);
                 memoryCache.put(photoToLoad.url, bitmap);

@@ -15,16 +15,16 @@ import androidx.annotation.Nullable;
 
 import com.github.cris16228.library.R;
 
-public class CircularImageView extends androidx.appcompat.widget.AppCompatImageView {
-    public CircularImageView(Context context) {
+public class RoundedImageView extends androidx.appcompat.widget.AppCompatImageView {
+    public RoundedImageView(Context context) {
         super(context);
     }
 
-    public CircularImageView(Context context, @Nullable AttributeSet attrs) {
+    public RoundedImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CircularImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public RoundedImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
