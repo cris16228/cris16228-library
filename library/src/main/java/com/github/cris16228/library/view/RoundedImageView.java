@@ -10,12 +10,13 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
 import com.github.cris16228.library.R;
 
-public class RoundedImageView extends androidx.appcompat.widget.AppCompatImageView {
+public class RoundedImageView extends ImageView {
     public RoundedImageView(Context context) {
         super(context);
     }

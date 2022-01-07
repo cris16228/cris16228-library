@@ -9,6 +9,10 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
+
 import com.github.cris16228.library.FileUtils;
 
 import java.io.File;
@@ -80,6 +84,14 @@ public class ImageLoader {
 
 
     public void load(Bitmap bitmap, ImageView imageView) {
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            imageView.invalidate();
+        }
+    }
+
+    public void load(@RawRes @DrawableRes @NonNull Integer resourceId, ImageView imageView) {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
