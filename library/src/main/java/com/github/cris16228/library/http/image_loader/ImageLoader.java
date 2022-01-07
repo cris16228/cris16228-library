@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -13,6 +14,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
+import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
 
 import java.io.File;
@@ -21,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -79,7 +82,15 @@ public class ImageLoader {
     }
 
     public void load(byte[] bytes, ImageView imageView) {
-        queuePhoto(bytes, imageView);
+        Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
+        String url = encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null);
+        imageViews.put(imageView, url);
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            imageView.invalidate();
+        } else
+            queuePhoto(bytes, imageView);
     }
 
 
@@ -135,6 +146,11 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(byte[] bytes) {
+        Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
+        File file = fileCache.getFile(encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null));
+        Bitmap _image = fileUtils.decodeFile(file);
+        if (_image != null)
+            return _image;
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
@@ -180,6 +196,9 @@ public class ImageLoader {
             Log.i(PhotoToLoad.class.getSimpleName(), "asBitmap: " + asBitmap);
             if (asBitmap) {
                 bitmap = getBitmap(photoToLoad.bytes);
+                Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
+                String bytes = encoder.encrypt(Arrays.toString(photoToLoad.bytes), Base64.NO_WRAP, null);
+                memoryCache.put(bytes, bitmap);
             } else {
                 bitmap = getBitmap(photoToLoad.url);
                 memoryCache.put(photoToLoad.url, bitmap);
