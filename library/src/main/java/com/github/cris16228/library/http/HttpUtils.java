@@ -1,7 +1,5 @@
 package com.github.cris16228.library.http;
 
-import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +16,8 @@ public class HttpUtils {
         return new HttpUtils();
     }
 
-    public static String getJSON(String urlString, boolean printJSON) throws IOException, JSONException {
+
+    public static String getJSON(String urlString, boolean printJSON) throws IOException {
         HttpURLConnection urlConnection;
         URL url = new URL(urlString);
         HttpUtils httpUtils = new HttpUtils();
