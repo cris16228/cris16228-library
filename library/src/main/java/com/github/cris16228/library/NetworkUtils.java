@@ -2,6 +2,7 @@ package com.github.cris16228.library;
 
 import static android.content.Context.WIFI_SERVICE;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
+
+import androidx.annotation.RequiresPermission;
 
 public class NetworkUtils {
 
@@ -22,6 +25,8 @@ public class NetworkUtils {
         return networkUtils;
     }
 
+
+    @RequiresPermission(allOf = {Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.INTERNET, Manifest.permission.CHANGE_NETWORK_STATE})
     public void showNoInternet(Context context) {
         no_internet = new Dialog(context, R.style.no_internet_dialog);
         no_internet.setContentView(R.layout.no_internet_connection);
@@ -42,6 +47,7 @@ public class NetworkUtils {
         });
     }
 
+    @RequiresPermission(allOf = {Manifest.permission.CHANGE_NETWORK_STATE})
     public boolean isConnectedTo(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network nw = connectivityManager.getActiveNetwork();

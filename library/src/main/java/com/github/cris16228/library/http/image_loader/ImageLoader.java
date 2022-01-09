@@ -1,5 +1,6 @@
 package com.github.cris16228.library.http.image_loader;
 
+import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
+import androidx.annotation.RequiresPermission;
 
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
@@ -42,6 +44,7 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
+    @RequiresPermission(value = Manifest.permission.INTERNET)
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(_context);
@@ -51,6 +54,7 @@ public class ImageLoader {
         return imageLoader;
     }
 
+    @RequiresPermission(allOf = {Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public static ImageLoader with(Context _context, String path) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(path);

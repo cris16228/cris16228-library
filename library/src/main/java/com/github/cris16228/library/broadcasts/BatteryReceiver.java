@@ -29,7 +29,6 @@ public class BatteryReceiver extends BroadcastReceiver {
 
     public void onBatteryChange(onBatteryChange _onBatteryChange) {
         onBatteryChange = _onBatteryChange;
-
     }
 
     @Override

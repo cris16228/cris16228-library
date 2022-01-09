@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.RequiresPermission;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonElement;
@@ -45,6 +47,7 @@ public class UpdateChecker {
     private final String app_version;
     private final String app_name;
 
+    @RequiresPermission(value = Manifest.permission.INTERNET)
     public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name) {
         this.weakActivity = new WeakReference<>(activity);
         this.json_link = _json_link;
@@ -57,6 +60,7 @@ public class UpdateChecker {
             networkUtils = new NetworkUtils();
     }
 
+    @RequiresPermission(value = Manifest.permission.INTERNET)
     public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name,
                          NetworkUtils _networkUtils) {
         this.weakActivity = new WeakReference<>(activity);
@@ -69,8 +73,7 @@ public class UpdateChecker {
         this.networkUtils = _networkUtils;
     }
 
-    /*
-        @RequiresPermission(Manifest.permission.INTERNET)*/
+    @RequiresPermission(value = Manifest.permission.INTERNET)
     public void check() {
         executor.execute(() -> {
             if (TextUtils.isEmpty(json_link)) {

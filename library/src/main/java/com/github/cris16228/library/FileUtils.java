@@ -1,10 +1,13 @@
 package com.github.cris16228.library;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.RequiresPermission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +28,15 @@ public class FileUtils {
         fileUtils.folderName = folderName;
         fileUtils.position = position;
         return fileUtils;
+    }
+
+    public boolean isFileValid(String path) {
+        File tmp = new File(path);
+        return tmp.length() > 0 && tmp.exists();
+    }
+
+    public boolean isFileValid(File tmp) {
+        return tmp.length() > 0 && tmp.exists();
     }
 
     public String getMD5Hash(String input) {
@@ -64,6 +76,7 @@ public class FileUtils {
             sd_card.setVisibility(View.GONE);
     }
 
+    @RequiresPermission(allOf = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public Bitmap decodeFile(File file) {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -87,6 +100,7 @@ public class FileUtils {
         }
     }
 
+    @RequiresPermission(allOf = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public Bitmap decodeFile(File file, int size) {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();

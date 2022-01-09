@@ -1,9 +1,12 @@
 package com.github.cris16228.library.broadcasts;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import androidx.annotation.RequiresPermission;
 
 import com.github.cris16228.library.NetworkUtils;
 import com.github.cris16228.library.UpdateChecker;
@@ -20,6 +23,8 @@ public class NetworkReceiver extends BroadcastReceiver {
     public NetworkReceiver() {
     }
 
+
+    @RequiresPermission(value = Manifest.permission.INTERNET)
     public NetworkReceiver(String _json_link, String _download_link, int app_patch, String app_version, String app_name) {
         this.json_link = _json_link;
         this.download_link = _download_link;
@@ -30,6 +35,8 @@ public class NetworkReceiver extends BroadcastReceiver {
             networkUtils = new NetworkUtils();
     }
 
+
+    @RequiresPermission(value = Manifest.permission.INTERNET)
     public NetworkReceiver(String _json_link, String _download_link, int app_patch, String app_version, String app_name, NetworkUtils networkUtils) {
         this.json_link = _json_link;
         this.download_link = _download_link;
