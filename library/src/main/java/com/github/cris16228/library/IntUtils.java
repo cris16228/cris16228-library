@@ -14,7 +14,7 @@ public class IntUtils {
         return intUtils;
     }
 
-    private String convertIntoTime(int ms) {
+    public String convertIntoTime(int ms) {
         String time;
         int x, seconds, minutes, hours;
         x = ms / 1000;
