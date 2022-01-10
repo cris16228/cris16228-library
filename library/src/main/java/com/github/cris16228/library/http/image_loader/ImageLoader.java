@@ -69,6 +69,11 @@ public class ImageLoader {
         return this;
     }
 
+    public ImageLoader saveToCache(String url, Bitmap bitmap) {
+        memoryCache.put(url, bitmap);
+        return this;
+    }
+
     public ImageLoader timeout(int timeout) {
         this.timeout = timeout;
         return this;
@@ -157,7 +162,7 @@ public class ImageLoader {
         }
     }
 
-    private Bitmap getBitmap(byte[] bytes) {
+    public Bitmap getBitmap(byte[] bytes) {
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
         File file = fileCache.getFile(encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null));
         Bitmap _image = fileUtils.decodeFile(file);
