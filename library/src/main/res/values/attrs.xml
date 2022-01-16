@@ -12,4 +12,9 @@
         <attr name="wrongInputTip" format="string" />
         <attr name="correctInputTip" format="string" />
     </declare-styleable>
+
+
+    <declare-styleable name="RoundCornerImageView">
+        <attr name="roundCorners" format="float" />
+    </declare-styleable>
 </resources>

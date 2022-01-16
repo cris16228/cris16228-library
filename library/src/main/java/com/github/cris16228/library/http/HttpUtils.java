@@ -1,9 +1,5 @@
 package com.github.cris16228.library.http;
 
-import android.Manifest;
-
-import androidx.annotation.RequiresPermission;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +17,6 @@ public class HttpUtils {
     }
 
 
-    @RequiresPermission(anyOf = {Manifest.permission.INTERNET})
     public static String getJSON(String urlString, boolean printJSON) throws IOException {
         HttpURLConnection urlConnection;
         URL url = new URL(urlString);
@@ -67,7 +62,6 @@ public class HttpUtils {
         return this;
     }
 
-    @RequiresPermission(anyOf = {Manifest.permission.INTERNET})
     public boolean isOnline(String site) throws MalformedURLException {
         URL url = new URL(site);
         try {

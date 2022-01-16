@@ -1,6 +1,5 @@
 package com.github.cris16228.library;
 
-import android.Manifest;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
@@ -52,7 +50,6 @@ public class DownloadController {
     }
 
 
-    @RequiresPermission(allOf = {Manifest.permission.REQUEST_INSTALL_PACKAGES})
     private void showInstallOption(String destination) {
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(@NonNull Context context, @NonNull Intent intent) {

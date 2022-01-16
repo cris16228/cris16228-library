@@ -1,6 +1,7 @@
 package com.github.cris16228.library.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.github.cris16228.library.R;
+
 public class RoundCornerImageView extends ImageView {
 
     public float roundCorners;
@@ -30,6 +33,12 @@ public class RoundCornerImageView extends ImageView {
 
     public RoundCornerImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundCornerImageView);
+        try {
+            roundCorners = typedArray.getFloat(R.styleable.RoundCornerImageView_roundCorners, 0);
+        } finally {
+            typedArray.recycle();
+        }
     }
 
     @NonNull

@@ -1,12 +1,10 @@
 package com.github.cris16228.library;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -15,8 +13,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.annotation.RequiresApi;
-import androidx.annotation.RequiresPermission;
 import androidx.core.view.ContentInfoCompat;
 
 public class ActivityUtils {
@@ -69,8 +65,6 @@ public class ActivityUtils {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @RequiresPermission(anyOf = {Manifest.permission.REQUEST_DELETE_PACKAGES, Manifest.permission.DELETE_PACKAGES})
     public void uninstallApp(PackageInfo app, Activity activity) {
         Intent delete_intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
         Uri uri = Uri.fromParts("package", app.packageName, null);
