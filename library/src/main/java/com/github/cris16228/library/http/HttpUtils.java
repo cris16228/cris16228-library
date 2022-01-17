@@ -17,30 +17,37 @@ public class HttpUtils {
     }
 
 
-    public static String getJSON(String urlString, boolean printJSON) throws IOException {
+    public static String getJSON(String urlString, boolean printJSON) {
         HttpURLConnection urlConnection;
-        URL url = new URL(urlString);
-        HttpUtils httpUtils = new HttpUtils();
-        urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestMethod("GET");
-        urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
-        urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
-        urlConnection.setDoOutput(true);
-        urlConnection.connect();
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         StringBuilder sb = new StringBuilder();
-
-        String line;
-        while ((line = br.readLine()) != null) {
-            sb.append(line).append("\n");
-        }
-        br.close();
-
         String jsonString = sb.toString();
-        if (printJSON)
-            System.out.println("JSON: " + jsonString);
-
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpUtils httpUtils = new HttpUtils();
+        try {
+            if (url != null) {
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
+                urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
+                urlConnection.setDoOutput(true);
+                urlConnection.connect();
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                br.close();
+                if (printJSON)
+                    System.out.println("JSON: " + jsonString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return jsonString;
     }
 
