@@ -20,7 +20,7 @@ public class HttpUtils {
     public static String getJSON(String urlString, boolean printJSON) {
         HttpURLConnection urlConnection;
         StringBuilder sb = new StringBuilder();
-        String jsonString = sb.toString();
+        String jsonString = null;
         URL url = null;
         try {
             url = new URL(urlString);
@@ -42,6 +42,7 @@ public class HttpUtils {
                     sb.append(line).append("\n");
                 }
                 br.close();
+                jsonString = sb.toString();
                 if (printJSON)
                     System.out.println("JSON: " + jsonString);
             }
