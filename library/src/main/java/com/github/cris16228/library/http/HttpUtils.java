@@ -2,6 +2,8 @@ package com.github.cris16228.library.http;
 
 import android.util.Log;
 
+import com.github.cris16228.library.LibraryException;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -23,9 +25,9 @@ public class HttpUtils {
         return new HttpUtils();
     }
 
-    public int uploadFile(String sourceFileUri) {
-
-
+    public int uploadFile(String sourceFileUri) throws LibraryException {
+        if (serverResponseCode == 0)
+            throw new LibraryException(getClass(), "METHOD NOT IMPLEMENTED YET");
         HttpURLConnection conn;
         DataOutputStream dos;
         String lineEnd = "\r\n";
