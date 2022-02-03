@@ -16,7 +16,7 @@ public class HttpUtils {
 
     private int readTimeout = 10000;
     private int connectionTimeout = 15000;
-    String upLoadServerUri = "http://192.168.1.11/upload.php";
+    String upLoadServerUri = "http://192.168.1.11/upload.php?";
     int serverResponseCode = 0;
 
     public static HttpUtils get() {
@@ -37,7 +37,7 @@ public class HttpUtils {
         File sourceFile = new File(sourceFileUri);
 
         if (!sourceFile.isFile()) {
-
+            Log.w("uploadFile", sourceFile.getAbsolutePath() + " is not a file");
             return 0;
         } else {
             try {
@@ -94,17 +94,11 @@ public class HttpUtils {
                 Log.i("uploadFile", "HTTP Response is : "
                         + serverResponseMessage + ": " + serverResponseCode);
 
-                /*if(serverResponseCode == 200){
+                if (serverResponseCode == 200) {
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
-                                    +" C:/xamp/wamp/fileupload/uploads";
-                            messageText.setText(msg);
-                            Toast.makeText(MainActivity.this, "File Upload Complete.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }*/
+                    Log.i("uploadFile", "File Upload Completed.\n\n See uploaded file here : \n"
+                            + "http://192.168.1.11/uploads");
+                }
 
                 //close the streams //
                 fileInputStream.close();
