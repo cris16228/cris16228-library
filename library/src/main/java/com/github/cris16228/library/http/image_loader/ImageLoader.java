@@ -134,6 +134,10 @@ public class ImageLoader {
     private Bitmap getBitmap(String url) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
+        if (!memoryCache.isCacheValid(url, _image)) {
+            memoryCache.remove(url);
+            _image = null;
+        }
         if (_image != null)
             return _image;
         try {

@@ -30,8 +30,7 @@ public class FileCache {
             e.printStackTrace();
         }
         if (file_name != null) {
-            File file = new File(cacheDir, file_name);
-            return file;
+            return new File(cacheDir, file_name);
         }
         return null;
     }

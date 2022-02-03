@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class MemoryCache {
 
-    private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(10, 1.5f, true));
+    private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<>(10, 1.5f, true));
     private long size = 0;
-    private long limit = 1000000;
+    private long limit = Long.MAX_VALUE;
 
     public MemoryCache() {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
@@ -30,6 +30,31 @@ public class MemoryCache {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public void remove(String id) {
+        try {
+            if (cache.containsKey(id)) {
+                size -= sizeInBytes(cache.get(id));
+                cache.remove(id);
+                checkSize();
+            }
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public boolean isCacheValid(String id, Bitmap bitmap) {
+        try {
+            if (!cache.containsKey(id))
+                return false;
+            if (cache.get(id) == null)
+                return false;
+            return sizeInBytes(cache.get(id)) == sizeInBytes(bitmap);
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     public void put(String id, Bitmap bitmap) {
