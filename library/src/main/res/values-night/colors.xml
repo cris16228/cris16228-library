@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorText">@color/white</color>
+    <color name="colorTextAlt">@color/black</color>
     <color name="app_background">#292929</color>
+    <color name="app_background_alt">#0F1C1C1C</color>
     <color name="reverse_app_background">#FFFFFF</color>
     <color name="black_on_light_theme">@color/white</color>
 </resources>
