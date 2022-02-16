@@ -44,14 +44,14 @@ public class ActivityUtils {
         }
     }
 
-    public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, String name, Bundle value) {
+    public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, Bundle... bundles) {
         if (delay <= 0) {
-            startActivity(context, destinationActivity, name, value);
+            startActivity(context, destinationActivity, bundles);
             if (finish)
                 ((Activity) context).finish();
         } else {
             new Handler().postDelayed(() -> {
-                startActivity(context, destinationActivity, name, value);
+                startActivity(context, destinationActivity, bundles);
                 if (finish)
                     ((Activity) context).finish();
             }, delay);
@@ -118,10 +118,12 @@ public class ActivityUtils {
         currentActivity.startActivity(activity);
     }
 
-    public void startActivity(Context currentActivity, Class<?> destinationActivity, String name, Bundle value) {
+    public void startActivity(Context currentActivity, Class<?> destinationActivity, Bundle... bundles) {
         Intent activity = new Intent(currentActivity, destinationActivity);
         activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        activity.putExtra(name, value);
+        for (Bundle bundle : bundles) {
+            activity.putExtras(bundle);
+        }
         currentActivity.startActivity(activity);
     }
 
