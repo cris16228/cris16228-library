@@ -164,7 +164,7 @@ public class ImageLoader {
             return null;
         } catch (FileNotFoundException fileNotFoundException) {
             if (connectionErrors != null)
-                connectionErrors.FileNotFound();
+                connectionErrors.FileNotFound(url);
             return null;
         } catch (IOException ioException) {
             if (connectionErrors != null)
