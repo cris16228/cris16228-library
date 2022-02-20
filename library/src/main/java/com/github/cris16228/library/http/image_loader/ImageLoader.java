@@ -15,9 +15,13 @@ import androidx.annotation.RawRes;
 
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
+import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
+import com.github.cris16228.library.http.image_loader.interfaces.LoadImage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -40,6 +44,8 @@ public class ImageLoader {
     private int timeout = 75000;
     private Context context;
     private boolean asBitmap = false;
+    private ConnectionErrors connectionErrors;
+    private LoadImage loadImage;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
@@ -57,6 +63,16 @@ public class ImageLoader {
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
         return imageLoader;
+    }
+
+    public ImageLoader onConnectionErrors(ConnectionErrors _connectionErrors) {
+        connectionErrors = _connectionErrors;
+        return this;
+    }
+
+    public ImageLoader onLoadImage(LoadImage _loadImage) {
+        loadImage = _loadImage;
+        return this;
     }
 
     public ImageLoader asBitmap() {
@@ -153,10 +169,14 @@ public class ImageLoader {
             os.close();
             _webImage = fileUtils.decodeFile(file);
             return _webImage;
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-            if (throwable instanceof OutOfMemoryError)
-                memoryCache.clear();
+        } catch (OutOfMemoryError outOfMemoryError) {
+            connectionErrors.OutOfMemory(memoryCache);
+            return null;
+        } catch (FileNotFoundException fileNotFoundException) {
+            connectionErrors.FileNotFound();
+            return null;
+        } catch (IOException ioException) {
+            connectionErrors.NormalError();
             return null;
         }
     }
@@ -220,18 +240,18 @@ public class ImageLoader {
             }
             if (imageViewReused(photoToLoad))
                 return;
-            Displayer displayer = new Displayer(bitmap, photoToLoad);
+            Displacer displayer = new Displacer(bitmap, photoToLoad);
             executor.execute(displayer);
             photoToLoad.imageView.invalidate();
         }
     }
 
-    public class Displayer implements Runnable {
+    public class Displacer implements Runnable {
 
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
 
-        public Displayer(Bitmap bitmap, PhotoToLoad photoToLoad) {
+        public Displacer(Bitmap bitmap, PhotoToLoad photoToLoad) {
             this.bitmap = bitmap;
             this.photoToLoad = photoToLoad;
         }
@@ -241,10 +261,12 @@ public class ImageLoader {
             handler.post(() -> {
                 if (imageViewReused(photoToLoad))
                     return;
-                if (bitmap != null)
+                if (bitmap != null) {
+                    loadImage.onSuccess();
                     photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
-            /*else
-                photoToLoad.imageView.setImageBitmap(null);*/
+                } else {
+                    loadImage.onFail();
+                }
             });
         }
     }

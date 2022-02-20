@@ -50,6 +50,7 @@ public class MemoryCache {
                 return false;
             if (cache.get(id) == null)
                 return false;
+            System.out.println("isCacheValid: " + (sizeInBytes(cache.get(id)) == sizeInBytes(bitmap)));
             return sizeInBytes(cache.get(id)) == sizeInBytes(bitmap);
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -94,6 +95,7 @@ public class MemoryCache {
     long sizeInBytes(Bitmap bitmap) {
         if (bitmap == null)
             return 0;
+        System.out.println("Size: " + bitmap.getRowBytes() * bitmap.getHeight());
         return (long) bitmap.getRowBytes() * bitmap.getHeight();
     }
 }
