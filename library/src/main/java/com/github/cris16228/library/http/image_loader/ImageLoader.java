@@ -65,14 +65,12 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public ImageLoader onConnectionErrors(ConnectionErrors _connectionErrors) {
+    public void onConnectionErrors(ConnectionErrors _connectionErrors) {
         connectionErrors = _connectionErrors;
-        return this;
     }
 
-    public ImageLoader onLoadImage(LoadImage _loadImage) {
+    public void onLoadImage(LoadImage _loadImage) {
         loadImage = _loadImage;
-        return this;
     }
 
     public ImageLoader asBitmap() {
