@@ -45,7 +45,6 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
     private ConnectionErrors connectionErrors;
-    private LoadImage loadImage;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
@@ -69,10 +68,6 @@ public class ImageLoader {
         connectionErrors = _connectionErrors;
     }
 
-    public void onLoadImage(LoadImage _loadImage) {
-        loadImage = _loadImage;
-    }
-
     public ImageLoader asBitmap() {
         asBitmap = true;
         return this;
@@ -88,7 +83,7 @@ public class ImageLoader {
         return this;
     }
 
-    public void load(String url, ImageView imageView) {
+    public void load(String url, ImageView imageView, LoadImage loadImage) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         imageViews.put(imageView, url);
@@ -97,11 +92,11 @@ public class ImageLoader {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
         } else {
-            queuePhoto(url, imageView);
+            queuePhoto(url, imageView, loadImage);
         }
     }
 
-    public void load(byte[] bytes, ImageView imageView) {
+    public void load(byte[] bytes, ImageView imageView, LoadImage loadImage) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
@@ -112,7 +107,7 @@ public class ImageLoader {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
         } else
-            queuePhoto(bytes, imageView);
+            queuePhoto(bytes, imageView, loadImage);
     }
 
 
@@ -135,14 +130,14 @@ public class ImageLoader {
         }
     }
 
-    public void queuePhoto(String url, ImageView imageView) {
+    public void queuePhoto(String url, ImageView imageView, LoadImage loadImage) {
         PhotoToLoad photoToLoad = new PhotoToLoad(url, imageView);
-        executor.submit(new PhotoLoader(photoToLoad));
+        executor.submit(new PhotoLoader(photoToLoad, loadImage));
     }
 
-    public void queuePhoto(byte[] bytes, ImageView imageView) {
+    public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage) {
         PhotoToLoad photoToLoad = new PhotoToLoad(bytes, imageView);
-        executor.submit(new PhotoLoader(photoToLoad));
+        executor.submit(new PhotoLoader(photoToLoad, loadImage));
     }
 
     private Bitmap getBitmap(String url) {
@@ -217,9 +212,11 @@ public class ImageLoader {
     class PhotoLoader implements Runnable {
 
         PhotoToLoad photoToLoad;
+        LoadImage loadImage;
 
-        PhotoLoader(PhotoToLoad _photoToLoad) {
+        PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage) {
             photoToLoad = _photoToLoad;
+            loadImage = _loadImage;
         }
 
         @Override
@@ -238,7 +235,7 @@ public class ImageLoader {
             }
             if (imageViewReused(photoToLoad))
                 return;
-            Displacer displayer = new Displacer(bitmap, photoToLoad);
+            Displacer displayer = new Displacer(bitmap, photoToLoad, loadImage);
             executor.execute(displayer);
             photoToLoad.imageView.invalidate();
         }
@@ -248,10 +245,12 @@ public class ImageLoader {
 
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
+        LoadImage loadImage;
 
-        public Displacer(Bitmap bitmap, PhotoToLoad photoToLoad) {
+        public Displacer(Bitmap bitmap, PhotoToLoad photoToLoad, LoadImage _loadImage) {
             this.bitmap = bitmap;
             this.photoToLoad = photoToLoad;
+            this.loadImage = _loadImage;
         }
 
         @Override
