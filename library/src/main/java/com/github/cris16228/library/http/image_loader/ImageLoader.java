@@ -44,7 +44,6 @@ public class ImageLoader {
     private int timeout = 75000;
     private Context context;
     private boolean asBitmap = false;
-    private ConnectionErrors connectionErrors;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
@@ -64,10 +63,6 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public void onConnectionErrors(ConnectionErrors _connectionErrors) {
-        connectionErrors = _connectionErrors;
-    }
-
     public ImageLoader asBitmap() {
         asBitmap = true;
         return this;
@@ -83,7 +78,7 @@ public class ImageLoader {
         return this;
     }
 
-    public void load(String url, ImageView imageView, LoadImage loadImage) {
+    public void load(String url, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         imageViews.put(imageView, url);
@@ -91,12 +86,11 @@ public class ImageLoader {
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
-        } else {
-            queuePhoto(url, imageView, loadImage);
-        }
+        } else
+            queuePhoto(url, imageView, loadImage, connectionErrors);
     }
 
-    public void load(byte[] bytes, ImageView imageView, LoadImage loadImage) {
+    public void load(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
@@ -107,7 +101,7 @@ public class ImageLoader {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
         } else
-            queuePhoto(bytes, imageView, loadImage);
+            queuePhoto(bytes, imageView, loadImage, connectionErrors);
     }
 
 
@@ -130,17 +124,17 @@ public class ImageLoader {
         }
     }
 
-    public void queuePhoto(String url, ImageView imageView, LoadImage loadImage) {
+    public void queuePhoto(String url, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         PhotoToLoad photoToLoad = new PhotoToLoad(url, imageView);
-        executor.submit(new PhotoLoader(photoToLoad, loadImage));
+        executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors));
     }
 
-    public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage) {
+    public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         PhotoToLoad photoToLoad = new PhotoToLoad(bytes, imageView);
-        executor.submit(new PhotoLoader(photoToLoad, loadImage));
+        executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors));
     }
 
-    private Bitmap getBitmap(String url) {
+    private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
         if (!memoryCache.isCacheValid(url, _image)) {
@@ -163,13 +157,18 @@ public class ImageLoader {
             _webImage = fileUtils.decodeFile(file);
             return _webImage;
         } catch (OutOfMemoryError outOfMemoryError) {
-            connectionErrors.OutOfMemory(memoryCache);
+            if (connectionErrors != null)
+                connectionErrors.OutOfMemory(memoryCache);
+            else
+                memoryCache.clear();
             return null;
         } catch (FileNotFoundException fileNotFoundException) {
-            connectionErrors.FileNotFound();
+            if (connectionErrors != null)
+                connectionErrors.FileNotFound();
             return null;
         } catch (IOException ioException) {
-            connectionErrors.NormalError();
+            if (connectionErrors != null)
+                connectionErrors.NormalError();
             return null;
         }
     }
@@ -213,10 +212,12 @@ public class ImageLoader {
 
         PhotoToLoad photoToLoad;
         LoadImage loadImage;
+        ConnectionErrors connectionErrors;
 
-        PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage) {
+        PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors) {
             photoToLoad = _photoToLoad;
             loadImage = _loadImage;
+            connectionErrors = _connectionErrors;
         }
 
         @Override
@@ -230,7 +231,7 @@ public class ImageLoader {
                 String bytes = encoder.encrypt(Arrays.toString(photoToLoad.bytes), Base64.NO_WRAP, null);
                 memoryCache.put(bytes, bitmap);
             } else {
-                bitmap = getBitmap(photoToLoad.url);
+                bitmap = getBitmap(photoToLoad.url, connectionErrors);
                 memoryCache.put(photoToLoad.url, bitmap);
             }
             if (imageViewReused(photoToLoad))
@@ -259,10 +260,12 @@ public class ImageLoader {
                 if (imageViewReused(photoToLoad))
                     return;
                 if (bitmap != null) {
-                    loadImage.onSuccess();
+                    if (loadImage != null)
+                        loadImage.onSuccess();
                     photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
                 } else {
-                    loadImage.onFail();
+                    if (loadImage != null)
+                        loadImage.onFail();
                 }
             });
         }
