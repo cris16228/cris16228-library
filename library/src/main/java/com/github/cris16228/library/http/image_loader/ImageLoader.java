@@ -154,6 +154,7 @@ public class ImageLoader {
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
             os.close();
+            is.close();
             _webImage = fileUtils.decodeFile(file);
             return _webImage;
         } catch (OutOfMemoryError outOfMemoryError) {
