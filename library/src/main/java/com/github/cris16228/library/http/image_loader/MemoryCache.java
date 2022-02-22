@@ -45,6 +45,8 @@ public class MemoryCache {
     }
 
     public boolean isCacheValid(String id, Bitmap bitmap) {
+        System.out.println(id == null ? "id null" : id);
+        System.out.println(cache.get(id) == null ? "cache.get(id) null" : cache.get(id));
         try {
             if (!cache.containsKey(id))
                 return false;
