@@ -2,6 +2,7 @@ package com.github.cris16228.library.http.image_loader;
 
 import android.graphics.Bitmap;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -13,8 +14,17 @@ public class MemoryCache {
     private long size = 0;
     private long limit = Long.MAX_VALUE;
 
-    public MemoryCache() {
+    public MemoryCache(FileCache fileCache) {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
+        //loadCache(fileCache);
+    }
+
+    private void loadCache(FileCache fileCache) {
+        File[] files = fileCache.getCacheDir().listFiles();
+        if (files != null && files.length > 0)
+            for (File file : files) {
+                cache.put(file.getAbsolutePath(), get(file.getAbsolutePath()));
+            }
     }
 
     public void setLimit(long _limit) {
@@ -97,7 +107,6 @@ public class MemoryCache {
     long sizeInBytes(Bitmap bitmap) {
         if (bitmap == null)
             return 0;
-        System.out.println("Size: " + bitmap.getRowBytes() * bitmap.getHeight());
         return (long) bitmap.getRowBytes() * bitmap.getHeight();
     }
 }

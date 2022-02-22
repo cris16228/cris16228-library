@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
 public class ImageLoader {
 
     private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<>());
-    MemoryCache memoryCache = new MemoryCache();
+    MemoryCache memoryCache;
     FileCache fileCache;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler handler = new Handler(Looper.getMainLooper());
@@ -48,6 +48,7 @@ public class ImageLoader {
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(_context);
+        imageLoader.memoryCache = new MemoryCache(imageLoader.fileCache);
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
@@ -57,6 +58,7 @@ public class ImageLoader {
     public static ImageLoader with(Context _context, String path) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(path);
+        imageLoader.memoryCache = new MemoryCache(imageLoader.fileCache);
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;

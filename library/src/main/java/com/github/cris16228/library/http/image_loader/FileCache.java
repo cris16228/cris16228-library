@@ -35,6 +35,10 @@ public class FileCache {
         return null;
     }
 
+    public File getCacheDir() {
+        return cacheDir;
+    }
+
     public long lenght() {
         long size = 0;
         size += cacheDir.length();
