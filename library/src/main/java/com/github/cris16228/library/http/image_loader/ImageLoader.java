@@ -137,6 +137,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
+        System.out.println(memoryCache.isCacheValid(url, _image));
         if (!memoryCache.isCacheValid(url, _image)) {
             memoryCache.remove(url);
             _image = null;
@@ -155,6 +156,7 @@ public class ImageLoader {
             fileUtils.copyStream(is, os);
             os.close();
             is.close();
+            connection.disconnect();
             _webImage = fileUtils.decodeFile(file);
             return _webImage;
         } catch (OutOfMemoryError outOfMemoryError) {
@@ -237,8 +239,8 @@ public class ImageLoader {
             }
             if (imageViewReused(photoToLoad))
                 return;
-            Displacer displayer = new Displacer(bitmap, photoToLoad, loadImage);
-            executor.execute(displayer);
+            Displacer displacer = new Displacer(bitmap, photoToLoad, loadImage);
+            executor.execute(displacer);
             photoToLoad.imageView.invalidate();
         }
     }
