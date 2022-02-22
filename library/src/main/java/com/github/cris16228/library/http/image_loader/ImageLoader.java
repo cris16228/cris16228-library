@@ -81,13 +81,14 @@ public class ImageLoader {
     public void load(String url, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
-        imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
-        } else
+        } else {
+            imageViews.put(imageView, url);
             queuePhoto(url, imageView, loadImage, connectionErrors);
+        }
     }
 
     public void load(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
@@ -95,13 +96,14 @@ public class ImageLoader {
         imageView.setImageDrawable(null);
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
         String url = encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null);
-        imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
-        } else
+        } else {
+            imageViews.put(imageView, url);
             queuePhoto(bytes, imageView, loadImage, connectionErrors);
+        }
     }
 
 
