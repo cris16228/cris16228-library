@@ -2,6 +2,8 @@ package com.github.cris16228.library.http.image_loader;
 
 import android.graphics.Bitmap;
 
+import com.github.cris16228.library.AsyncUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +15,7 @@ import java.util.Map;
 public class MemoryCache {
 
     private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<>(10, 1.5f, true));
+    boolean isValid = false;
     private long size = 0;
     private long limit = Long.MAX_VALUE;
 
@@ -61,22 +64,27 @@ public class MemoryCache {
     }
 
     public boolean isCacheValid(String id, Bitmap bitmap, FileCache fileCache, ImageLoader imageLoader) {
-        if (cache.isEmpty())
-            loadCache(imageLoader, fileCache);
-        System.out.println("Cache: " + cache);
-        System.out.println(id == null ? "id null" : id);
-        System.out.println(cache.get(id) == null ? "cache.get(id) null" : cache.get(id));
-        try {
-            if (!cache.containsKey(id))
-                return false;
-            if (cache.get(id) == null)
-                return false;
-            System.out.println("isCacheValid: " + (sizeInBytes(cache.get(id)) == sizeInBytes(bitmap)));
-            return sizeInBytes(cache.get(id)) == sizeInBytes(bitmap);
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
-        return false;
+
+        AsyncUtils asyncUtils = AsyncUtils.get();
+        asyncUtils.onExecuteListener(new AsyncUtils.onExecuteListener() {
+            @Override
+            public void doInBackground() {
+                if (cache.isEmpty())
+                    loadCache(imageLoader, fileCache);
+            }
+
+            @Override
+            public void postDelayed() {
+                System.out.println("Cache: " + cache);
+                System.out.println(id == null ? "id null" : id);
+                System.out.println(cache.get(id) == null ? "cache.get(id) null" : cache.get(id));
+                if (cache.containsKey(id) && cache.get(id) != null && sizeInBytes(cache.get(id)) == sizeInBytes(bitmap)) {
+                    isValid = true;
+                }
+            }
+        });
+        asyncUtils.execute();
+        return isValid;
     }
 
     public void put(String id, Bitmap bitmap) {
