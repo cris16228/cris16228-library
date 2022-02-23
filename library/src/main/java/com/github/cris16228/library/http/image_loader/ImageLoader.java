@@ -44,11 +44,7 @@ public class ImageLoader {
     private int timeout = 75000;
     private Context context;
     private boolean asBitmap = false;
-
-    public ImageLoader init() {
-        memoryCache.loadCache(this, fileCache);
-        return this;
-    }
+    private boolean isInit = false;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
@@ -66,6 +62,12 @@ public class ImageLoader {
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
         return imageLoader;
+    }
+
+    public ImageLoader init() {
+        memoryCache.loadCache(this, fileCache);
+        isInit = true;
+        return this;
     }
 
     public ImageLoader asBitmap() {
@@ -139,7 +141,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
-        if (!memoryCache.isCacheValid(url, _image)) {
+        if (isInit && !memoryCache.isCacheValid(url, _image)) {
             memoryCache.remove(url);
             _image = null;
         }
