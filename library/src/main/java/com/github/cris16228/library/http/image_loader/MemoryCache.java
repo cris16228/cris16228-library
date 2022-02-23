@@ -3,6 +3,8 @@ package com.github.cris16228.library.http.image_loader;
 import android.graphics.Bitmap;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,17 +20,22 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
     }
 
-    private void loadCache(FileCache fileCache) {
+    private void loadCache(ImageLoader imageLoader, FileCache fileCache) {
         File[] files = fileCache.getCacheDir().listFiles();
         if (files != null && files.length > 0)
             for (File file : files) {
-                cache.put(file.getAbsolutePath(), get(file.getAbsolutePath()));
+                try {
+                    cache.put(file.getAbsolutePath(), imageLoader.getBitmap(Files.readAllBytes(file.toPath())));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
     }
 
     public void setLimit(long _limit) {
         limit = _limit;
     }
+
 
     public Bitmap get(String id) {
         try {
@@ -53,9 +60,9 @@ public class MemoryCache {
         }
     }
 
-    public boolean isCacheValid(String id, Bitmap bitmap, FileCache fileCache) {
+    public boolean isCacheValid(String id, Bitmap bitmap, FileCache fileCache, ImageLoader imageLoader) {
         if (cache.isEmpty())
-            loadCache(fileCache);
+            loadCache(imageLoader, fileCache);
         System.out.println("Cache: " + cache);
         System.out.println(id == null ? "id null" : id);
         System.out.println(cache.get(id) == null ? "cache.get(id) null" : cache.get(id));
