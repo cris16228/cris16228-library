@@ -14,9 +14,8 @@ public class MemoryCache {
     private long size = 0;
     private long limit = Long.MAX_VALUE;
 
-    public MemoryCache(FileCache fileCache) {
+    public MemoryCache() {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
-        loadCache(fileCache);
     }
 
     private void loadCache(FileCache fileCache) {
@@ -54,7 +53,10 @@ public class MemoryCache {
         }
     }
 
-    public boolean isCacheValid(String id, Bitmap bitmap) {
+    public boolean isCacheValid(String id, Bitmap bitmap, FileCache fileCache) {
+        if (cache.isEmpty())
+            loadCache(fileCache);
+        System.out.println("Cache: " + cache);
         System.out.println(id == null ? "id null" : id);
         System.out.println(cache.get(id) == null ? "cache.get(id) null" : cache.get(id));
         try {

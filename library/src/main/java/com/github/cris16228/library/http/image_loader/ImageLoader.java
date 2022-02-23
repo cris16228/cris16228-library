@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
 public class ImageLoader {
 
     private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<>());
-    MemoryCache memoryCache;
+    MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler handler = new Handler(Looper.getMainLooper());
@@ -48,7 +48,6 @@ public class ImageLoader {
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(_context);
-        imageLoader.memoryCache = new MemoryCache(imageLoader.fileCache);
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
@@ -58,7 +57,6 @@ public class ImageLoader {
     public static ImageLoader with(Context _context, String path) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(path);
-        imageLoader.memoryCache = new MemoryCache(imageLoader.fileCache);
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
@@ -136,7 +134,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
-        if (!memoryCache.isCacheValid(url, _image)) {
+        if (!memoryCache.isCacheValid(url, _image, fileCache)) {
             memoryCache.remove(url);
             _image = null;
         }
