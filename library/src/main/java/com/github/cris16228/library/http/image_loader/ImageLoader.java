@@ -45,6 +45,11 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
+    public ImageLoader init() {
+        memoryCache.loadCache(this, fileCache);
+        return this;
+    }
+
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(_context);
@@ -134,7 +139,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
-        if (!memoryCache.isCacheValid(url, _image, fileCache, this)) {
+        if (!memoryCache.isCacheValid(url, _image)) {
             memoryCache.remove(url);
             _image = null;
         }
