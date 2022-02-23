@@ -16,7 +16,7 @@ public class MemoryCache {
 
     public MemoryCache(FileCache fileCache) {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
-        //loadCache(fileCache);
+        loadCache(fileCache);
     }
 
     private void loadCache(FileCache fileCache) {
