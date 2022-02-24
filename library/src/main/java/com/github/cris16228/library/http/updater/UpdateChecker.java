@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.github.cris16228.library.DownloadController;
 import com.github.cris16228.library.NetworkUtils;
+import com.github.cris16228.library.PrefUtils;
 import com.github.cris16228.library.R;
 import com.github.cris16228.library.http.HttpUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,6 +29,8 @@ import java.util.concurrent.Executors;
 
 public class UpdateChecker {
 
+    private static int patch = -1;
+    private static String version = "";
     private final WeakReference<Activity> weakActivity;
     private final Download download;
     private final int app_patch;
@@ -39,8 +42,6 @@ public class UpdateChecker {
     String download_link;
     DownloadController downloadController;
     NetworkUtils networkUtils;
-    private static int patch = -1;
-    private static String version = "";
 
     public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name) {
         this.weakActivity = new WeakReference<>(activity);
@@ -80,7 +81,10 @@ public class UpdateChecker {
                 try {
                     version = getNewVersion(json_link);
                     patch = getNewPatch(json_link);
-                    System.out.println("Version " + version + "(" + patch + ")");
+                    PrefUtils.with(weakActivity.get()).setSharedPref("update");
+                    PrefUtils.with(weakActivity.get()).setString("version", version);
+                    PrefUtils.with(weakActivity.get()).setInt("patch", patch);
+                    System.out.println("Version " + version + " (" + patch + ")");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -97,6 +101,10 @@ public class UpdateChecker {
                 // activity is no longer valid, don't do anything!
                 return;
             }
+            if (TextUtils.isEmpty(PrefUtils.PREF))
+                PrefUtils.with(weakActivity.get()).setSharedPref("update");
+            version = PrefUtils.with(weakActivity.get()).getString("version", version);
+            patch = PrefUtils.with(weakActivity.get()).getInt("patch", patch);
             if (patch == -1) {
                 Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
                 return;
