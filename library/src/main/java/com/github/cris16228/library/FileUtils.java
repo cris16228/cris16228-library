@@ -137,7 +137,6 @@ public class FileUtils {
             connection.setReadTimeout(3000);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
-            connection.disconnect();
             return BitmapFactory.decodeStream(is);
         } catch (FileNotFoundException fileNotFoundException) {
             if (connectionErrors != null)
