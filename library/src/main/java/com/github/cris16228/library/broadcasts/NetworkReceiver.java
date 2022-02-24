@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.github.cris16228.library.NetworkUtils;
-import com.github.cris16228.library.UpdateChecker;
+import com.github.cris16228.library.http.updater.UpdateChecker;
 
 public class NetworkReceiver extends BroadcastReceiver {
 

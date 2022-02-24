@@ -1,4 +1,4 @@
-package com.github.cris16228.library;
+package com.github.cris16228.library.http.updater;
 
 import android.Manifest;
 import android.app.Activity;
@@ -7,12 +7,13 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.github.cris16228.library.DownloadController;
+import com.github.cris16228.library.NetworkUtils;
+import com.github.cris16228.library.R;
+import com.github.cris16228.library.http.HttpUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -20,9 +21,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -169,19 +168,13 @@ public class UpdateChecker {
     }
 
     private int getNewPatch(String _url) throws IOException {
-        URL link = new URL(_url);
-        JsonReader jr = new JsonReader(new InputStreamReader(link.openStream()));
-        JsonElement je = JsonParser.parseReader(jr);
-        JsonObject jo = je.getAsJsonObject();
-        return jo.get("versionCode").getAsInt();
+        JsonModel jsonModel = new Gson().fromJson(HttpUtils.getJSON(_url, true), JsonModel.class);
+        return jsonModel.getVersionCode();
     }
 
     private String getNewVersion(String _url) throws IOException {
-        URL link = new URL(_url);
-        JsonReader jr = new JsonReader(new InputStreamReader(link.openStream()));
-        JsonElement je = JsonParser.parseReader(jr);
-        JsonObject jo = je.getAsJsonObject();
-        return jo.get("version").getAsString();
+        JsonModel jsonModel = new Gson().fromJson(HttpUtils.getJSON(_url, true), JsonModel.class);
+        return jsonModel.getVersion();
     }
 
     public enum Download {
