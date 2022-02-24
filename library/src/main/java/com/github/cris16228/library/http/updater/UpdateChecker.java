@@ -81,7 +81,7 @@ public class UpdateChecker {
                 try {
                     version = getNewVersion(json_link);
                     patch = getNewPatch(json_link);
-                    PrefUtils.with(weakActivity.get()).setSharedPref("update");
+                    PrefUtils.with(weakActivity.get()).setSharedPref("updater");
                     PrefUtils.with(weakActivity.get()).setString("version", version);
                     PrefUtils.with(weakActivity.get()).setInt("patch", patch);
                 } catch (IOException e) {
