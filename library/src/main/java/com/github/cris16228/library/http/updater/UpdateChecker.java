@@ -29,8 +29,8 @@ import java.util.concurrent.Executors;
 
 public class UpdateChecker {
 
-    private static int patch = -1;
-    private static String version = "";
+    private int patch = -1;
+    private String version = "";
     private final WeakReference<Activity> weakActivity;
     private final Download download;
     private final int app_patch;
@@ -84,7 +84,6 @@ public class UpdateChecker {
                     PrefUtils.with(weakActivity.get()).setSharedPref("update");
                     PrefUtils.with(weakActivity.get()).setString("version", version);
                     PrefUtils.with(weakActivity.get()).setInt("patch", patch);
-                    System.out.println("Version " + version + " (" + patch + ")");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -102,9 +101,10 @@ public class UpdateChecker {
                 return;
             }
             if (TextUtils.isEmpty(PrefUtils.PREF))
-                PrefUtils.with(weakActivity.get()).setSharedPref("update");
+                PrefUtils.with(weakActivity.get()).setSharedPref("updater");
             version = PrefUtils.with(weakActivity.get()).getString("version", version);
             patch = PrefUtils.with(weakActivity.get()).getInt("patch", patch);
+            System.out.println("Version " + version + " (" + patch + ")");
             if (patch == -1) {
                 Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
                 return;
