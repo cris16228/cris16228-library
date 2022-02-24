@@ -39,8 +39,8 @@ public class UpdateChecker {
     String download_link;
     DownloadController downloadController;
     NetworkUtils networkUtils;
-    private int patch = -1;
-    private String version = "";
+    private static int patch = -1;
+    private static String version = "";
 
     public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name) {
         this.weakActivity = new WeakReference<>(activity);
@@ -80,6 +80,7 @@ public class UpdateChecker {
                 try {
                     version = getNewVersion(json_link);
                     patch = getNewPatch(json_link);
+                    System.out.println("Version " + version + "(" + patch + ")");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
