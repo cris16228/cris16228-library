@@ -10,11 +10,16 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
+import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -120,6 +125,28 @@ public class FileUtils {
             _options.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(file), null, _options);
         } catch (FileNotFoundException exception) {
+            return null;
+        }
+    }
+
+    public Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
+        try {
+            URL imageURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(3000);
+            connection.setInstanceFollowRedirects(true);
+            InputStream is = connection.getInputStream();
+            is.close();
+            connection.disconnect();
+            return BitmapFactory.decodeStream(is);
+        } catch (FileNotFoundException fileNotFoundException) {
+            if (connectionErrors != null)
+                connectionErrors.FileNotFound(url);
+            return null;
+        } catch (IOException ioException) {
+            if (connectionErrors != null)
+                connectionErrors.NormalError();
             return null;
         }
     }
