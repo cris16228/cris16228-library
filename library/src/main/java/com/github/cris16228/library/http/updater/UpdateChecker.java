@@ -29,8 +29,6 @@ import java.util.concurrent.Executors;
 
 public class UpdateChecker {
 
-    private int patch = -1;
-    private String version = "";
     private final WeakReference<Activity> weakActivity;
     private final Download download;
     private final int app_patch;
@@ -42,6 +40,8 @@ public class UpdateChecker {
     String download_link;
     DownloadController downloadController;
     NetworkUtils networkUtils;
+    private int patch = -1;
+    private String version = "";
 
     public UpdateChecker(Activity activity, String _json_link, String _download_link, Download download, int _patch, String _version, String _app_name) {
         this.weakActivity = new WeakReference<>(activity);
@@ -91,88 +91,88 @@ public class UpdateChecker {
                 downloadController = new DownloadController(weakActivity.get(), download_link, app_name);
                 downloadController.enqueueDownload();
             }
-        });
-        handler.post(() -> {
-            Activity activity = weakActivity.get();
-            if (activity == null
-                    || activity.isFinishing()
-                    || activity.isDestroyed()) {
-                // activity is no longer valid, don't do anything!
-                return;
-            }
-            if (TextUtils.isEmpty(PrefUtils.PREF))
-                PrefUtils.with(weakActivity.get()).setSharedPref("updater");
-            version = PrefUtils.with(weakActivity.get()).getString("version", version);
-            patch = PrefUtils.with(weakActivity.get()).getInt("patch", patch);
-            System.out.println("Version " + version + " (" + patch + ")");
-            if (patch == -1) {
-                Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
-                return;
-            }
-            if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
-                MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
-                new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_app, version));
-                new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
-                        activity.getApplicationContext().getResources().getString(R.string.app_update)));
-                new_update.setPositiveButton(R.string.ok, (dialog, which) -> Dexter.withContext(weakActivity.get()).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                            new_update.create().dismiss();
-                            if (networkUtils.no_internet == null)
-                                networkUtils.showNoInternet(activity);
-                            if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
-                                networkUtils.no_internet.show();
-                            else {
-                                UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                                checker.check();
+            handler.post(() -> {
+                Activity activity = weakActivity.get();
+                if (activity == null
+                        || activity.isFinishing()
+                        || activity.isDestroyed()) {
+                    // activity is no longer valid, don't do anything!
+                    return;
+                }
+                if (TextUtils.isEmpty(PrefUtils.PREF))
+                    PrefUtils.with(weakActivity.get()).setSharedPref("updater");
+                version = PrefUtils.with(weakActivity.get()).getString("version", version);
+                patch = PrefUtils.with(weakActivity.get()).getInt("patch", patch);
+                System.out.println("Version " + version + " (" + patch + ")");
+                if (patch == -1) {
+                    Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
+                    MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
+                    new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_app, version));
+                    new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
+                            activity.getApplicationContext().getResources().getString(R.string.app_update)));
+                    new_update.setPositiveButton(R.string.ok, (dialog, which) -> Dexter.withContext(weakActivity.get()).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                            if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                                new_update.create().dismiss();
+                                if (networkUtils.no_internet == null)
+                                    networkUtils.showNoInternet(activity);
+                                if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
+                                    networkUtils.no_internet.show();
+                                else {
+                                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
+                                    checker.check();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check());
-                new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
-                });
-                new_update.create().show();
-                return;
-            }
-            if (patch > 0 && patch > app_patch && download == Download.JSON) {
-                MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
-                new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_patch, patch));
-                new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
-                        activity.getApplicationContext().getResources().getString(R.string.patch)));
-                new_update.setPositiveButton(R.string.ok, (dialog, which) -> Dexter.withContext(weakActivity.get()).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
-                            new_update.create().dismiss();
-                            if (networkUtils.no_internet == null)
-                                networkUtils.showNoInternet(activity);
-                            if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
-                                networkUtils.no_internet.show();
-                            else {
-                                UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
-                                checker.check();
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                            permissionToken.continuePermissionRequest();
+                        }
+                    }).check());
+                    new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                    });
+                    new_update.create().show();
+                    return;
+                }
+                if (patch > 0 && patch > app_patch && download == Download.JSON) {
+                    MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
+                    new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_patch, patch));
+                    new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
+                            activity.getApplicationContext().getResources().getString(R.string.patch)));
+                    new_update.setPositiveButton(R.string.ok, (dialog, which) -> Dexter.withContext(weakActivity.get()).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                            if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                                new_update.create().dismiss();
+                                if (networkUtils.no_internet == null)
+                                    networkUtils.showNoInternet(activity);
+                                if (!networkUtils.isConnectedTo(activity.getApplicationContext()))
+                                    networkUtils.no_internet.show();
+                                else {
+                                    UpdateChecker checker = new UpdateChecker(activity, json_link, download_link, Download.UPDATE, app_patch, app_version, app_name);
+                                    checker.check();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check());
-                new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
-                }).create();
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                            permissionToken.continuePermissionRequest();
+                        }
+                    }).check());
+                    new_update.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                    }).create();
 
-                new_update.create().show();
-            }
+                    new_update.create().show();
+                }
+            });
         });
     }
 
