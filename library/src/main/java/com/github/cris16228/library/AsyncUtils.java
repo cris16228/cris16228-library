@@ -24,9 +24,7 @@ public class AsyncUtils {
     public void execute() {
         executor.execute(() -> {
             onExecuteListener.doInBackground();
-            handler.post(() -> {
-                onExecuteListener.postDelayed();
-            });
+            handler.post(() -> onExecuteListener.postDelayed());
         });
     }
 
