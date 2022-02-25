@@ -27,7 +27,9 @@ public class GetStoreInfo {
 
             @Override
             public void postDelayed() {
+                System.out.println("Pos: " + pos);
                 app = store.getApps().get(pos);
+                System.out.println("Pos: " + store.getApps().get(pos).getName());
             }
         });
         asyncUtils.execute();
