@@ -11,6 +11,18 @@ public class GetStoreInfo {
     int pos = -1;
     Store store;
 
+    public App getApp() {
+        return app;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
     public App getApp(String store_url, String packageName) {
         AsyncUtils asyncUtils = AsyncUtils.get();
         asyncUtils.onExecuteListener(new AsyncUtils.onExecuteListener() {
