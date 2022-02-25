@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 public class GetStoreInfo {
 
 
-    App app = new App();
+    App app = null;
     int pos = -1;
     Store store;
 
@@ -31,6 +31,6 @@ public class GetStoreInfo {
             }
         });
         asyncUtils.execute();
-        return null;
+        return app;
     }
 }
