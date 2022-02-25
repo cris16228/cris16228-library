@@ -15,6 +15,10 @@ public class JsonModel implements Serializable {
     @Expose
     public Integer versionCode;
 
+    @SerializedName("package")
+    @Expose
+    public String packageName;
+
     public String getVersion() {
         return version;
     }

@@ -14,16 +14,16 @@ public class NetworkReceiver extends BroadcastReceiver {
     private int app_patch = 0;
     private String app_version = "";
     private String app_name = "";
-    private String json_link;
-    private String download_link;
+    private String packageName;
+    private String store_url;
 
     public NetworkReceiver() {
     }
 
 
-    public NetworkReceiver(String _json_link, String _download_link, int app_patch, String app_version, String app_name) {
-        this.json_link = _json_link;
-        this.download_link = _download_link;
+    public NetworkReceiver(String _packageName, String _store_url, int app_patch, String app_version, String app_name) {
+        this.packageName = _packageName;
+        this.store_url = _store_url;
         this.app_patch = app_patch;
         this.app_version = app_version;
         this.app_name = app_name;
@@ -32,9 +32,9 @@ public class NetworkReceiver extends BroadcastReceiver {
     }
 
 
-    public NetworkReceiver(String _json_link, String _download_link, int app_patch, String app_version, String app_name, NetworkUtils networkUtils) {
-        this.json_link = _json_link;
-        this.download_link = _download_link;
+    public NetworkReceiver(String _packageName, String _store_url, int app_patch, String app_version, String app_name, NetworkUtils networkUtils) {
+        this.packageName = _packageName;
+        this.store_url = _store_url;
         this.app_patch = app_patch;
         this.app_version = app_version;
         this.app_name = app_name;
@@ -47,8 +47,9 @@ public class NetworkReceiver extends BroadcastReceiver {
             networkUtils.showNoInternet(context);
         if (networkUtils.isConnectedTo(context)) {
             networkUtils.no_internet.dismiss();
-            UpdateChecker updateChecker = new UpdateChecker((Activity) context, json_link, download_link, UpdateChecker.Download.JSON, app_patch, app_version, app_name);
-            updateChecker.check();
+            UpdateChecker checker = new UpdateChecker((Activity) context, UpdateChecker.Download.UPDATE, app_patch, app_version, app_name,
+                    packageName, store_url);
+            checker.check();
         } else
             networkUtils.no_internet.show();
     }
