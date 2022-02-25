@@ -80,7 +80,8 @@ public class UpdateChecker {
                 return;
             }
             if (download == Download.JSON) {
-                AsyncUtils.get().onExecuteListener(new AsyncUtils.onExecuteListener() {
+                AsyncUtils asyncUtils = AsyncUtils.get();
+                asyncUtils.onExecuteListener(new AsyncUtils.onExecuteListener() {
                     @Override
                     public void doInBackground() {
                         Store store = new Gson().fromJson(HttpUtils.getJSON(store_url, false), Store.class);
@@ -98,6 +99,7 @@ public class UpdateChecker {
 
                     }
                 });
+                asyncUtils.execute();
             } else if (download == Download.UPDATE) {
                 downloadController = new DownloadController(weakActivity.get(), download_link, app_name);
                 downloadController.enqueueDownload();

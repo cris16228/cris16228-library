@@ -12,7 +12,8 @@ public class GetStoreInfo {
     Store store;
 
     public App getApp(String store_url, String packageName) {
-        AsyncUtils.get().onExecuteListener(new AsyncUtils.onExecuteListener() {
+        AsyncUtils asyncUtils = AsyncUtils.get();
+        asyncUtils.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void doInBackground() {
                 store = new Gson().fromJson(HttpUtils.getJSON(store_url, false), Store.class);
@@ -29,6 +30,7 @@ public class GetStoreInfo {
                 app = store.getApps().get(pos);
             }
         });
+        asyncUtils.execute();
         return null;
     }
 }
