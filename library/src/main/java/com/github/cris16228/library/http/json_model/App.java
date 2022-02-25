@@ -26,6 +26,9 @@ public class App implements Serializable {
     @SerializedName("screenshots")
     @Expose
     private List<String> screenshots = null;
+    @SerializedName("links")
+    @Expose
+    private List<String> links = null;
     @SerializedName("download")
     @Expose
     private Download download;
@@ -76,6 +79,14 @@ public class App implements Serializable {
 
     public void setScreenshots(List<String> screenshots) {
         this.screenshots = screenshots;
+    }
+
+    public List<String> getlinks() {
+        return links;
+    }
+
+    public void setlinks(List<String> links) {
+        this.links = links;
     }
 
     public Download getDownload() {
