@@ -48,11 +48,11 @@ public class FileUtils {
 
     public boolean isFileValid(String path) {
         File tmp = new File(path);
-        return tmp.length() > 0 && tmp.exists();
+        return tmp.exists() && tmp.length() > 0;
     }
 
     public boolean isFileValid(File tmp) {
-        return tmp.length() > 0 && tmp.exists();
+        return tmp.exists() && tmp.length() > 0;
     }
 
     public String getMD5Hash(String input) {
@@ -90,6 +90,12 @@ public class FileUtils {
             sd_card.setVisibility(View.VISIBLE);
         else
             sd_card.setVisibility(View.GONE);
+    }
+
+    public boolean isFileMimeType(String path, MimeTypes mimeType) {
+        File tmp = new File(path);
+        Uri uri = Uri.fromFile(tmp);
+        return getMimeType(uri).startsWith(mimeType.getValue());
     }
 
     public String getMimeType(Uri uri) {
@@ -180,6 +186,28 @@ public class FileUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public enum MimeTypes {
+        VIDEO("video/"),
+        IMAGE("image/"),
+        AUDIO("audio/"),
+        TEXT("text/");
+
+        private final String value;
+
+        MimeTypes(final String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return this.getValue();
         }
     }
 }
