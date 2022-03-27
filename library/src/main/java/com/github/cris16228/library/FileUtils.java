@@ -196,7 +196,7 @@ public class FileUtils {
     public String readJson(String file) {
         StringBuilder sb = new StringBuilder();
         try {
-            FileInputStream fis = context.openFileInput(file);
+            FileInputStream fis = new FileInputStream(file);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
 
@@ -204,10 +204,10 @@ public class FileUtils {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
+            fis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return sb.toString();
     }
 
