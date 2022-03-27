@@ -12,12 +12,16 @@ import android.widget.ImageView;
 
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -185,6 +189,44 @@ public class FileUtils {
                 os.write(data, 0, count);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String readJson(String file) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            FileInputStream fis = context.openFileInput(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+
+    public void writeJson(String file, String json) {
+        File f = new File(file);
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            osw.append(json);
+            osw.close();
+            fos.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
