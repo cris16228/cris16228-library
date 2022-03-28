@@ -1,11 +1,20 @@
 package com.github.cris16228.library;
 
+import android.content.Context;
+import android.text.format.DateFormat;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class DateTimeUtils {
 
@@ -38,6 +47,34 @@ public class DateTimeUtils {
     public void setTime(long time) {
         this.time = time;
     }
+
+    public String getDateTime(AppCompatActivity activity) {
+        Context context = activity.getBaseContext();
+        AtomicLong date_ms = new AtomicLong(0L);
+        StringBuilder dateTime = new StringBuilder();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
+                .build();
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
+            dateTime.append(" ");
+            date_ms.set(selection);
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
+                    .setTitleText("Select time")
+                    .setTimeFormat(DateFormat.is24HourFormat(context) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+                    .setHour(calendar.get(Calendar.HOUR_OF_DAY)).setMinute(calendar.get(Calendar.MINUTE)).build();
+            timePicker.addOnPositiveButtonClickListener(v -> {
+                dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
+                        "0" + timePicker.getMinute() : timePicker.getMinute()));
+            });
+            timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+        });
+        datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+        return dateTime.toString();
+    }
+
 
     private String timePicker(MaterialTimePicker timePicker) {
         return timePicker.getHour() + ":" + (timePicker.getMinute() == 0 ? "00" : timePicker.getMinute());
