@@ -88,9 +88,25 @@ public class DateTimeUtils {
         return dateTime.toString();
     }
 
-    public long getMilliseconds(String date) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(DEFAULT_FORMAT_DATE, Locale.getDefault());
-        Date temp_date = format.parse(date);
+    public long getMilliseconds(String date) {
+        SimpleDateFormat format = new SimpleDateFormat(DEFAULT_FORMAT, Locale.getDefault());
+        Date temp_date = null;
+        try {
+            temp_date = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return temp_date != null ? temp_date.getTime() : 0;
+    }
+
+    public long getMilliseconds(String date, String formatting) {
+        SimpleDateFormat format = new SimpleDateFormat(formatting, Locale.getDefault());
+        Date temp_date = null;
+        try {
+            temp_date = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return temp_date != null ? temp_date.getTime() : 0;
     }
 }
