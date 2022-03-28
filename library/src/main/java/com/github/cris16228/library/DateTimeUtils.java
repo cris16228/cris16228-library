@@ -2,6 +2,7 @@ package com.github.cris16228.library;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.widget.AutoCompleteTextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,7 +49,7 @@ public class DateTimeUtils {
         this.time = time;
     }
 
-    public String getDateTime(AppCompatActivity activity) {
+    public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(0L);
         StringBuilder dateTime = new StringBuilder();
@@ -68,11 +69,11 @@ public class DateTimeUtils {
             timePicker.addOnPositiveButtonClickListener(v -> {
                 dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
                         "0" + timePicker.getMinute() : timePicker.getMinute()));
+                datetime.setText(dateTime.toString());
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
-        return dateTime.toString();
     }
 
 
