@@ -1,6 +1,7 @@
 package com.github.cris16228.library;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.widget.AutoCompleteTextView;
 
@@ -74,6 +75,12 @@ public class DateTimeUtils {
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+    }
+
+    public String getDateTime(long millis, String formatter) {
+        if (TextUtils.isEmpty(formatter))
+            formatter = DEFAULT_FORMAT;
+        return new SimpleDateFormat(formatter, Locale.getDefault()).format(millis);
     }
 
 
