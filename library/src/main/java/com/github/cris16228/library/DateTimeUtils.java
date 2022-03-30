@@ -2,7 +2,6 @@ package com.github.cris16228.library;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.widget.AutoCompleteTextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,7 +64,7 @@ public class DateTimeUtils {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
                     .setTitleText("Select time")
-                    .setTimeFormat(DateFormat.is24HourFormat(context) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
                     .setHour(calendar.get(Calendar.HOUR_OF_DAY)).setMinute(calendar.get(Calendar.MINUTE)).build();
             timePicker.addOnPositiveButtonClickListener(v -> {
                 dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
