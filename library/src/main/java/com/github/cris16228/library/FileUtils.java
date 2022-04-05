@@ -207,6 +207,13 @@ public class FileUtils {
             fis.close();
         } catch (IOException e) {
             e.printStackTrace();
+            if (e instanceof FileNotFoundException)
+                try {
+                    throw new LibraryException(getClass(), "File " + file + " not found!");
+                } catch (LibraryException ex) {
+                    ex.printStackTrace();
+                }
+            return "";
         }
         return sb.toString();
     }
