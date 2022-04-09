@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.core.view.ContentInfoCompat;
+import androidx.fragment.app.FragmentActivity;
 
 public class ActivityUtils {
 
@@ -26,8 +27,11 @@ public class ActivityUtils {
     }
 
     public void restartApp(Context currentActivity, Class<?> destinationActivity) {
-        ((Activity) currentActivity).finish();
-        startActivity(currentActivity, destinationActivity);
+        if (currentActivity instanceof FragmentActivity)
+            ((FragmentActivity) currentActivity).finish();
+        else
+            ((Activity) currentActivity).finish();
+        restartActivity(currentActivity, destinationActivity);
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish) {
@@ -115,6 +119,12 @@ public class ActivityUtils {
     public void startActivity(Context currentActivity, Class<?> destinationActivity) {
         Intent activity = new Intent(currentActivity, destinationActivity);
         activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        currentActivity.startActivity(activity);
+    }
+
+    public void restartActivity(Context currentActivity, Class<?> destinationActivity) {
+        Intent activity = new Intent(currentActivity, destinationActivity);
+        activity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         currentActivity.startActivity(activity);
     }
 

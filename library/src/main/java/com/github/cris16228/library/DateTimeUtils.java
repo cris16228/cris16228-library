@@ -20,8 +20,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class DateTimeUtils {
 
     private final String DEFAULT_FORMAT_DATE = "dd/MM/yyyy";
-    private final String DEFAULT_FORMAT_TIME = "hh:mm";
-    private String DEFAULT_FORMAT = "dd/MM/yyyy hh:mm";
+    private final String DEFAULT_FORMAT_TIME = "HH:mm";
+    private String DEFAULT_FORMAT = "dd/MM/yyyy HH:mm";
     private long date;
     private long time;
 
