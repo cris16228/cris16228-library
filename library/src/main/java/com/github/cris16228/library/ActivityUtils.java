@@ -31,6 +31,7 @@ public class ActivityUtils {
             ((FragmentActivity) currentActivity).finish();
         else
             ((Activity) currentActivity).finish();
+        System.out.println("Finishing " + currentActivity.getClass().getSimpleName());
         restartActivity(currentActivity, destinationActivity);
     }
 
