@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -21,6 +22,7 @@ public class DownloadController {
     private final String url;
     private final String app_name;
     private final boolean save_in_cache;
+    private String original_app_name;
 
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
         this.context = context;
@@ -29,10 +31,20 @@ public class DownloadController {
         this.save_in_cache = save_in_cache;
     }
 
+    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache, String original_app_name) {
+        this.context = context;
+        this.url = url;
+        this.app_name = _app_name;
+        this.save_in_cache = save_in_cache;
+        this.original_app_name = original_app_name;
+    }
+
     public final void enqueueDownload() {
         String destination = "";
         if (save_in_cache) {
-            destination = context.getCacheDir() + "/apks/" + app_name;
+            destination = context.getCacheDir() + "/apks/" + app_name + "/";
+        } else if (!TextUtils.isEmpty(original_app_name)) {
+            destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + original_app_name + "/" + app_name + "/" + ".updates/";
         } else {
             destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app_name + "/" + ".updates/";
         }
