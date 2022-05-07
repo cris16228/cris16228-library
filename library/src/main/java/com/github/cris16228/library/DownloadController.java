@@ -11,6 +11,8 @@ import android.os.Environment;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
+import com.karumi.dexter.BuildConfig;
+
 import java.io.File;
 
 public class DownloadController {
@@ -18,15 +20,22 @@ public class DownloadController {
     private final Context context;
     private final String url;
     private final String app_name;
+    private final boolean save_in_cache;
 
-    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name) {
+    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
         this.context = context;
         this.url = url;
         this.app_name = _app_name;
+        this.save_in_cache = save_in_cache;
     }
 
     public final void enqueueDownload() {
-        String destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app_name + "/" + ".updates/";
+        String destination = "";
+        if (save_in_cache) {
+            destination = context.getCacheDir() + "/apks/" + app_name;
+        } else {
+            destination = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app_name + "/" + ".updates/";
+        }
         File path = new File(destination);
         if (!path.exists()) {
             path.mkdirs();

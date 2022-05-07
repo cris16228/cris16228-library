@@ -101,7 +101,7 @@ public class UpdateChecker {
                 });
                 asyncUtils.execute();
             } else if (download == Download.UPDATE) {
-                downloadController = new DownloadController(weakActivity.get(), download_link, app_name);
+                downloadController = new DownloadController(weakActivity.get(), download_link, app_name, false);
                 downloadController.enqueueDownload();
             }
             handler.post(() -> {
