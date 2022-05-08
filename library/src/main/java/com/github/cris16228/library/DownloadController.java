@@ -90,9 +90,7 @@ public class DownloadController {
                             8192);
 
                     // Output stream
-                    OutputStream output = new FileOutputStream(Environment
-                            .getExternalStorageDirectory().toString()
-                            + "/2011.kml");
+                    OutputStream output = new FileOutputStream(destination);
 
                     byte data[] = new byte[1024];
 
