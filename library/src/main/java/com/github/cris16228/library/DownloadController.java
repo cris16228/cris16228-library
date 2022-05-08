@@ -1,6 +1,5 @@
 package com.github.cris16228.library;
 
-import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,13 +7,20 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.karumi.dexter.BuildConfig;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class DownloadController {
 
@@ -23,6 +29,7 @@ public class DownloadController {
     private final String app_name;
     private final boolean save_in_cache;
     private String original_app_name;
+    String destination;
 
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
         this.context = context;
@@ -40,7 +47,6 @@ public class DownloadController {
     }
 
     public final void enqueueDownload() {
-        String destination = "";
         if (save_in_cache) {
             destination = context.getCacheDir() + "/apks/" + app_name + "/";
         } else if (!TextUtils.isEmpty(original_app_name)) {
@@ -59,7 +65,67 @@ public class DownloadController {
         if (file.exists()) {
             file.delete();
         }
-        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        AsyncUtils downloader = new AsyncUtils();
+        downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
+            @Override
+            public void preExecute() {
+
+            }
+
+            @Override
+            public void doInBackground() {
+                int count;
+                try {
+                    URL link = new URL(url);
+                    URLConnection connection = link.openConnection();
+                    connection.connect();
+
+                    // this will be useful so that you can show a tipical 0-100%
+                    // progress bar
+                    int lenghtOfFile = connection.getContentLength();
+
+                    // download the file
+                    InputStream input = new BufferedInputStream(link.openStream(),
+                            8192);
+
+                    // Output stream
+                    OutputStream output = new FileOutputStream(Environment
+                            .getExternalStorageDirectory().toString()
+                            + "/2011.kml");
+
+                    byte data[] = new byte[1024];
+
+                    long total = 0;
+
+                    while ((count = input.read(data)) != -1) {
+                        total += count;
+                        // publishing the progress....
+                        // After this onProgressUpdate will be called
+                        /*publishProgress("" + (int) ((total * 100) / lenghtOfFile));*/
+
+                        // writing data to file
+                        output.write(data, 0, count);
+                    }
+
+                    // flushing output
+                    output.flush();
+
+                    // closing streams
+                    output.close();
+                    input.close();
+
+                } catch (Exception e) {
+                    Log.e("Error: ", e.getMessage());
+                }
+            }
+
+            @Override
+            public void postDelayed() {
+                showInstallOption(destination);
+            }
+        });
+       /* DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri downloadUri = Uri.parse(url);
         DownloadManager.Request request = new DownloadManager.Request(downloadUri);
         request.setMimeType("application/vnd.android.package-archive");
@@ -67,7 +133,7 @@ public class DownloadController {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationUri(uri);
         showInstallOption(destination);
-        downloadManager.enqueue(request);
+        downloadManager.enqueue(request);*/
     }
 
 

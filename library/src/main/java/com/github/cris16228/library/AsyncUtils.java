@@ -22,6 +22,7 @@ public class AsyncUtils {
     }
 
     public void execute() {
+        onExecuteListener.preExecute();
         executor.execute(() -> {
             onExecuteListener.doInBackground();
             handler.post(() -> onExecuteListener.postDelayed());
@@ -29,6 +30,8 @@ public class AsyncUtils {
     }
 
     public interface onExecuteListener {
+
+        void preExecute();
 
         void doInBackground();
 

@@ -83,6 +83,11 @@ public class UpdateChecker {
                 AsyncUtils asyncUtils = AsyncUtils.get();
                 asyncUtils.onExecuteListener(new AsyncUtils.onExecuteListener() {
                     @Override
+                    public void preExecute() {
+
+                    }
+
+                    @Override
                     public void doInBackground() {
                         Store store = new Gson().fromJson(HttpUtils.getJSON(store_url, false), Store.class);
                         for (int i = 0; i < store.getApps().size(); i++) {
