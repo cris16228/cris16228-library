@@ -101,6 +101,7 @@ public class DownloadController {
                         /*publishProgress("" + (int) ((total * 100) / lenghtOfFile));*/
 
                         // writing data to file
+                        Log.i("Downloader: ", total + "/" + lenghtOfFile);
                         output.write(data, 0, count);
                     }
 
