@@ -3,10 +3,9 @@ package com.github.cris16228.library.http.json_model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Download implements Serializable {
+public class Download {
 
     @SerializedName("link")
     @Expose
@@ -41,5 +40,4 @@ public class Download implements Serializable {
     public void setChanges(List<String> changes) {
         this.changes = changes;
     }
-
 }

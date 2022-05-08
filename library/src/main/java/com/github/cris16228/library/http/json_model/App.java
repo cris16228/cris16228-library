@@ -3,23 +3,25 @@ package com.github.cris16228.library.http.json_model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class App implements Serializable {
+public class App {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
     @SerializedName("packageName")
     @Expose
     private String packageName;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("version")
     @Expose
     private Integer version;
     @SerializedName("versionCode")
     @Expose
     private String versionCode;
+    @SerializedName("description")
+    @Expose
+    private String description;
     @SerializedName("icon")
     @Expose
     private String icon;
@@ -33,20 +35,20 @@ public class App implements Serializable {
     @Expose
     private Download download;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPackageName() {
         return packageName;
     }
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getVersion() {
@@ -65,6 +67,14 @@ public class App implements Serializable {
         this.versionCode = versionCode;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getIcon() {
         return icon;
     }
@@ -81,11 +91,11 @@ public class App implements Serializable {
         this.screenshots = screenshots;
     }
 
-    public List<String> getlinks() {
+    public List<String> getLinks() {
         return links;
     }
 
-    public void setlinks(List<String> links) {
+    public void setLinks(List<String> links) {
         this.links = links;
     }
 
@@ -96,5 +106,6 @@ public class App implements Serializable {
     public void setDownload(Download download) {
         this.download = download;
     }
+
 
 }
