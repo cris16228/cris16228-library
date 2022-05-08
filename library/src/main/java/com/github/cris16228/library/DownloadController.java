@@ -10,8 +10,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.karumi.dexter.BuildConfig;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +26,7 @@ public class DownloadController {
     private final boolean save_in_cache;
     String destination;
     private String original_app_name;
+    private String authority;
 
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
         this.context = context;
@@ -42,6 +41,20 @@ public class DownloadController {
         this.app_name = _app_name;
         this.save_in_cache = save_in_cache;
         this.original_app_name = original_app_name;
+    }
+
+    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache, String original_app_name,
+                              String authority) {
+        this.context = context;
+        this.url = url;
+        this.app_name = _app_name;
+        this.save_in_cache = save_in_cache;
+        this.original_app_name = original_app_name;
+        this.authority = authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 
     public final void enqueueDownload() {
@@ -93,7 +106,7 @@ public class DownloadController {
                     byte[] data = new byte[1024];
 
                     long total = 0;
-
+                    LongUtils longUtils = new LongUtils();
                     while ((count = input.read(data)) != -1) {
                         total += count;
                         // publishing the progress....
@@ -101,7 +114,7 @@ public class DownloadController {
                         /*publishProgress("" + (int) ((total * 100) / lenghtOfFile));*/
 
                         // writing data to file
-                        Log.i("Downloader: ", total + "/" + lenghtOfFile);
+                        Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(lenghtOfFile));
                         output.write(data, 0, count);
                     }
 
@@ -123,22 +136,15 @@ public class DownloadController {
             }
         });
         downloader.execute();
-       /* DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri downloadUri = Uri.parse(url);
-        DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-        request.setMimeType("application/vnd.android.package-archive");
-        request.setTitle(context.getResources().getString(R.string.updater_title, app_name));
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationUri(uri);
-        showInstallOption(destination);
-        downloadManager.enqueue(request);*/
     }
 
 
     private void showInstallOption(String destination) {
+        if (TextUtils.isEmpty(authority))
+            authority = context.getPackageName();
         Uri contentUri = FileProvider.getUriForFile(
                 context,
-                BuildConfig.LIBRARY_PACKAGE_NAME + ".provider",
+                authority + ".provider",
                 new File(destination)
         );
         Intent install = new Intent(Intent.ACTION_VIEW);
