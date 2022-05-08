@@ -1,9 +1,7 @@
 package com.github.cris16228.library;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -28,8 +26,8 @@ public class DownloadController {
     private final String url;
     private final String app_name;
     private final boolean save_in_cache;
-    private String original_app_name;
     String destination;
+    private String original_app_name;
 
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
         this.context = context;
@@ -92,7 +90,7 @@ public class DownloadController {
                     // Output stream
                     OutputStream output = new FileOutputStream(destination);
 
-                    byte data[] = new byte[1024];
+                    byte[] data = new byte[1024];
 
                     long total = 0;
 
@@ -137,23 +135,17 @@ public class DownloadController {
 
 
     private void showInstallOption(String destination) {
-        BroadcastReceiver onComplete = new BroadcastReceiver() {
-            public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-                Uri contentUri = FileProvider.getUriForFile(
-                        context,
-                        BuildConfig.LIBRARY_PACKAGE_NAME + ".provider",
-                        new File(destination)
-                );
-                Intent install = new Intent(Intent.ACTION_VIEW);
-                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                install.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                install.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-                install.setData(contentUri);
-                if (contentUri != null)
-                    context.startActivity(install);
-                context.unregisterReceiver(this);
-            }
-        };
-        context.registerReceiver(onComplete, new IntentFilter("android.intent.action.DOWNLOAD_COMPLETE"));
+        Uri contentUri = FileProvider.getUriForFile(
+                context,
+                BuildConfig.LIBRARY_PACKAGE_NAME + ".provider",
+                new File(destination)
+        );
+        Intent install = new Intent(Intent.ACTION_VIEW);
+        install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        install.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        install.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+        install.setData(contentUri);
+        if (contentUri != null)
+            context.startActivity(install);
     }
 }
