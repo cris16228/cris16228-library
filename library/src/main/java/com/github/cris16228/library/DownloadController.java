@@ -125,6 +125,7 @@ public class DownloadController {
                 showInstallOption(destination);
             }
         });
+        downloader.execute();
        /* DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri downloadUri = Uri.parse(url);
         DownloadManager.Request request = new DownloadManager.Request(downloadUri);
