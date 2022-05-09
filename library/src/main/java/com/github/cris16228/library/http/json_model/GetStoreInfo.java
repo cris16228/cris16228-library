@@ -33,9 +33,8 @@ public class GetStoreInfo {
 
             @Override
             public void doInBackground() {
-                store = new Gson().fromJson(HttpUtils.getJSON(store_url, true), Store.class);
+                store = new Gson().fromJson(HttpUtils.getJSON(store_url, false), Store.class);
                 for (int i = 0; i < store.getApps().size(); i++) {
-                    System.out.println(store.getApps().get(i).getPackageName() + "/" + packageName);
                     if (store.getApps().get(i).getPackageName().equals(packageName)) {
                         pos = i;
                     }
@@ -44,9 +43,7 @@ public class GetStoreInfo {
 
             @Override
             public void postDelayed() {
-                System.out.println("Pos: " + pos);
                 app = store.getApps().get(pos);
-                System.out.println("Pos: " + store.getApps().get(pos).getName());
             }
         });
         asyncUtils.execute();
