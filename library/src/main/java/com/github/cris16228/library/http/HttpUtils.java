@@ -57,8 +57,17 @@ public class HttpUtils {
                 connection.setRequestProperty("uploaded_file", filePath);
 
                 dos = new DataOutputStream(connection.getOutputStream());
+
+                /*dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=mobile_no" + lineEnd); // name=mobile_no so you have to get PHP side using mobile_no
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(mobile_number); // mobile_no is String variable
+                dos.writeBytes(lineEnd);*/
+
                 dos.writeBytes(twoHyphens + boundary + endLine);
-                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + filePath + "\"" + endLine);
+                dos.writeBytes("Content-Disposition: form-data; name=uploaded_file;filename=" + filePath + endLine);
+                dos.writeBytes(endLine);
+                dos.writeBytes("uploaded_file");
                 dos.writeBytes(endLine);
 
                 bytesAvailable = fis.available();
