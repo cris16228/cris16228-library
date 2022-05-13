@@ -1,5 +1,6 @@
 package com.github.cris16228.library.http;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.cris16228.library.FileUtils;
@@ -25,7 +26,9 @@ public class HttpUtils {
         return new HttpUtils();
     }
 
-    public int uploadFile(String filePath) {
+    public int uploadFile(String _uploadServerUri, String filePath) {
+        if (!TextUtils.isEmpty(_uploadServerUri))
+            uploadServerUri = _uploadServerUri;
         HttpURLConnection connection = null;
         DataOutputStream dos = null;
         String endLine = "\r\n";
@@ -37,7 +40,7 @@ public class HttpUtils {
         int maxBuffer = 1024 * 1024;
         File sourceFile = new File(filePath);
         String fileName = fileUtils.getFileName(sourceFile);
-        if (sourceFile.isFile()) {
+        if (!sourceFile.isFile()) {
             return 0;
         } else {
             try {
