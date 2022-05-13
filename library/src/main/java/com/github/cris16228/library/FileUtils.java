@@ -238,6 +238,10 @@ public class FileUtils {
         }
     }
 
+    public String getFileName(File file) {
+        return file.getName();
+    }
+
     public enum MimeTypes {
         VIDEO("video/"),
         IMAGE("image/"),
