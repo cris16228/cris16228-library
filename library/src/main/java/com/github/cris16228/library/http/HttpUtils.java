@@ -58,7 +58,7 @@ public class HttpUtils {
 
                 dos = new DataOutputStream(connection.getOutputStream());
                 dos.writeBytes(twoHyphens + boundary + endLine);
-                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + fileName + "\"" + endLine);
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + filePath + "\"" + endLine);
                 dos.writeBytes(endLine);
 
                 bytesAvailable = fis.available();
