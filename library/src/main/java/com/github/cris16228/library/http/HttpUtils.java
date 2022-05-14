@@ -3,105 +3,165 @@ package com.github.cris16228.library.http;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.github.cris16228.library.FileUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
 
 public class HttpUtils {
 
     private int readTimeout = 10000;
     private int connectionTimeout = 15000;
-    String uploadServerUri = "http://192.168.1.11/upload.php";
-    int serverResponseCode = 0;
+    String url = "http://192.168.1.11/upload.php";
+    String lineEnd = "\r\n";
+    String twoHyphens = "--";
+    String boundary = "*****";
+    String TAG = getClass().getSimpleName();
+    private HttpURLConnection conn;
+    private DataOutputStream dos;
+    private StringBuilder result = new StringBuilder();
+    private JSONObject jsonObject;
 
     public static HttpUtils get() {
         return new HttpUtils();
     }
 
-    public int uploadFile(String _uploadServerUri, String filePath) {
-        if (!TextUtils.isEmpty(_uploadServerUri))
-            uploadServerUri = _uploadServerUri;
-        HttpURLConnection connection = null;
-        DataOutputStream dos = null;
-        String endLine = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        int bytesRead, bytesAvailable, bufferSize;
-        FileUtils fileUtils = new FileUtils();
-        byte[] buffer;
-        int maxBuffer = 1024 * 1024;
-        File sourceFile = new File(filePath);
-        String fileName = fileUtils.getFileName(sourceFile);
-        if (!sourceFile.isFile()) {
-            return 0;
-        } else {
-            try {
-                FileInputStream fis = new FileInputStream(filePath);
-                URL url = new URL(uploadServerUri);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                connection.setUseCaches(false);
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Connection", "Keep-Alive");
-                connection.setRequestProperty("ENCTYPE", "multipart/form-data");
-                connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                connection.setRequestProperty("uploaded_file", filePath);
+    public HashMap<String, String> defaultParams() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", "cris16228");
+        params.put("action", "upload");
 
-                dos = new DataOutputStream(connection.getOutputStream());
+        return params;
+    }
 
-                /*dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=mobile_no" + lineEnd); // name=mobile_no so you have to get PHP side using mobile_no
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(mobile_number); // mobile_no is String variable
-                dos.writeBytes(lineEnd);*/
+    public HashMap<String, String> defaultFileParams(String path) {
+        HashMap<String, String> fileParams = new HashMap<>();
+        fileParams.put("file", path);
+        return fileParams;
+    }
 
-                dos.writeBytes(twoHyphens + boundary + endLine);
-                dos.writeBytes("Content-Disposition: form-data; name=uploaded_file;filename=" + filePath + endLine);
-                dos.writeBytes(endLine);
-                dos.writeBytes("uploaded_file");
-                dos.writeBytes(endLine);
+    public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
+        if (!TextUtils.isEmpty(_url))
+            url = _url;
+        try {
+            conn = (HttpURLConnection) new URL(_url).openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(50000);
+            if (files != null) {
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                for (String key : files.keySet()) {
+                    conn.setRequestProperty(key, files.get(key));
+                }
+            }
+            conn.connect();
+            dos = new DataOutputStream(conn.getOutputStream());
 
-                bytesAvailable = fis.available();
-                bufferSize = Math.min(bytesAvailable, maxBuffer);
-                buffer = new byte[bufferSize];
+            if (files != null) {
+                for (String key : files.keySet()) {
+                    int bytesRead, bytesAvailable, bufferSize;
+                    byte[] buffer;
+                    int maxBuffer = 1 * 1024 * 1024;
 
-                bytesRead = fis.read(buffer, 0, bufferSize);
+                    File selectedFile = new File(files.get(key));
+                    if (!selectedFile.isFile()) {
+                        break;
+                    }
 
-                while (bytesRead > 0) {
-                    dos.write(buffer, 0, bufferSize);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"" + key + "\";filename=\"" + files.get(key) + "\"" + lineEnd);
+                    dos.writeBytes(lineEnd);
+
+                    FileInputStream fis = new FileInputStream(selectedFile);
                     bytesAvailable = fis.available();
                     bufferSize = Math.min(bytesAvailable, maxBuffer);
+                    buffer = new byte[bufferSize];
+
                     bytesRead = fis.read(buffer, 0, bufferSize);
+
+                    while (bytesRead > 0) {
+                        dos.write(buffer, 0, bufferSize);
+                        bytesAvailable = fis.available();
+                        bufferSize = Math.min(bytesAvailable, maxBuffer);
+                        bytesRead = fis.read(buffer, 0, bufferSize);
+
+                    }
+
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    fis.close();
                 }
-                dos.writeBytes(endLine);
-                dos.writeBytes(twoHyphens + boundary + twoHyphens + endLine);
-                serverResponseCode = connection.getResponseCode();
-                String serverResponseMessage = connection.getResponseMessage();
-                Log.i(getClass().getSimpleName(), "HTTP Response is : "
-                        + serverResponseMessage + ": " + serverResponseCode);
-                if (serverResponseCode == 200) {
-                    Log.i(getClass().getSimpleName(), "File Upload Complete.");
+            }
+            if (params != null && files != null) {
+                for (String key : params.keySet()) {
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd);
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(params.get(key));
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
                 }
-                fis.close();
+            } else if (params != null) {
+                StringBuilder sb = new StringBuilder();
+                boolean flag = false;
+                for (String key : params.keySet()) {
+                    try {
+                        if (flag) {
+                            sb.append("&");
+                        }
+                        sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    flag = true;
+                    dos.writeBytes(sb.toString());
+                }
+                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage());
                 dos.flush();
                 dos.close();
-            } catch (MalformedURLException ex) {
-                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
-            } catch (Exception e) {
-                Log.e("Upload file to server Exception", "Exception : "
-                        + e.getMessage(), e);
             }
-            return serverResponseCode;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(conn.getInputStream())));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+
+            }
+            Log.d(TAG, "Result: " + result.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        conn.disconnect();
+
+        try {
+            jsonObject = new JSONObject(result.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parsing data " + e);
+        }
+
+        return jsonObject;
     }
 
 
