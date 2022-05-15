@@ -13,16 +13,16 @@ public class AsyncUtils {
 
     private onExecuteListener onExecuteListener;
 
-    public static AsyncUtils get() {
-        return new AsyncUtils();
-    }
-
     public AsyncUtils(ExecutorService executor, Handler handler) {
         this.executor = executor;
         this.handler = handler;
     }
 
     public AsyncUtils() {
+    }
+
+    public static AsyncUtils get() {
+        return new AsyncUtils();
     }
 
     public void onExecuteListener(onExecuteListener _onExecuteListener) {
