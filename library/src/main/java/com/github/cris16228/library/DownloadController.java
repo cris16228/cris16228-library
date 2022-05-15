@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutorService;
 
 public class DownloadController {
 
@@ -32,6 +34,8 @@ public class DownloadController {
     Dialog dialog;
     LinearProgressIndicator progress;
     TextView download_app_name, download_app_percent, download_app_size;
+    ExecutorService executor;
+    Handler handler;
     private String original_app_name;
     private String authority;
 
@@ -64,6 +68,14 @@ public class DownloadController {
         this.authority = authority;
     }
 
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
+
     public final void enqueueDownload() {
         if (save_in_cache) {
             destination = context.getCacheDir() + "/apks/" + app_name + "/";
@@ -84,7 +96,12 @@ public class DownloadController {
             file.delete();
         }
 
-        AsyncUtils downloader = new AsyncUtils();
+        AsyncUtils downloader;
+        if (executor == null && handler == null)
+            downloader = new AsyncUtils();
+        else {
+            downloader = new AsyncUtils(executor, handler);
+        }
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
