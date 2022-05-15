@@ -30,6 +30,8 @@ public class NotificationBuilder {
         builder.setContentText(content);
         if (icon != -1)
             builder.setSmallIcon(icon);
+        else
+            builder.setSmallIcon(R.drawable.ic_download);
     }
 
     public void updateDownloadNotification(int progress, int max) {
