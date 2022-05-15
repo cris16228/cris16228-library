@@ -17,6 +17,14 @@ public class AsyncUtils {
         return new AsyncUtils();
     }
 
+    public AsyncUtils(ExecutorService executor, Handler handler) {
+        this.executor = executor;
+        this.handler = handler;
+    }
+
+    public AsyncUtils() {
+    }
+
     public void onExecuteListener(onExecuteListener _onExecuteListener) {
         onExecuteListener = _onExecuteListener;
     }
