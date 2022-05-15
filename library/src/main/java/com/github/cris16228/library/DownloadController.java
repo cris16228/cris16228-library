@@ -148,7 +148,9 @@ public class DownloadController {
 
                     long total = 0;
                     LongUtils longUtils = new LongUtils();
-                    progress.setMax(contentLength);
+                    /*progress.setMax(contentLength);*/
+                    NotificationBuilder notificationBuilder = new NotificationBuilder(context);
+                    notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
                     while ((count = input.read(data)) != -1) {
                         total += count;
                         // publishing the progress....
@@ -164,8 +166,6 @@ public class DownloadController {
                             download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
                                     String.valueOf((progress.getProgress() / progress.getMax()) * 100)));
                         });*/
-                        NotificationBuilder notificationBuilder = new NotificationBuilder(context);
-                        notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
                         notificationBuilder.updateDownloadNotification((int) ((finalTotal * 100) / contentLength), contentLength);
                         /*Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
                          */
@@ -186,7 +186,7 @@ public class DownloadController {
 
             @Override
             public void postDelayed() {
-                dialog.dismiss();
+                /*dialog.dismiss();*/
                 showInstallOption(destination);
             }
         });
