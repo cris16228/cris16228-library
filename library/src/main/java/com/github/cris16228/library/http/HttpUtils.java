@@ -3,6 +3,8 @@ package com.github.cris16228.library.http;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,27 +24,71 @@ import java.util.HashMap;
 
 public class HttpUtils {
 
-    private int readTimeout = 10000;
-    private int connectionTimeout = 15000;
+    private final StringBuilder result = new StringBuilder();
     String url = "http://192.168.1.11/upload.php";
     String lineEnd = "\r\n";
     String twoHyphens = "--";
     String boundary = "*****";
     String TAG = getClass().getSimpleName();
+    private int readTimeout = 10000;
+    private int connectionTimeout = 15000;
     private HttpURLConnection conn;
     private DataOutputStream dos;
-    private StringBuilder result = new StringBuilder();
     private JSONObject jsonObject;
 
     public static HttpUtils get() {
         return new HttpUtils();
     }
 
+    public static String getJSON(String urlString, boolean printJSON) {
+        HttpURLConnection urlConnection;
+        StringBuilder sb = new StringBuilder();
+        String jsonString = null;
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpUtils httpUtils = new HttpUtils();
+        try {
+            if (url != null) {
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
+                urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
+                urlConnection.setDoOutput(true);
+                urlConnection.connect();
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                br.close();
+                jsonString = sb.toString();
+                if (printJSON)
+                    System.out.println("JSON: " + jsonString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonString;
+    }
+
     public HashMap<String, String> defaultParams() {
         HashMap<String, String> params = new HashMap<>();
         params.put("user", "cris16228");
         params.put("action", "upload");
+        return params;
+    }
 
+    public HashMap<String, String> setParams(@NonNull String[] keys, @NonNull String[] values) {
+        HashMap<String, String> params = new HashMap<>();
+        for (String key : keys) {
+            for (String value : values) {
+                params.put(key, value);
+            }
+        }
         return params;
     }
 
@@ -52,8 +98,16 @@ public class HttpUtils {
         return fileParams;
     }
 
+    public HashMap<String, String> setFileParams(@NonNull String[] paths) {
+        HashMap<String, String> fileParams = new HashMap<>();
+        for (String path : paths) {
+            fileParams.put("file", path);
+        }
+        return fileParams;
+    }
+
     public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
-        if (!TextUtils.isEmpty(_url))
+        if (TextUtils.isEmpty(_url))
             url = _url;
         try {
             conn = (HttpURLConnection) new URL(_url).openConnection();
@@ -149,7 +203,7 @@ public class HttpUtils {
                 result.append(line);
 
             }
-            Log.d(TAG, "Result: " + result.toString());
+            Log.d(TAG, "Result: " + result);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,42 +216,6 @@ public class HttpUtils {
         }
 
         return jsonObject;
-    }
-
-
-    public static String getJSON(String urlString, boolean printJSON) {
-        HttpURLConnection urlConnection;
-        StringBuilder sb = new StringBuilder();
-        String jsonString = null;
-        URL url = null;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpUtils httpUtils = new HttpUtils();
-        try {
-            if (url != null) {
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
-                urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
-                urlConnection.setDoOutput(true);
-                urlConnection.connect();
-                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-                br.close();
-                jsonString = sb.toString();
-                if (printJSON)
-                    System.out.println("JSON: " + jsonString);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return jsonString;
     }
 
     public int getReadTimeout() {
