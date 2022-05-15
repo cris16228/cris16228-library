@@ -88,15 +88,18 @@ public class DownloadController {
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
-                dialog = new Dialog(context);
-                dialog.setContentView(R.layout.download_notification_layout);
-                download_app_name = dialog.findViewById(R.id.download_app_name);
-                download_app_percent = dialog.findViewById(R.id.download_percent);
-                download_app_size = dialog.findViewById(R.id.download_size);
+                System.out.println("preExecute()");
             }
 
             @Override
             public void doInBackground() {
+                System.out.println("doInBackground()");
+                dialog = new Dialog(context);
+                dialog.setContentView(R.layout.download_notification_layout);
+                dialog.getWindow().setBackgroundDrawable(null);
+                download_app_name = dialog.findViewById(R.id.download_app_name);
+                download_app_percent = dialog.findViewById(R.id.download_percent);
+                download_app_size = dialog.findViewById(R.id.download_size);
                 int count;
                 try {
                     URL link = new URL(url);
