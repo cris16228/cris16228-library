@@ -154,7 +154,7 @@ public class DownloadController {
                             download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(finalTotal),
                                     longUtils.getSize(contentLength)));
                             download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
-                                    String.valueOf((progress.getProgress() * 100 / progress.getMax()))));
+                                    String.valueOf((progress.getProgress() / progress.getMax()) * 100)));
                         });
                         Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
                         output.write(data, 0, count);
