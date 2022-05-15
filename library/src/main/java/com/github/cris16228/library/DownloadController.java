@@ -158,23 +158,13 @@ public class DownloadController {
 
                         // writing data to file
                         long finalTotal = total;
-                        try {
+                        ((Activity) context).runOnUiThread(() -> {
                             progress.setProgress((int) ((finalTotal * 100) / contentLength), true);
                             download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(finalTotal),
                                     longUtils.getSize(contentLength)));
                             download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
-                                    String.valueOf(((finalTotal * 100) / contentLength))));
-                        } catch (Exception e) {
-                            System.out.println("Error!");
-                        } finally {
-                            ((Activity) context).runOnUiThread(() -> {
-                                progress.setProgress((int) ((finalTotal * 100) / contentLength), true);
-                                download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(finalTotal),
-                                        longUtils.getSize(contentLength)));
-                                download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
-                                        String.valueOf((progress.getProgress() / progress.getMax()) * 100)));
-                            });
-                        }
+                                    String.valueOf((progress.getProgress() / progress.getMax()) * 100)));
+                        });
                         /*Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
                          */
                         output.write(data, 0, count);
