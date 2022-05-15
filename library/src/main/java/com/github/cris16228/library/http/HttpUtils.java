@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 public class HttpUtils {
 
-    private final StringBuilder result = new StringBuilder();
+    private StringBuilder result;
     String url = "http://192.168.1.11/upload.php";
     String lineEnd = "\r\n";
     String twoHyphens = "--";
@@ -109,6 +109,7 @@ public class HttpUtils {
     public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
         if (TextUtils.isEmpty(_url))
             url = _url;
+        result = new StringBuilder();
         try {
             conn = (HttpURLConnection) new URL(_url).openConnection();
             conn.setDoInput(true);
@@ -201,7 +202,6 @@ public class HttpUtils {
             String line;
             while ((line = reader.readLine()) != null) {
                 result.append(line);
-
             }
             Log.d(TAG, "Result: " + result);
         } catch (IOException e) {
