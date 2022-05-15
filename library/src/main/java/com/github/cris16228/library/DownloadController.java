@@ -30,6 +30,7 @@ public class DownloadController {
     private final String url;
     private final String app_name;
     private final boolean save_in_cache;
+    private final NotificationBuilder notificationBuilder;
     String destination;
     Dialog dialog;
     LinearProgressIndicator progress;
@@ -39,49 +40,64 @@ public class DownloadController {
     private String original_app_name;
     private String authority;
 
-    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
+    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache, NotificationBuilder notificationBuilder) {
         this.context = context;
         this.url = url;
         this.app_name = _app_name;
         this.save_in_cache = save_in_cache;
+        if (notificationBuilder == null) {
+            notificationBuilder = new NotificationBuilder(context);
+            notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
+        }
+        this.notificationBuilder = notificationBuilder;
     }
 
-    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache, String original_app_name) {
+    public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache, String original_app_name, NotificationBuilder notificationBuilder) {
         this.context = context;
         this.url = url;
         this.app_name = _app_name;
         this.save_in_cache = save_in_cache;
         this.original_app_name = original_app_name;
+        if (notificationBuilder == null) {
+            notificationBuilder = new NotificationBuilder(context);
+            notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
+        }
+        this.notificationBuilder = notificationBuilder;
     }
 
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache, String original_app_name,
-                              String authority) {
+                              String authority, NotificationBuilder notificationBuilder) {
         this.context = context;
         this.url = url;
         this.app_name = _app_name;
         this.save_in_cache = save_in_cache;
         this.original_app_name = original_app_name;
         this.authority = authority;
+        if (notificationBuilder == null) {
+            notificationBuilder = new NotificationBuilder(context);
+            notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
+        }
+        this.notificationBuilder = notificationBuilder;
     }
 
     public void setAuthority(String authority) {
         this.authority = authority;
     }
 
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
-
     public ExecutorService getExecutor() {
         return executor;
     }
 
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
     public Handler getHandler() {
         return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     public final void enqueueDownload() {
@@ -137,8 +153,6 @@ public class DownloadController {
 
                     long total = 0;
                     LongUtils longUtils = new LongUtils();
-                    NotificationBuilder notificationBuilder = new NotificationBuilder(context);
-                    notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
                     while ((count = input.read(data)) != -1) {
                         total += count;
                         notificationBuilder.updateDownloadNotification((int) total, contentLength);
