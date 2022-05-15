@@ -1,14 +1,18 @@
 package com.github.cris16228.library;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -25,6 +29,9 @@ public class DownloadController {
     private final String app_name;
     private final boolean save_in_cache;
     String destination;
+    Dialog dialog;
+    LinearProgressIndicator progress;
+    TextView download_app_name, download_app_percent, download_app_size;
     private String original_app_name;
     private String authority;
 
@@ -81,7 +88,11 @@ public class DownloadController {
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
-
+                dialog = new Dialog(context);
+                dialog.setContentView(R.layout.download_notification_layout);
+                download_app_name = dialog.findViewById(R.id.download_app_name);
+                download_app_percent = dialog.findViewById(R.id.download_percent);
+                download_app_size = dialog.findViewById(R.id.download_size);
             }
 
             @Override
@@ -94,7 +105,7 @@ public class DownloadController {
 
                     // this will be useful so that you can show a tipical 0-100%
                     // progress bar
-                    int lenghtOfFile = connection.getContentLength();
+                    int contentLength = connection.getContentLength();
 
                     // download the file
                     InputStream input = new BufferedInputStream(link.openStream(),
@@ -107,14 +118,21 @@ public class DownloadController {
 
                     long total = 0;
                     LongUtils longUtils = new LongUtils();
+                    progress.setMax(contentLength);
+                    dialog.show();
                     while ((count = input.read(data)) != -1) {
                         total += count;
                         // publishing the progress....
                         // After this onProgressUpdate will be called
-                        /*publishProgress("" + (int) ((total * 100) / lenghtOfFile));*/
+                        /*publishProgress("" + );*/
 
                         // writing data to file
-                        Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(lenghtOfFile));
+                        progress.setProgress((int) ((total * 100) / contentLength), true);
+                        download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(total),
+                                longUtils.getSize(contentLength)));
+                        download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
+                                String.valueOf((progress.getProgress() * 100 / progress.getMax()))));
+                        Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
                         output.write(data, 0, count);
                     }
 
@@ -132,6 +150,7 @@ public class DownloadController {
 
             @Override
             public void postDelayed() {
+                dialog.dismiss();
                 showInstallOption(destination);
             }
         });
