@@ -1,5 +1,6 @@
 package com.github.cris16228.library;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -88,11 +89,6 @@ public class DownloadController {
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
-
-            }
-
-            @Override
-            public void doInBackground() {
                 dialog = new Dialog(context);
                 dialog.setContentView(R.layout.download_notification_layout);
                 dialog.getWindow().setBackgroundDrawable(null);
@@ -101,6 +97,10 @@ public class DownloadController {
                 download_app_size = dialog.findViewById(R.id.download_size);
                 progress = dialog.findViewById(R.id.progress);
                 download_app_name.setText(context.getResources().getString(R.string.downloading_app_name, app_name));
+            }
+
+            @Override
+            public void doInBackground() {
                 int count;
                 try {
                     URL link = new URL(url);
@@ -131,12 +131,15 @@ public class DownloadController {
                         /*publishProgress("" + );*/
 
                         // writing data to file
-                        progress.setProgress((int) ((total * 100) / contentLength), true);
-                        download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(total),
-                                longUtils.getSize(contentLength)));
-                        download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
-                                String.valueOf((progress.getProgress() * 100 / progress.getMax()))));
-                        Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
+                        long finalTotal = total;
+                        ((Activity) context).runOnUiThread(() -> {
+                            progress.setProgress((int) ((finalTotal * 100) / contentLength), true);
+                            download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(finalTotal),
+                                    longUtils.getSize(contentLength)));
+                            download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
+                                    String.valueOf((progress.getProgress() * 100 / progress.getMax()))));
+                            Log.i("Downloader: ", longUtils.getSize(finalTotal) + "/" + longUtils.getSize(contentLength));
+                        });
                         output.write(data, 0, count);
                     }
 
