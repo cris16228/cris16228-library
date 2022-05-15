@@ -1,6 +1,5 @@
 package com.github.cris16228.library;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -115,7 +114,7 @@ public class DownloadController {
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
-                dialog = new Dialog(context);
+                /*dialog = new Dialog(context);
                 dialog.setContentView(R.layout.download_notification_layout);
                 dialog.getWindow().setBackgroundDrawable(null);
                 download_app_name = dialog.findViewById(R.id.download_app_name);
@@ -123,7 +122,7 @@ public class DownloadController {
                 download_app_size = dialog.findViewById(R.id.download_size);
                 progress = dialog.findViewById(R.id.progress);
                 download_app_name.setText(context.getResources().getString(R.string.downloading_app_name, app_name));
-                dialog.show();
+                dialog.show();*/
             }
 
             @Override
@@ -158,13 +157,16 @@ public class DownloadController {
 
                         // writing data to file
                         long finalTotal = total;
-                        ((Activity) context).runOnUiThread(() -> {
+                        /*((Activity) context).runOnUiThread(() -> {
                             progress.setProgress((int) ((finalTotal * 100) / contentLength), true);
                             download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(finalTotal),
                                     longUtils.getSize(contentLength)));
                             download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
                                     String.valueOf((progress.getProgress() / progress.getMax()) * 100)));
-                        });
+                        });*/
+                        NotificationBuilder notificationBuilder = new NotificationBuilder(context);
+                        notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
+                        notificationBuilder.updateDownloadNotification((int) ((finalTotal * 100) / contentLength), contentLength);
                         /*Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
                          */
                         output.write(data, 0, count);
