@@ -29,6 +29,9 @@ public class DownloadController {
     private final String app_name;
     private final boolean save_in_cache;
     String destination;
+    Dialog dialog;
+    LinearProgressIndicator progress;
+    TextView download_app_name, download_app_percent, download_app_size;
     private String original_app_name;
     private String authority;
 
@@ -83,10 +86,6 @@ public class DownloadController {
 
         AsyncUtils downloader = new AsyncUtils();
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
-            Dialog dialog;
-            LinearProgressIndicator progress;
-            TextView download_app_name, download_app_percent, download_app_size;
-
             @Override
             public void preExecute() {
                 dialog = new Dialog(context);
@@ -95,6 +94,8 @@ public class DownloadController {
                 download_app_name = dialog.findViewById(R.id.download_app_name);
                 download_app_percent = dialog.findViewById(R.id.download_percent);
                 download_app_size = dialog.findViewById(R.id.download_size);
+                progress = dialog.findViewById(R.id.progress);
+                download_app_name.setText(context.getResources().getString(R.string.downloading_app_name, app_name));
             }
 
             @Override
