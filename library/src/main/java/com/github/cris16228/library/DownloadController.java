@@ -77,6 +77,14 @@ public class DownloadController {
         this.handler = handler;
     }
 
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
     public final void enqueueDownload() {
         if (save_in_cache) {
             destination = context.getCacheDir() + "/apks/" + app_name + "/";
@@ -98,11 +106,12 @@ public class DownloadController {
         }
 
         AsyncUtils downloader;
+        System.out.println("DownloadController: " + (executor == null) + "/" + (handler == null));
+
         if (executor == null && handler == null)
             downloader = new AsyncUtils();
-        else {
+        else
             downloader = new AsyncUtils(executor, handler);
-        }
         downloader.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
