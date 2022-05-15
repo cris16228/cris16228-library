@@ -113,6 +113,7 @@ public class DownloadController {
                 download_app_size = dialog.findViewById(R.id.download_size);
                 progress = dialog.findViewById(R.id.progress);
                 download_app_name.setText(context.getResources().getString(R.string.downloading_app_name, app_name));
+                dialog.show();
             }
 
             @Override
@@ -139,7 +140,6 @@ public class DownloadController {
                     long total = 0;
                     LongUtils longUtils = new LongUtils();
                     progress.setMax(contentLength);
-                    dialog.show();
                     while ((count = input.read(data)) != -1) {
                         total += count;
                         // publishing the progress....
@@ -147,12 +147,12 @@ public class DownloadController {
                         /*publishProgress("" + );*/
 
                         // writing data to file
-                        /*progress.setProgress((int) ((total * 100) / contentLength), true);
+                        progress.setProgress((int) ((total * 100) / contentLength), true);
                         download_app_size.setText(context.getResources().getString(R.string.downloading_app_size, longUtils.getSize(total),
                                 longUtils.getSize(contentLength)));
                         download_app_percent.setText(context.getResources().getString(R.string.downloading_app_percent,
                                 String.valueOf((progress.getProgress() * 100 / progress.getMax()))));
-                        Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));*/
+                        Log.i("Downloader: ", longUtils.getSize(total) + "/" + longUtils.getSize(contentLength));
                         output.write(data, 0, count);
                     }
 
