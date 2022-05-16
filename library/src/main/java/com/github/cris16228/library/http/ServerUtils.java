@@ -36,6 +36,7 @@ public class ServerUtils {
     }
 
     public static boolean isHome(Context context) {
+        boolean isHome = false;
         try {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -43,15 +44,17 @@ public class ServerUtils {
                 String currentSSID = wifiInfo.getSSID();
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
-                        if (ssid.equals(currentSSID))
-                            return true;
+                        if (ssid.equals(currentSSID)) {
+                            isHome = true;
+                            break;
+                        }
                     }
                 }
             }
         } catch (SecurityException e) {
             System.out.println("Please add \"android.permission.ACCESS_WIFI_STATE\" in your AndroidManifest.xml");
         }
-        return false;
+        return isHome;
     }
 
     public String webURL(Context context) {
