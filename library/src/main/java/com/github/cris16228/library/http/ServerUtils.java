@@ -1,5 +1,6 @@
 package com.github.cris16228.library.http;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -25,9 +26,9 @@ public class ServerUtils {
     public static boolean isConnectedWifi(Context context) {
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            Network nw = connectivityManager.getActiveNetwork();
+            @SuppressLint("MissingPermission") Network nw = connectivityManager.getActiveNetwork();
             if (nw == null) return false;
-            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+            @SuppressLint("MissingPermission") NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
             return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
         } catch (SecurityException e) {
             System.out.println("Please add \"android.permission.ACCESS_NETWORK_STATE\" in your AndroidManifest.xml");
@@ -44,6 +45,7 @@ public class ServerUtils {
                 String currentSSID = wifiInfo.getSSID();
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
+                        System.out.println(ssid + "/" + currentSSID);
                         if (ssid.equals(currentSSID)) {
                             isHome = true;
                             break;
