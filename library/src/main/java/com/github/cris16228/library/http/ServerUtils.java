@@ -7,11 +7,20 @@ import android.net.NetworkCapabilities;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
+import androidx.annotation.NonNull;
+
 public class ServerUtils {
 
     private static final String[] SSIDs = {"Casa", "Casa5GHz"};
     private final String _local = "http://192.168.1.11";
     private final String _public = "http://cris16228.com";
+    private Context context;
+
+    public static ServerUtils get(Context context) {
+        ServerUtils serverUtils = new ServerUtils();
+        serverUtils.context = context;
+        return serverUtils;
+    }
 
     public static boolean isConnectedWifi(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -41,6 +50,13 @@ public class ServerUtils {
             return _local;
         else
             return _public;
+    }
+
+    public String getValidURL(@NonNull String url) {
+        if (url.startsWith("/")) {
+            url.substring(1);
+        }
+        return webURL(context) + url;
     }
 
     public enum actions {
