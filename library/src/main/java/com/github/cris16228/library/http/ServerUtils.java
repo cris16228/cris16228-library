@@ -10,9 +10,11 @@ import android.net.wifi.WifiManager;
 
 import androidx.annotation.NonNull;
 
+import com.github.cris16228.library.DeviceUtils;
+
 public class ServerUtils {
 
-    private static final String[] SSIDs = {"Casa", "Casa5GHz", "AndroidWifi"};
+    private static final String[] SSIDs = {"Casa", "Casa5GHz"};
     private final String _local = "http://192.168.1.11/";
     private final String _public = "http://cris16228.com/";
     private Context context;
@@ -38,6 +40,9 @@ public class ServerUtils {
 
     public static boolean isHome(Context context) {
         boolean isHome = false;
+        if (DeviceUtils.with(context).isEmulator()) {
+            return true;
+        }
         try {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -45,7 +50,6 @@ public class ServerUtils {
                 String currentSSID = wifiInfo.getSSID();
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
-                        System.out.println(ssid + "/" + currentSSID);
                         if (ssid.equals(currentSSID)) {
                             isHome = true;
                             break;
