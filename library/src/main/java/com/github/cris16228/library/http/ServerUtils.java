@@ -54,7 +54,9 @@ public class ServerUtils {
 
     public String getValidURL(@NonNull String url) {
         if (url.startsWith("/")) {
-            url.substring(1);
+            System.out.println("pre: " + url);
+            url = url.substring(1);
+            System.out.println("post: " + url);
         }
         return webURL(context) + url;
     }
