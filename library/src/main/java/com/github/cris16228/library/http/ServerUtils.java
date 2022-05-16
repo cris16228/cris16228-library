@@ -26,6 +26,9 @@ public class ServerUtils {
     }
 
     public static boolean isConnectedWifi(Context context) {
+        if (DeviceUtils.with(context).isEmulator()) {
+            return true;
+        }
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             @SuppressLint("MissingPermission") Network nw = connectivityManager.getActiveNetwork();
