@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 
 public class ServerUtils {
 
-    private static final String[] SSIDs = {"Casa", "Casa5GHz"};
-    private final String _local = "http://192.168.1.11";
-    private final String _public = "http://cris16228.com";
+    private static final String[] SSIDs = {"Casa", "Casa5GHz", "AndroidWifi"};
+    private final String _local = "http://192.168.1.11/";
+    private final String _public = "http://cris16228.com/";
     private Context context;
 
     public static ServerUtils get(Context context) {
@@ -23,24 +23,33 @@ public class ServerUtils {
     }
 
     public static boolean isConnectedWifi(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Network nw = connectivityManager.getActiveNetwork();
-        if (nw == null) return false;
-        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
-        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+        try {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            Network nw = connectivityManager.getActiveNetwork();
+            if (nw == null) return false;
+            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+            return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+        } catch (SecurityException e) {
+            System.out.println("Please add \"android.permission.ACCESS_NETWORK_STATE\" in your AndroidManifest.xml");
+        }
+        return false;
     }
 
     public static boolean isHome(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        if (wifiInfo != null) {
-            String currentSSID = wifiInfo.getSSID();
-            if (currentSSID != null) {
-                for (String ssid : SSIDs) {
-                    if (ssid.equals(currentSSID))
-                        return true;
+        try {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            if (wifiInfo != null) {
+                String currentSSID = wifiInfo.getSSID();
+                if (currentSSID != null) {
+                    for (String ssid : SSIDs) {
+                        if (ssid.equals(currentSSID))
+                            return true;
+                    }
                 }
             }
+        } catch (SecurityException e) {
+            System.out.println("Please add \"android.permission.ACCESS_WIFI_STATE\" in your AndroidManifest.xml");
         }
         return false;
     }
@@ -54,9 +63,7 @@ public class ServerUtils {
 
     public String getValidURL(@NonNull String url) {
         if (url.startsWith("/")) {
-            System.out.println("pre: " + url);
             url = url.substring(1);
-            System.out.println("post: " + url);
         }
         return webURL(context) + url;
     }
