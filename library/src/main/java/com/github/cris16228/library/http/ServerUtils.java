@@ -68,7 +68,7 @@ public class ServerUtils {
     }
 
     public String webURL(Context context) {
-        if (isConnectedWifi(context) && isHome(context))
+        if (isConnectedWifi(context) || isHome(context))
             return _local;
         else
             return _public;
