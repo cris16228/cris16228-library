@@ -48,10 +48,11 @@ public class PermissionsUtils {
                 permissionResult.OnSuccess();
             }
         }
-        for (String permission : permissions) {
-            for (int requestCode : requestCodes) {
-                if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+        for (int i = 0; i < permissions.size(); i++) {
+            for (int j = 0; j < requestCodes.size(); j++) {
+                if (!Manifest.permission.ACCESS_FINE_LOCATION.equals(permissions.get(i)) && ContextCompat.checkSelfPermission(context,
+                        permissions.get(i)) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{permissions.get(i)}, requestCodes.get(j));
                 } else {
                     permissionResult.OnSuccess();
                 }
