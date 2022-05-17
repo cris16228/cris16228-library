@@ -19,6 +19,7 @@ public class PermissionsUtils {
     public static PermissionsUtils get(Context context, Activity activity) {
         PermissionsUtils permissionsUtils = new PermissionsUtils();
         permissionsUtils.context = context;
+        permissionsUtils.activity = activity;
         return permissionsUtils;
     }
 
