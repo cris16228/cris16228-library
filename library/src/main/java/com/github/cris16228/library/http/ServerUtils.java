@@ -74,6 +74,8 @@ public class ServerUtils {
     }
 
     public String getValidURL(@NonNull String url) {
+        if (url.startsWith(_local) || url.startsWith(_public))
+            return url;
         if (url.startsWith("/")) {
             url = url.substring(1);
         }
