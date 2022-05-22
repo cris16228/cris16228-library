@@ -140,10 +140,10 @@ public class ImageLoader {
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
-        if (!memoryCache.isCacheValid(url, _image)) {
+        /*if (!memoryCache.isCacheValid(url, _image)) {
             System.out.println("Image is not valid in cache");
             _image = null;
-        }
+        }*/
         if (_image != null)
             return _image;
         try {
