@@ -41,10 +41,10 @@ public class ImageLoader {
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler handler = new Handler(Looper.getMainLooper());
     private FileUtils fileUtils;
-    private int timeout = 75000;
     private Context context;
     private boolean asBitmap = false;
     private boolean isInit = false;
+    private long downloadSize;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
@@ -72,11 +72,6 @@ public class ImageLoader {
 
     public ImageLoader asBitmap() {
         asBitmap = true;
-        return this;
-    }
-
-    public ImageLoader timeout(int timeout) {
-        this.timeout = timeout;
         return this;
     }
 
@@ -151,8 +146,8 @@ public class ImageLoader {
             Bitmap _webImage;
             URL imageURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
-            connection.setConnectTimeout(timeout);
-            connection.setReadTimeout(3000);
+            connection.setConnectTimeout(0);
+            connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
             OutputStream os = new FileOutputStream(file);
@@ -196,6 +191,27 @@ public class ImageLoader {
     public void clearCache() {
         memoryCache.clear();
         fileCache.clear();
+    }
+
+    public void getOnlineFileSize(String url) {
+        try {
+            URL imageURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
+            connection.setConnectTimeout(0);
+            connection.setReadTimeout(0);
+            connection.setInstanceFollowRedirects(true);
+            setDownloadSize(connection.getInputStream().available());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public long getDownloadSize() {
+        return downloadSize;
+    }
+
+    public void setDownloadSize(long downloadSize) {
+        this.downloadSize = downloadSize;
     }
 
     static class PhotoToLoad {
