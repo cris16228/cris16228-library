@@ -52,7 +52,6 @@ public class ImageLoader {
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
-        imageLoader.init();
         return imageLoader;
     }
 
@@ -62,7 +61,6 @@ public class ImageLoader {
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
-        imageLoader.init();
         return imageLoader;
     }
 
@@ -85,6 +83,7 @@ public class ImageLoader {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         Bitmap bitmap = memoryCache.get(url);
+        System.out.println(bitmap == null);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
