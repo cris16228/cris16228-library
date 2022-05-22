@@ -2,8 +2,12 @@ package com.github.cris16228.library.http.image_loader;
 
 import android.graphics.Bitmap;
 
+import com.github.cris16228.library.AsyncUtils;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Iterator;
@@ -41,6 +45,32 @@ public class MemoryCache {
         try {
             if (!cache.containsKey(id))
                 return null;
+            AsyncUtils checkSize = AsyncUtils.get();
+            checkSize.onExecuteListener(new AsyncUtils.onExecuteListener() {
+                @Override
+                public void preExecute() {
+
+                }
+
+                @Override
+                public void doInBackground() {
+                    try {
+                        URL imageURL = new URL(id);
+                        HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
+                        connection.setConnectTimeout(120000);
+                        connection.setReadTimeout(120000);
+                        connection.setInstanceFollowRedirects(true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void postDelayed() {
+                    sizeInBytes(cache.get(id));
+                }
+            });
+            checkSize.execute();
             return cache.get(id);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
