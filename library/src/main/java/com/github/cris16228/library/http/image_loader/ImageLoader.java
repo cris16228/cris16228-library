@@ -83,7 +83,6 @@ public class ImageLoader {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         Bitmap bitmap = memoryCache.get(url);
-        System.out.println(bitmap == null);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
@@ -141,8 +140,8 @@ public class ImageLoader {
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
-        if (isInit && !memoryCache.isCacheValid(url, _image)) {
-            memoryCache.remove(url);
+        if (!memoryCache.isCacheValid(url, _image)) {
+            System.out.println("Image is not valid in cache");
             _image = null;
         }
         if (_image != null)

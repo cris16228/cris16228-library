@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.github.cris16228.library.AsyncUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -18,6 +19,7 @@ public class MemoryCache {
 
     private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<>(10, 1.5f, true));
     private long size = 0;
+    private long imageSize;
     private long limit = Long.MAX_VALUE;
 
     public MemoryCache() {
@@ -63,6 +65,7 @@ public class MemoryCache {
                         connection.setConnectTimeout(120000);
                         connection.setReadTimeout(120000);
                         connection.setInstanceFollowRedirects(true);
+                        imageSize = connection.getInputStream().available();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -70,7 +73,7 @@ public class MemoryCache {
 
                 @Override
                 public void postDelayed() {
-                    sizeInBytes(cache.get(id));
+                    System.out.println("Async get() L: " + sizeInBytes(cache.get(id)) + " O: " + imageSize);
                 }
             });
             checkSize.execute();
@@ -146,6 +149,9 @@ public class MemoryCache {
     long sizeInBytes(Bitmap bitmap) {
         if (bitmap == null)
             return 0;
-        return (long) bitmap.getRowBytes() * bitmap.getHeight();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] imageInByte = stream.toByteArray();
+        return imageInByte.length;
     }
 }
