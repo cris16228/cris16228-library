@@ -2,13 +2,9 @@ package com.github.cris16228.library.http.image_loader;
 
 import android.graphics.Bitmap;
 
-import com.github.cris16228.library.AsyncUtils;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Iterator;
@@ -50,33 +46,6 @@ public class MemoryCache {
         try {
             if (!cache.containsKey(id))
                 return null;
-            AsyncUtils checkSize = AsyncUtils.get();
-            checkSize.onExecuteListener(new AsyncUtils.onExecuteListener() {
-                @Override
-                public void preExecute() {
-
-                }
-
-                @Override
-                public void doInBackground() {
-                    try {
-                        URL imageURL = new URL(id);
-                        HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
-                        connection.setConnectTimeout(120000);
-                        connection.setReadTimeout(120000);
-                        connection.setInstanceFollowRedirects(true);
-                        imageSize = connection.getInputStream().available();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void postDelayed() {
-                    System.out.println("Async get() L: " + sizeInBytes(cache.get(id)) + " O: " + imageSize);
-                }
-            });
-            checkSize.execute();
             return cache.get(id);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
@@ -97,19 +66,7 @@ public class MemoryCache {
     }
 
     public boolean isCacheValid(String id, Bitmap bitmap) {
-        System.out.println(id == null ? "id null" : id);
-        System.out.println(cache.get(id) == null ? "cache.get(id) null" : cache.get(id));
-        try {
-            if (!cache.containsKey(id))
-                return false;
-            if (cache.get(id) == null)
-                return false;
-            System.out.println("isCacheValid: " + (sizeInBytes(cache.get(id)) == sizeInBytes(bitmap)));
-            return sizeInBytes(cache.get(id)) == sizeInBytes(bitmap);
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
-        return false;
+        return sizeInBytes(cache.get(id)) == sizeInBytes(bitmap);
     }
 
     public void put(String id, Bitmap bitmap) {
