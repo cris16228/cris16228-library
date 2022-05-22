@@ -34,6 +34,9 @@ public class MemoryCache {
                     e.printStackTrace();
                 }
             }
+        for (String path : cache.keySet()) {
+            System.out.println(path);
+        }
     }
 
     public void setLimit(long _limit) {
