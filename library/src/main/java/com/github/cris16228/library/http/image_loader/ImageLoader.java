@@ -66,7 +66,7 @@ public class ImageLoader {
     }
 
     public void init() {
-        memoryCache.loadCache(this, fileCache);
+        memoryCache.loadCache(fileCache);
         isInit = true;
     }
 
@@ -139,14 +139,6 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
-        File file = fileCache.getFile(url);
-        Bitmap _image = fileUtils.decodeFile(file);
-        /*if (!memoryCache.isCacheValid(url, _image)) {
-            System.out.println("Image is not valid in cache");
-            _image = null;
-        }*/
-        if (_image != null)
-            return _image;
         try {
             Bitmap _webImage;
             URL imageURL = new URL(url);
@@ -155,6 +147,12 @@ public class ImageLoader {
             connection.setReadTimeout(120000);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
+            File file = fileCache.getFile(url);
+            Bitmap _image = fileUtils.decodeFile(file);
+            if (!memoryCache.isCacheValid(file.getAbsolutePath(), is.available()))
+                return null;
+            if (_image != null)
+                return _image;
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
             os.close();

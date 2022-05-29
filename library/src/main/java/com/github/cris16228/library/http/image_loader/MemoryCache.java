@@ -1,9 +1,17 @@
 package com.github.cris16228.library.http.image_loader;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import com.github.cris16228.library.Base64Utils;
+import com.github.cris16228.library.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -20,20 +28,31 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
     }
 
-    public void loadCache(ImageLoader imageLoader, FileCache fileCache) {
+    public void loadCache(FileCache fileCache) {
         File[] files = fileCache.getCacheDir().listFiles();
         if (files != null && files.length > 0)
             for (File file : files) {
                 System.out.println(file.getAbsolutePath());
-                /*try {
-                    cache.put(file.getAbsolutePath(), imageLoader.getBitmap(Files.readAllBytes(file.toPath())));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                if (!cache.containsKey(file.getAbsolutePath()))
+                    try {
+                        cache.put(file.getAbsolutePath(), getBitmap(Files.readAllBytes(file.toPath())));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
         for (String path : cache.keySet()) {
             System.out.println(path);
         }
+    }
+
+    public Bitmap getBitmap(byte[] bytes) {
+        Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
+        FileUtils fileUtils = new FileUtils();
+        File file = new File(encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null));
+        Bitmap _image = fileUtils.decodeFile(file);
+        if (_image != null)
+            return _image;
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
     public void setLimit(long _limit) {
@@ -64,8 +83,8 @@ public class MemoryCache {
         }
     }
 
-    public boolean isCacheValid(String id, Bitmap bitmap) {
-        return sizeInBytes(cache.get(id)) == sizeInBytes(bitmap);
+    public boolean isCacheValid(String id, int size) {
+        return sizeInBytes(cache.get(id)) == size;
     }
 
     public void put(String id, Bitmap bitmap) {
