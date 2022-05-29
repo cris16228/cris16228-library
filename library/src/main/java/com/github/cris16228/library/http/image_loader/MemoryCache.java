@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,11 +24,12 @@ public class MemoryCache {
         File[] files = fileCache.getCacheDir().listFiles();
         if (files != null && files.length > 0)
             for (File file : files) {
-                try {
+                System.out.println(file.getAbsolutePath());
+                /*try {
                     cache.put(file.getAbsolutePath(), imageLoader.getBitmap(Files.readAllBytes(file.toPath())));
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         for (String path : cache.keySet()) {
             System.out.println(path);

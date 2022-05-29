@@ -61,6 +61,7 @@ public class ImageLoader {
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
+        imageLoader.init();
         return imageLoader;
     }
 
