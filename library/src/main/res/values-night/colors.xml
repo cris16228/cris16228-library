@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryLight">#33A5E8</color>
-    <color name="colorPrimary">#448AFF</color>
-    <color name="colorPrimaryDark">#3346E8</color>
-    <color name="colorSecondaryLight">#FFC345</color>
-    <color name="colorSecondary">#FFA715</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorText">@color/white</color>
     <color name="colorTextAlt">@color/black</color>
-    <color name="app_background">#292929</color>
+    <color name="app_background">#202020</color>
+    <color name="app_background_light">#2B2B2B</color>
     <color name="app_background_alt">#0F1C1C1C</color>
     <color name="reverse_app_background">#FFFFFF</color>
     <color name="black_on_light_theme">@color/white</color>
