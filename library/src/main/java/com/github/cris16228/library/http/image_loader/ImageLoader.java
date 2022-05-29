@@ -44,7 +44,7 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
-    public static ImageLoader with(Context _context, String path) {
+   /* public static ImageLoader with(Context _context, String path) {
         ImageLoader imageLoader = new ImageLoader();
         imageLoader.fileCache = new FileCache(path);
         imageLoader.executor = Executors.newFixedThreadPool(3);
@@ -52,6 +52,29 @@ public class ImageLoader {
         imageLoader.context = _context;
         imageLoader.init();
         return imageLoader;
+    }
+
+    public static ImageLoader with(Context _context) {
+        ImageLoader imageLoader = new ImageLoader();
+        imageLoader.fileCache = new FileCache(_context);
+        imageLoader.executor = Executors.newFixedThreadPool(3);
+        imageLoader.fileUtils = new FileUtils();
+        imageLoader.context = _context;
+        return imageLoader;
+    }*/
+
+    public static ImageLoader get() {
+        return new ImageLoader();
+    }
+
+    public ImageLoader with(Context _context, String path) {
+
+        fileCache = new FileCache(path);
+        executor = Executors.newFixedThreadPool(3);
+        fileUtils = new FileUtils();
+        context = _context;
+        init();
+        return this;
     }
 
     public void fileCache(Context _context) {
@@ -62,17 +85,12 @@ public class ImageLoader {
         fileCache = new FileCache(path);
     }
 
-    public static ImageLoader with(Context _context) {
-        ImageLoader imageLoader = new ImageLoader();
-        imageLoader.fileCache = new FileCache(_context);
-        imageLoader.executor = Executors.newFixedThreadPool(3);
-        imageLoader.fileUtils = new FileUtils();
-        imageLoader.context = _context;
-        return imageLoader;
-    }
-
-    public ImageLoader get() {
-        return new ImageLoader();
+    public ImageLoader with(Context _context) {
+        fileCache = new FileCache(_context);
+        executor = Executors.newFixedThreadPool(3);
+        fileUtils = new FileUtils();
+        context = _context;
+        return this;
     }
 
     public void init() {
