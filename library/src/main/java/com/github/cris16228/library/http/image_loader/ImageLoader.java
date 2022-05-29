@@ -149,8 +149,10 @@ public class ImageLoader {
             InputStream is = connection.getInputStream();
             File file = fileCache.getFile(url);
             Bitmap _image = fileUtils.decodeFile(file);
-            if (!memoryCache.isCacheValid(file.getAbsolutePath(), is.available()))
+            if (!memoryCache.isCacheValid(file.getAbsolutePath(), is.available())) {
+                System.out.println(url + " is not available, downloading...");
                 return null;
+            }
             if (_image != null)
                 return _image;
             OutputStream os = new FileOutputStream(file);

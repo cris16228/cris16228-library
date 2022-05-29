@@ -32,9 +32,10 @@ public class MemoryCache {
         File[] files = fileCache.getCacheDir().listFiles();
         if (files != null && files.length > 0)
             for (File file : files) {
-                System.out.println(file.getAbsolutePath());
+
                 if (!cache.containsKey(file.getAbsolutePath()))
                     try {
+                        System.out.println(file.getAbsolutePath());
                         cache.put(file.getAbsolutePath(), getBitmap(Files.readAllBytes(file.toPath())));
                     } catch (IOException e) {
                         e.printStackTrace();
