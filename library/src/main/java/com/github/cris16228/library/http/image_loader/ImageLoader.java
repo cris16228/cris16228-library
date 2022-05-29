@@ -41,10 +41,8 @@ public class ImageLoader {
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler handler = new Handler(Looper.getMainLooper());
     private FileUtils fileUtils;
-    private int timeout = 75000;
     private Context context;
     private boolean asBitmap = false;
-    private boolean isInit = false;
 
     public static ImageLoader with(Context _context) {
         ImageLoader imageLoader = new ImageLoader();
@@ -55,28 +53,31 @@ public class ImageLoader {
         return imageLoader;
     }
 
-    public static ImageLoader with(Context _context, String path) {
-        ImageLoader imageLoader = new ImageLoader();
-        imageLoader.fileCache = new FileCache(path);
+    /*public static ImageLoader with(Context _context) {
+        ImageLoader imageLoader = new ImageLoader();*//*
+        imageLoader.fileCache = new FileCache(path);*//*
         imageLoader.executor = Executors.newFixedThreadPool(3);
         imageLoader.fileUtils = new FileUtils();
         imageLoader.context = _context;
         imageLoader.init();
         return imageLoader;
+    }*/
+
+    public ImageLoader setPath(String path) {
+        if (fileCache == null) {
+            System.out.println("fileCache null");
+            fileCache = new FileCache(path);
+        }
+        init();
+        return this;
     }
 
     public void init() {
         memoryCache.loadCache(fileCache);
-        isInit = true;
     }
 
     public ImageLoader asBitmap() {
         asBitmap = true;
-        return this;
-    }
-
-    public ImageLoader timeout(int timeout) {
-        this.timeout = timeout;
         return this;
     }
 
