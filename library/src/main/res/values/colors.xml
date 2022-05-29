@@ -53,7 +53,7 @@
     <color name="bottom_sheet_dialog_background">#448AFF</color>
     <color name="black_on_light_theme">@color/black</color>
     <color name="passcode_background">#AAAAAA</color>
-    <color name="passcode_overlay">@color/colorPrimary</color>
+    <color name="passcode_overlay">@color/colorPrimary_1</color>
     <color name="passcode_wrong">#F24055</color>
     <color name="transparent">#00000000</color>
 </resources>
