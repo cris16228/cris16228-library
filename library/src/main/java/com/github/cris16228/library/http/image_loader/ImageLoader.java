@@ -68,12 +68,11 @@ public class ImageLoader {
     }
 
     public ImageLoader with(Context _context, String path) {
-
         fileCache = new FileCache(path);
         executor = Executors.newFixedThreadPool(3);
         fileUtils = new FileUtils();
         context = _context;
-        init();
+        /*        init();*/
         return this;
     }
 
@@ -171,10 +170,10 @@ public class ImageLoader {
             InputStream is = connection.getInputStream();
             File file = fileCache.getFile(url);
             Bitmap _image = fileUtils.decodeFile(file);
-            if (!memoryCache.isCacheValid(file.getAbsolutePath(), is.available())) {
+           /* if (!memoryCache.isCacheValid(file.getAbsolutePath(), is.available())) {
                 System.out.println(url + " is not available, downloading...");
                 return null;
-            }
+            }*/
             if (_image != null)
                 return _image;
             OutputStream os = new FileOutputStream(file);
