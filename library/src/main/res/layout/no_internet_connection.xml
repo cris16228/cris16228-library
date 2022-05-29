@@ -82,7 +82,7 @@
                     android:background="@drawable/button_background"
                     android:text="@string/enable_mobile_data"
                     android:textColor="@color/colorText"
-                    app:backgroundTint="@color/colorSecondaryLight"
+                    app:backgroundTint="@color/colorSecondaryLight_2"
                     app:icon="@drawable/mobile_data"
                     app:iconTint="@color/black_on_light_theme" />
 
@@ -96,7 +96,7 @@
                     android:background="@drawable/button_background"
                     android:text="@string/enable_wifi"
                     android:textColor="@color/colorText"
-                    app:backgroundTint="@color/colorSecondaryLight"
+                    app:backgroundTint="@color/colorSecondaryLight_2"
                     app:icon="@drawable/wifi"
                     app:iconTint="@color/black_on_light_theme" />
             </LinearLayout>
