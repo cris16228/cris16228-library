@@ -35,8 +35,8 @@ public class MemoryCache {
 
                 if (!cache.containsKey(file.getAbsolutePath()))
                     try {
-                        System.out.println(file.getAbsolutePath());
                         cache.put(file.getAbsolutePath(), getBitmap(Files.readAllBytes(file.toPath())));
+                        System.out.println("cache doesn't contain " + file.getPath() + " adding it");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -85,6 +85,7 @@ public class MemoryCache {
     }
 
     public boolean isCacheValid(String id, int size) {
+        System.out.println(sizeInBytes(cache.get(id)) + " / " + size);
         return sizeInBytes(cache.get(id)) == size;
     }
 
