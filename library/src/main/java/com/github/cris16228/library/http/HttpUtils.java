@@ -5,6 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.github.cris16228.library.DeviceUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,7 +68,7 @@ public class HttpUtils {
                 }
                 br.close();
                 jsonString = sb.toString();
-                if (printJSON)
+                if (printJSON && DeviceUtils.isEmulator())
                     System.out.println("JSON: " + jsonString);
             }
         } catch (IOException e) {

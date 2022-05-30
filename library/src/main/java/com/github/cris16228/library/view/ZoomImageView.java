@@ -18,7 +18,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
     static final int CLICK = 3;
     protected float origWidth, origHeight;
     Matrix matrix;
-    private int mode = NONE;
+    public int mode = NONE;
     // Remember some things for zooming
     PointF last = new PointF();
     PointF start = new PointF();
@@ -36,7 +36,6 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
     public ZoomImageView(Context context) {
         super(context);
         sharedConstructing(context);
-        setMode(NONE);
     }
 
     public ZoomImageView(Context context, AttributeSet attrs) {
@@ -79,7 +78,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    /*mode = NONE;*/
+                    mode = NONE;
                     int xDiff = (int) Math.abs(curr.x - start.x);
                     int yDiff = (int) Math.abs(curr.y - start.y);
                     if (xDiff < CLICK && yDiff < CLICK)
@@ -87,7 +86,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     break;
 
                 case MotionEvent.ACTION_POINTER_UP:
-                    /*mode = NONE;*/
+                    mode = NONE;
                     break;
             }
 
@@ -99,14 +98,6 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
 
     public void setMaxZoom(float x) {
         maxScale = x;
-    }
-
-    public int getMode() {
-        return mode;
-    }
-
-    public void setMode(int mode) {
-        this.mode = mode;
     }
 
     void fixTrans() {
@@ -199,7 +190,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
             ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
-            setMode(ZOOM);
+            mode = ZOOM;
             return true;
         }
 

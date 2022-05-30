@@ -43,7 +43,7 @@ public class ServerUtils {
 
     public static boolean isHome(Context context) {
         boolean isHome = false;
-        if (DeviceUtils.with(context).isEmulator()) {
+        if (DeviceUtils.isEmulator()) {
             return true;
         }
         try {
@@ -51,7 +51,8 @@ public class ServerUtils {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             if (wifiInfo != null) {
                 String currentSSID = wifiInfo.getSSID();
-                System.out.println(currentSSID);
+                if (DeviceUtils.isEmulator())
+                    System.out.println(currentSSID);
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
                         if (ssid.equals(currentSSID)) {

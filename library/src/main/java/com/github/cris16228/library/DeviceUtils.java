@@ -25,7 +25,7 @@ public class DeviceUtils {
         return deviceUtils;
     }
 
-    public boolean isEmulator() {
+    public static boolean isEmulator() {
         return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
                 || Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.startsWith("unknown")
