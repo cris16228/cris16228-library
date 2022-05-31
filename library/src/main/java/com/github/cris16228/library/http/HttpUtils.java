@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.github.cris16228.library.DeviceUtils;
+import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

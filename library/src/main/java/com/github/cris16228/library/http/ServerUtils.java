@@ -10,7 +10,7 @@ import android.net.wifi.WifiManager;
 
 import androidx.annotation.NonNull;
 
-import com.github.cris16228.library.DeviceUtils;
+import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ServerUtils {
 

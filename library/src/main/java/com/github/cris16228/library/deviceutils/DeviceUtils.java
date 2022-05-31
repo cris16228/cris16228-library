@@ -1,15 +1,15 @@
-package com.github.cris16228.library;
+package com.github.cris16228.library.deviceutils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+
+import com.github.cris16228.library.FloatUtils;
+import com.github.cris16228.library.LibraryException;
 
 import java.math.RoundingMode;
 
@@ -66,34 +66,6 @@ public class DeviceUtils {
             ex.printStackTrace();
         }
         return FloatUtils.with(context).getNumberFormat(Math.sqrt(x + y), limit, true, RoundingMode.HALF_UP) + "\"";
-    }
-
-    public PackageInfo appFromPackage(String packageName) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(packageName, 0);
-    }
-
-    public PackageInfo getPermissions(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PERMISSIONS);
-    }
-
-    public PackageInfo getActivities(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_ACTIVITIES);
-    }
-
-    public PackageInfo getReceivers(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_RECEIVERS);
-    }
-
-    public PackageInfo getProviders(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PROVIDERS);
-    }
-
-    public PackageInfo getServices(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_SERVICES);
-    }
-
-    public boolean isSystemApp(PackageInfo p) {
-        return ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM);
     }
 
     public int getWidth() {

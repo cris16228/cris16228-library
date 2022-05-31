@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import androidx.core.view.ContentInfoCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.github.cris16228.library.deviceutils.DeviceUtils;
+
 public class ActivityUtils {
 
     Context context;
