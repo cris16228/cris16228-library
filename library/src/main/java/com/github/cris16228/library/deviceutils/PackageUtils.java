@@ -19,28 +19,58 @@ public class PackageUtils {
         return packageUtils;
     }
 
-    public PackageInfo appFromPackage(String packageName) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(packageName, 0);
+    public PackageInfo appFromPackage(String packageName) {
+        try {
+            return context.getPackageManager().getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PackageInfo getPermissions(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PERMISSIONS);
+    public PackageInfo getPermissions(PackageInfo app) {
+        try {
+            return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PERMISSIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PackageInfo getActivities(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_ACTIVITIES);
+    public PackageInfo getActivities(PackageInfo app) {
+        try {
+            return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_ACTIVITIES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PackageInfo getReceivers(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_RECEIVERS);
+    public PackageInfo getReceivers(PackageInfo app) {
+        try {
+            return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_RECEIVERS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PackageInfo getProviders(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PROVIDERS);
+    public PackageInfo getProviders(PackageInfo app) {
+        try {
+            return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_PROVIDERS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PackageInfo getServices(PackageInfo app) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_SERVICES);
+    public PackageInfo getServices(PackageInfo app) {
+        try {
+            return context.getPackageManager().getPackageInfo(app.packageName, PackageManager.GET_SERVICES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean isSystemApp(PackageInfo p) {
