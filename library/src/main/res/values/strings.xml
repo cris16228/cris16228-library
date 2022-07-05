@@ -48,7 +48,8 @@
     <string name="number_9">9</string>
     <string name="number_0">0</string>
     <string name="clear">Clear</string>
-    <string name="downloading_app_name">Downloading %s...</string>
+    <string name="downloading_app_name">Downloading %s…</string>
     <string name="downloading_app_size">%s/%s</string>
     <string name="downloading_app_percent">%s%%</string>
+    <string name="image_still_loading">Image is still loading…</string>
 </resources>
