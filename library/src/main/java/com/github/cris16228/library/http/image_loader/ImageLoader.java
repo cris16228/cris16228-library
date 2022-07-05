@@ -159,7 +159,7 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors));
     }
 
-    private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
+    public Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         try {
             Bitmap _webImage;
             URL imageURL = new URL(url);
