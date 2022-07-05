@@ -3,7 +3,6 @@ package com.github.cris16228.library.http.image_loader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
@@ -159,7 +158,7 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors));
     }
 
-    public Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
+    private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         try {
             Bitmap _webImage;
             URL imageURL = new URL(url);
@@ -290,7 +289,7 @@ public class ImageLoader {
                 if (bitmap != null) {
                     if (loadImage != null)
                         loadImage.onSuccess();
-                    photoToLoad.imageView.setImageDrawable(new BitmapDrawable(context.getResources(), bitmap));
+                    photoToLoad.imageView.setImageBitmap(bitmap);
                 } else {
                     if (loadImage != null)
                         loadImage.onFail();
