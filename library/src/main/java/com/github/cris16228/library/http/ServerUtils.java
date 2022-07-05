@@ -26,7 +26,7 @@ public class ServerUtils {
     }
 
     public static boolean isConnectedWifi(Context context) {
-        if (DeviceUtils.with(context).isEmulator()) {
+        if (DeviceUtils.isEmulator()) {
             return true;
         }
         try {

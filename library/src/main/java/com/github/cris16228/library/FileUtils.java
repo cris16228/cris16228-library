@@ -159,22 +159,6 @@ public class FileUtils {
         }
     }
 
-    public Bitmap decodeFile(File file, int scaleSize) {
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(file), null, options);
-            if (scaleSize <= 0)
-                scaleSize = 2;
-            int width_tmp = options.outWidth, height_tmp = options.outHeight;
-            BitmapFactory.Options _options = new BitmapFactory.Options();
-            _options.inSampleSize = scaleSize;
-            return BitmapFactory.decodeStream(new FileInputStream(file), null, _options);
-        } catch (FileNotFoundException exception) {
-            return null;
-        }
-    }
-
     public void copyStream(InputStream is, OutputStream os) {
         try {
             byte[] data = new byte[16384];

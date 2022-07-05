@@ -49,4 +49,10 @@ public class GetStoreInfo {
         asyncUtils.execute();
         return app;
     }
+
+    public String getLink(int index) {
+        if (getStore() == null || index == -1)
+            return null;
+        return getStore().getApps().get(getPos()).getLinks().get(index);
+    }
 }

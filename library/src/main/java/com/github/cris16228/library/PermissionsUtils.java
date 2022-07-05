@@ -44,18 +44,18 @@ public class PermissionsUtils {
                     PackageManager.PERMISSION_GRANTED && context.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+                if (requestCodes.size() < permissions.size() || requestCodes.size() > permissions.size())
+                    return;
+                for (int i = 0; i < permissions.size(); i++) {
+                    if (!Manifest.permission.ACCESS_FINE_LOCATION.equals(permissions.get(i)) && ContextCompat.checkSelfPermission(context,
+                            permissions.get(i)) == PackageManager.PERMISSION_DENIED) {
+                        ActivityCompat.requestPermissions(activity, new String[]{permissions.get(i)}, requestCodes.get(i));
+                    } else {
+                        permissionResult.OnSuccess();
+                    }
+                }
             } else {
                 permissionResult.OnSuccess();
-            }
-        }
-        for (int i = 0; i < permissions.size(); i++) {
-            for (int j = 0; j < requestCodes.size(); j++) {
-                if (!Manifest.permission.ACCESS_FINE_LOCATION.equals(permissions.get(i)) && ContextCompat.checkSelfPermission(context,
-                        permissions.get(i)) == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(activity, new String[]{permissions.get(i)}, requestCodes.get(j));
-                } else {
-                    permissionResult.OnSuccess();
-                }
             }
         }
     }

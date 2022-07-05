@@ -43,8 +43,6 @@ public class ImageLoader {
     private FileUtils fileUtils;
     private Context context;
     private boolean asBitmap = false;
-    private boolean scaleImage = false;
-    private int scaleSize = 2;
 
    /* public static ImageLoader with(Context _context, String path) {
         ImageLoader imageLoader = new ImageLoader();
@@ -100,12 +98,6 @@ public class ImageLoader {
 
     public ImageLoader asBitmap() {
         asBitmap = true;
-        return this;
-    }
-
-    public ImageLoader scaleBitmap(int _scaleSize) {
-        scaleImage = true;
-        scaleSize = _scaleSize;
         return this;
     }
 
@@ -172,17 +164,13 @@ public class ImageLoader {
             Bitmap _webImage;
             URL imageURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
-            connection.setConnectTimeout(120000);
-            connection.setReadTimeout(120000);
+            connection.setConnectTimeout(0);
+            connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
             File file = fileCache.getFile(url);
-            Bitmap _image = null;
-            if (scaleImage)
-                _image = fileUtils.decodeFile(file);
-            else {
-                _image = fileUtils.decodeFile(file, scaleSize);
-            }
+            Bitmap _image = fileUtils.decodeFile(file);
+
            /* if (!memoryCache.isCacheValid(file.getAbsolutePath(), is.available())) {
                 System.out.println(url + " is not available, downloading...");
                 return null;
