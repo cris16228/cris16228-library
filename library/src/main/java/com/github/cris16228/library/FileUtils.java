@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -157,6 +158,21 @@ public class FileUtils {
                 connectionErrors.NormalError();
             return null;
         }
+    }
+
+    private void saveImage(Bitmap bitmap, String folderName) throws LibraryException, IOException {
+        if (context == null)
+            throw new LibraryException(FileUtils.class, "context is null!! Please use a valid context");
+        String name = "Wallpaper_" + System.currentTimeMillis() + ".png";
+        File path = context.getExternalFilesDir(null);
+        File dir = new File(path + "/" + folderName);
+        if (!dir.exists()) dir.mkdirs();
+        File file = new File(dir, name);
+        OutputStream out = new FileOutputStream(file);
+        BufferedOutputStream bos = new BufferedOutputStream(out);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        bos.flush();
+        bos.close();
     }
 
     public void copyStream(InputStream is, OutputStream os) {
