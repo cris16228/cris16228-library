@@ -71,7 +71,7 @@ public class ImageLoader {
         executor = Executors.newFixedThreadPool(3);
         fileUtils = new FileUtils();
         context = _context;
-        init();
+        /*init();*/
         return this;
     }
 
@@ -88,7 +88,7 @@ public class ImageLoader {
         executor = Executors.newFixedThreadPool(3);
         fileUtils = new FileUtils();
         context = _context;
-        init();
+        /*init();*/
         return this;
     }
 
