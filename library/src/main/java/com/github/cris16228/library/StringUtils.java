@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class StringUtils {
 
-    static char[] CHARSET_AZ_09 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+    static char[] CHARSET_AZ_09 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
     public static String UUID(int length) {
         Random random = new SecureRandom();

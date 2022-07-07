@@ -28,9 +28,9 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
     }
 
-    public void loadCache(FileCache fileCache) {
-        File[] files = fileCache.getCacheDir().listFiles();
-        if (files != null && files.length > 0)
+    public void loadCache(String path) {
+        File[] files = new File(path).listFiles();
+        if (files != null && files.length > 0) {
             for (File file : files) {
 
                 if (!cache.containsKey(file.getAbsolutePath()))
@@ -41,8 +41,6 @@ public class MemoryCache {
                         e.printStackTrace();
                     }
             }
-        for (String path : cache.keySet()) {
-            System.out.println(path);
         }
     }
 
