@@ -172,10 +172,6 @@ public class ImageLoader {
             Bitmap _image = fileUtils.decodeFile(file);
             if (_image != null)
                 return _image;
-            System.out.println(memoryCache.isCacheValid(file.getAbsolutePath(), is.available()));
-            /*if (!) {
-                return null;
-            }*/
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
             os.close();
