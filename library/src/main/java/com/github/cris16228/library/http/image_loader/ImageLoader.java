@@ -160,6 +160,10 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
+        File file = fileCache.getFile(url);
+        Bitmap _image = fileUtils.decodeFile(file);
+        if (_image != null)
+            return _image;
         try {
             Bitmap _webImage;
             URL imageURL = new URL(url);
@@ -168,10 +172,6 @@ public class ImageLoader {
             connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
-            File file = fileCache.getFile(url);
-            Bitmap _image = fileUtils.decodeFile(file);
-            if (_image != null)
-                return _image;
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
             os.close();
