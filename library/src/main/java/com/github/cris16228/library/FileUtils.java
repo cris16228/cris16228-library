@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
@@ -188,7 +189,16 @@ public class FileUtils {
     }
 
     public String readJson(String file) {
-        StringBuilder sb = new StringBuilder();
+        return readFile(file);
+    }
+
+    public String readFile(String file) {
+        File f = new File(file);
+        StringBuilder text = new StringBuilder();
+        if (!f.exists()) {
+            Log.e("readFiles", "The file doesn't exists");
+            return "";
+        }
         try {
             FileInputStream fis = new FileInputStream(file);
             InputStreamReader isr = new InputStreamReader(fis);
@@ -196,7 +206,7 @@ public class FileUtils {
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
+                text.append(line);
             }
             fis.close();
         } catch (IOException e) {
@@ -209,10 +219,10 @@ public class FileUtils {
                 }
             return "";
         }
-        return sb.toString();
+        return text.toString();
     }
 
-    public void writeJson(String file, String json) {
+    public void writeFile(String file, String text) {
         File f = new File(file);
         if (!f.exists()) {
             try {
@@ -224,12 +234,16 @@ public class FileUtils {
         try {
             FileOutputStream fos = new FileOutputStream(f);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
-            osw.append(json);
+            osw.append(text);
             osw.close();
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void writeJson(String file, String json) {
+        writeFile(file, json);
     }
 
     public String getFileName(File file) {
