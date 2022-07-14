@@ -222,6 +222,16 @@ public class FileUtils {
         return text.toString();
     }
 
+    public String binaryFileToString(String path) {
+        File file = new File(path);
+        String text = "";
+        if (!file.exists()) return "";
+        if (!StringUtils.isEmpty(StringUtils.binaryToString(readFile(file.getAbsolutePath())))) {
+            text = StringUtils.binaryToString(readFile(file.getAbsolutePath()));
+        }
+        return text;
+    }
+
     public void writeFile(String file, String text) {
         File f = new File(file);
         if (!f.exists()) {

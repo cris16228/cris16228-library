@@ -27,7 +27,7 @@ public class StringUtils {
 
     public static String stringToBinary(String text) {
         StringBuilder bString = new StringBuilder();
-        String tmp = "";
+        String tmp;
         if (text.trim().length() == 0) {
             Log.e("stringToBinary", "The text cannot be empty");
             return "";
