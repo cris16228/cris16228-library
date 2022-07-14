@@ -2,6 +2,9 @@ package com.github.cris16228.library;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class LongUtils {
 
     Context context;
@@ -44,6 +47,12 @@ public class LongUtils {
             s = String.format("%.2f", tb) + " TB";
         }
         return s;
+    }
+
+    public String longToDate(long date, String pattern) {
+        if (StringUtils.isEmpty(pattern))
+            pattern = "EEEE, dd MMMM yyyy HH:mm";
+        return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
     }
 
     public String toReadableTime(long timeInMillis) {
