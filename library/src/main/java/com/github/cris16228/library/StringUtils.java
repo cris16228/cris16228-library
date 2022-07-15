@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -38,6 +39,21 @@ public class StringUtils {
                 tmp = "0" + tmp;
             }
             bString.append(tmp).append(" ");
+        }
+        Log.i("stringToBinary", bString.toString());
+        return bString.toString();
+    }
+
+    public static String stringToBinaryV2(String text) {
+        StringBuilder bString = new StringBuilder();
+        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+        for (byte b : bytes) {
+            int val = b;
+            for (int i = 0; i < 9; i++) {
+                bString.append((val & 128) == 0 ? 0 : 1);
+                val <<= 1;
+            }
+            bString.append(" ");
         }
         Log.i("stringToBinary", bString.toString());
         return bString.toString();
