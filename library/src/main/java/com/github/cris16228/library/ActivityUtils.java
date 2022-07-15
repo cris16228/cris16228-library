@@ -125,10 +125,14 @@ public class ActivityUtils {
         currentActivity.startActivity(activity);
     }
 
-    public void startActivity(Context currentActivity, Class<?> destinationActivity, boolean finish, String name, Bundle value) {
+    public void startActivity(Context currentActivity, Class<?> destinationActivity, boolean finish, String[] names, Bundle[] values) {
         Intent activity = new Intent(currentActivity, destinationActivity);
         activity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        activity.putExtra(name, value);
+        if (values.length == names.length) {
+            for (int i = 0; i < names.length; i++) {
+                activity.putExtra(names[i], values[i]);
+            }
+        }
         currentActivity.startActivity(activity);
         if (finish)
             try {
