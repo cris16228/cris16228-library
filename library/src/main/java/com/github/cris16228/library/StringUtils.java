@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -46,10 +45,10 @@ public class StringUtils {
 
     public static String stringToBinaryV2(String text) {
         StringBuilder bString = new StringBuilder();
-        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = text.getBytes();
         for (byte b : bytes) {
             int val = b;
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < 8; i++) {
                 bString.append((val & 128) == 0 ? 0 : 1);
                 val <<= 1;
             }
