@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.core.view.ContentInfoCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -145,6 +146,13 @@ public class ActivityUtils {
             } catch (Exception e) {
                 Log.e(getClass().getSimpleName(), e.toString());
             }
+    }
+
+    public void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (manager != null && view != null)
+            manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     public void startActivity(Context currentActivity, Class<?> destinationActivity, boolean finish) {
