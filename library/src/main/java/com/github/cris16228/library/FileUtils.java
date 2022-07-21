@@ -222,12 +222,12 @@ public class FileUtils {
         return text.toString();
     }
 
-    public String binaryFileToString(String path) {
+    public String binaryFileToString(String path, boolean print) {
         File file = new File(path);
         String text = "";
         if (!file.exists()) return "";
-        if (!StringUtils.isEmpty(StringUtils.binaryToString(readFile(file.getAbsolutePath())))) {
-            text = StringUtils.binaryToString(readFile(file.getAbsolutePath()));
+        if (!StringUtils.isEmpty(StringUtils.binaryToString(readFile(file.getAbsolutePath()), print))) {
+            text = StringUtils.binaryToString(readFile(file.getAbsolutePath()), print);
         }
         return text;
     }

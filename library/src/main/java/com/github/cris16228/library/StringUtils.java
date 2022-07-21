@@ -21,29 +21,7 @@ public class StringUtils {
         return new String(result);
     }
 
-    public static boolean isEmpty(@Nullable CharSequence str) {
-        return str == null || str.length() == 0;
-    }
-
-    public static String stringToBinary(String text) {
-        StringBuilder bString = new StringBuilder();
-        String tmp;
-        if (text.trim().length() == 0) {
-            Log.e("stringToBinary", "The text cannot be empty");
-            return "";
-        }
-        for (int i = 0; i < text.length(); i++) {
-            tmp = Integer.toBinaryString(text.charAt(i));
-            for (int j = tmp.length(); j < 8; j++) {
-                tmp = "0" + tmp;
-            }
-            bString.append(tmp).append(" ");
-        }
-        Log.i("stringToBinary", bString.toString());
-        return bString.toString();
-    }
-
-    public static String stringToBinaryV2(String text) {
+    public static String stringToBinary(String text, boolean print) {
         StringBuilder bString = new StringBuilder();
         byte[] bytes = text.getBytes();
         for (byte b : bytes) {
@@ -54,17 +32,28 @@ public class StringUtils {
             }
             bString.append(" ");
         }
-        Log.i("stringToBinary", bString.toString());
+        if (print)
+            Log.i("stringToBinary", bString.toString());
         return bString.toString();
     }
 
-    public static String binaryToString(String binaryCode) {
+
+    public static boolean isEmpty(@Nullable CharSequence str) {
+        return str == null || str.length() == 0;
+    }
+
+    public static String binaryToString(String binaryCode, boolean print) {
         String[] code = binaryCode.split(" ");
         StringBuilder word = new StringBuilder();
         for (String s : code) {
             word.append((char) Integer.parseInt(s, 2));
         }
-        Log.i("stringToBinary", word.toString());
+        if (print)
+            Log.i("stringToBinary", word.toString());
         return word.toString();
+    }
+
+    public String convertToFirstUpper(String text) {
+        return text.substring(0, 1).toUpperCase() + text.substring(1).toUpperCase();
     }
 }

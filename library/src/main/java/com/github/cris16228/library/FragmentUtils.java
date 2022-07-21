@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class FragmentUtils {
 
@@ -20,5 +21,10 @@ public class FragmentUtils {
         FragmentManager manager = fragmentActivity.getSupportFragmentManager();
         manager.beginTransaction().replace(containerViewId,
                 fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
+    }
+
+    public void refreshFragment(FragmentActivity fragmentActivity, Fragment fragment) {
+        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        ft.detach(fragment).attach(fragment).commit();
     }
 }
