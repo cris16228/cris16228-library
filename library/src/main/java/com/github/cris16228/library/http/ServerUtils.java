@@ -74,7 +74,7 @@ public class ServerUtils {
         else if (isConnectedWifi(context) && !isHome(context))
             return _public;
         else
-            return _public;
+            return _local;
     }
 
 
