@@ -16,7 +16,7 @@ public class ServerUtils {
 
     private static final String[] SSIDs = {"Casa", "Casa5GHz"};
     private final String _local = "http://192.168.1.11/";
-    private final String _public = "http://cris16228.com/";
+    private final String _public = "http://www.cris16228.com/";
     private Context context;
 
     public static ServerUtils get(Context context) {
