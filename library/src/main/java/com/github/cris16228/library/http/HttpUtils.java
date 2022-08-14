@@ -122,8 +122,8 @@ public class HttpUtils {
                     8192);
             /*if (input.available() > 0) {*/
             File tmp = new File(path);
-            if (!tmp.exists())
-                tmp.mkdirs();
+            String tmp_path = tmp.getParent();
+            if (tmp_path != null && !new File(tmp_path).exists()) tmp.mkdirs();
             OutputStream output = new FileOutputStream(path);
 
             byte[] data = new byte[1024];
