@@ -15,23 +15,27 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
 public class HttpUtils {
 
-    private StringBuilder result;
     String url = "http://192.168.1.11/upload.php";
     String lineEnd = "\r\n";
     String twoHyphens = "--";
     String boundary = "*****";
     String TAG = getClass().getSimpleName();
+    private StringBuilder result;
     private int readTimeout = 10000;
     private int connectionTimeout = 15000;
     private HttpURLConnection conn;
@@ -106,6 +110,38 @@ public class HttpUtils {
             fileParams.put("file", path);
         }
         return fileParams;
+    }
+
+    public void downloadFile(String _url, String path) {
+        int count;
+        try {
+            URL url = new URL(_url);
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            InputStream input = new BufferedInputStream(url.openStream(),
+                    8192);
+            /*if (input.available() > 0) {*/
+            File tmp = new File(path);
+            if (!tmp.exists())
+                tmp.mkdirs();
+            OutputStream output = new FileOutputStream(path);
+
+            byte[] data = new byte[1024];
+
+            while ((count = input.read(data)) != -1) {
+                output.write(data, 0, count);
+            }
+
+            // flushing output
+            output.flush();
+
+            // closing streams
+            output.close();
+            input.close();
+            /*   }*/
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
+        }
     }
 
     public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
