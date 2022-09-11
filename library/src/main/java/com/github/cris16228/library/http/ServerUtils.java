@@ -51,10 +51,12 @@ public class ServerUtils {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             if (wifiInfo != null) {
                 String currentSSID = wifiInfo.getSSID();
+                System.out.println("Your SSID is: " + currentSSID);
                 if (DeviceUtils.isEmulator())
                     System.out.println(currentSSID);
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
+                        System.out.println(ssid + " | " + currentSSID);
                         if (ssid.equals(currentSSID)) {
                             isHome = true;
                             break;
