@@ -261,7 +261,7 @@ public class FileUtils {
     public void debugLog(String path, String text) {
         String fileText = readFile(path);
         StringBuilder sb = new StringBuilder();
-        sb.append(fileText).append(System.lineSeparator()).append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append(System.lineSeparator());
+        sb.append("\n").append(fileText).append("\n").append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append("\n");
         writeFile(path, sb.toString());
     }
 
