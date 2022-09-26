@@ -29,6 +29,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FileUtils {
 
@@ -250,6 +251,19 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void debugLog(String text) {
+        String path = context.getExternalFilesDir(null).getPath() + "debug.log";
+        debugLog(path, text);
+    }
+
+    public void debugLog(String path, String text) {
+        String fileText = readFile(path);
+        StringBuilder sb = new StringBuilder();
+        Date dateTime = new Date();
+        sb.append(fileText).append("\n").append("[").append(String.format("{0:dd/MM/yyyy HH:mm:ss}", dateTime)).append("]: ").append(text).append("\n");
+        writeFile(path, sb.toString());
     }
 
     public void writeJson(String file, String json) {
