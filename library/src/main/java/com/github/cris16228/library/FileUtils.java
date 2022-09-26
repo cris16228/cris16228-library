@@ -254,15 +254,14 @@ public class FileUtils {
     }
 
     public void debugLog(String text) {
-        String path = context.getExternalFilesDir(null).getPath() + "debug.log";
+        String path = context.getExternalFilesDir(null).getPath() + "/debug.log";
         debugLog(path, text);
     }
 
     public void debugLog(String path, String text) {
         String fileText = readFile(path);
         StringBuilder sb = new StringBuilder();
-        Date dateTime = new Date();
-        sb.append(fileText).append("\n").append("[").append(String.format("{0:dd/MM/yyyy HH:mm:ss}", dateTime)).append("]: ").append(text).append("\n");
+        sb.append(fileText).append(System.lineSeparator()).append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append(System.lineSeparator());
         writeFile(path, sb.toString());
     }
 
