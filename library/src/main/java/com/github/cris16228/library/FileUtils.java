@@ -262,7 +262,10 @@ public class FileUtils {
         String fileText = readFile(path);
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append(fileText).append("\n").append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append("\n");
+        System.out.println(sb);
         writeFile(path, sb.toString());
+        fileText = "";
+        sb = new StringBuilder();
     }
 
     public void writeJson(String file, String json) {
