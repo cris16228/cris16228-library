@@ -9,4 +9,5 @@
     <color name="app_background_alt">#0F1C1C1C</color>
     <color name="reverse_app_background">#FFFFFF</color>
     <color name="black_on_light_theme">@color/white</color>
+    <color name="light_on_black_theme">@color/black</color>
 </resources>

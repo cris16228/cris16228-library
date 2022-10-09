@@ -95,14 +95,7 @@ public class DateTimeUtils {
     }
 
     public long getMilliseconds(String date) {
-        SimpleDateFormat format = new SimpleDateFormat(DEFAULT_FORMAT, Locale.getDefault());
-        Date temp_date = null;
-        try {
-            temp_date = format.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return temp_date != null ? temp_date.getTime() : 0;
+        return getMilliseconds(date, DEFAULT_FORMAT);
     }
 
     public long getMilliseconds(String date, String formatting) {

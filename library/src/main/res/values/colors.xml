@@ -60,6 +60,7 @@
     <color name="reverse_app_background">#292929</color>
     <color name="bottom_sheet_dialog_background">#448AFF</color>
     <color name="black_on_light_theme">@color/black</color>
+    <color name="light_on_black_theme">@color/white</color>
     <color name="passcode_background">#AAAAAA</color>
     <color name="passcode_overlay">@color/colorPrimary_1</color>
     <color name="passcode_wrong">#F24055</color>
