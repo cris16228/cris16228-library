@@ -21,8 +21,8 @@ public class ThemeUtils {
     public final String DARK = "dark";
     public final String AUTO = "follow_system";
     public Theme theme;
-    private PrefUtils prefUtils;
     Context context;
+    private PrefUtils prefUtils;
 
     public static ThemeUtils with(PrefUtils prefUtils) {
         ThemeUtils themeUtils = new ThemeUtils();

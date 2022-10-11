@@ -68,20 +68,20 @@ public class DownloadController {
         this.authority = authority;
     }
 
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
-
     public ExecutorService getExecutor() {
         return executor;
     }
 
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
     public Handler getHandler() {
         return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     public final void enqueueDownload() {

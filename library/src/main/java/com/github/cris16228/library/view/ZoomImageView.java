@@ -16,9 +16,9 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
     static final int DRAG = 1;
     static final int ZOOM = 2;
     static final int CLICK = 3;
+    public int mode = NONE;
     protected float origWidth, origHeight;
     Matrix matrix;
-    public int mode = NONE;
     // Remember some things for zooming
     PointF last = new PointF();
     PointF start = new PointF();
