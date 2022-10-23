@@ -26,7 +26,6 @@ public class PieChart extends View {
         }
         value_degree = new float[values.length];
         COLORS = new String[]{};
-        values = calculateData(values);
         for (int i = 0; i < values.length; i++) {
             value_degree[i] = values[i];
             COLORS[i] = colors[i];

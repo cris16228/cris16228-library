@@ -7,7 +7,7 @@
     <color name="app_background">#202020</color>
     <color name="app_background_light">#2B2B2B</color>
     <color name="app_background_alt">#0F1C1C1C</color>
-    <color name="reverse_app_background">#FFFFFF</color>
+    <color name="reverse_app_background">#F3F3F3</color>
     <color name="black_on_light_theme">@color/white</color>
     <color name="light_on_black_theme">@color/black</color>
 </resources>

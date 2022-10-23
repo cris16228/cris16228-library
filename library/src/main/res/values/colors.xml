@@ -57,7 +57,7 @@
     <color name="app_background">#F3F3F3</color>
     <color name="app_background_light">#FBFBFB</color>
     <color name="app_background_alt">#F1F2F6</color>
-    <color name="reverse_app_background">#292929</color>
+    <color name="reverse_app_background">#202020</color>
     <color name="bottom_sheet_dialog_background">#448AFF</color>
     <color name="black_on_light_theme">@color/black</color>
     <color name="light_on_black_theme">@color/white</color>
