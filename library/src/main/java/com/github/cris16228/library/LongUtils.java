@@ -109,4 +109,58 @@ public class LongUtils {
 
         return timeBuf.toString();
     }
+
+    public String toReadableTimeFull(long timeInMillis) {
+
+        if (timeInMillis < 1) {
+            return String.valueOf(timeInMillis);
+        }
+
+        StringBuffer timeBuf = new StringBuffer();
+
+        // second (1000ms) & above
+        long time = timeInMillis / 1000;
+        if (time < 1) {
+            return "now";
+        }
+
+        long seconds = time % 60;
+        prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? "seconds" : "second");
+
+        // minute(60s) & above
+        time = time / 60;
+        if (time < 1) {
+            return timeBuf.toString();
+        }
+
+        long minutes = time % 60;
+        prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? "minutes" : "minute");
+
+        // hour(60m) & above
+        time = time / 60;
+        if (time < 1) {
+            return timeBuf.toString();
+        }
+
+        long hours = time % 24;
+        prependTimeAndUnit(timeBuf, hours, hours > 0 ? "hours" : "hour");
+
+        // day(24h) & above
+        time = time / 24;
+        if (time < 1) {
+            return timeBuf.toString();
+        }
+
+        long day = time % 365;
+        prependTimeAndUnit(timeBuf, day, minutes > 0 ? "days" : "day");
+
+        // year(365d) ...
+        time = time / 365;
+        if (time < 1) {
+            return timeBuf.toString();
+        }
+        prependTimeAndUnit(timeBuf, time, "years");
+
+        return timeBuf.toString();
+    }
 }
