@@ -125,7 +125,7 @@ public class LongUtils {
         }
 
         long seconds = time % 60;
-        prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? "seconds" : "second");
+        prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? " seconds" : " second");
 
         // minute(60s) & above
         time = time / 60;
@@ -134,7 +134,7 @@ public class LongUtils {
         }
 
         long minutes = time % 60;
-        prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? "minutes" : "minute");
+        prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? " minutes" : " minute");
 
         // hour(60m) & above
         time = time / 60;
@@ -143,7 +143,7 @@ public class LongUtils {
         }
 
         long hours = time % 24;
-        prependTimeAndUnit(timeBuf, hours, hours > 0 ? "hours" : "hour");
+        prependTimeAndUnit(timeBuf, hours, hours > 0 ? " hours" : " hour");
 
         // day(24h) & above
         time = time / 24;
@@ -152,14 +152,14 @@ public class LongUtils {
         }
 
         long day = time % 365;
-        prependTimeAndUnit(timeBuf, day, minutes > 0 ? "days" : "day");
+        prependTimeAndUnit(timeBuf, day, minutes > 0 ? " days" : " day");
 
         // year(365d) ...
         time = time / 365;
         if (time < 1) {
             return timeBuf.toString();
         }
-        prependTimeAndUnit(timeBuf, time, "years");
+        prependTimeAndUnit(timeBuf, time, " years");
 
         return timeBuf.toString();
     }

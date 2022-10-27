@@ -17,9 +17,12 @@ public class FloatUtils {
         return floatUtils;
     }
 
-    public String getNumberFormat(Object value, int limit) throws LibraryException {
-        if (limit <= 0)
-            throw new LibraryException(getClass(), limit + "is not valid! It must be higher than 0");
+    public static String getNumberFormat(Object value, int limit) {
+        FileUtils fileUtils = new FileUtils();
+        if (limit <= 0) {
+            fileUtils.debugLog(limit + "is not valid! It must be higher than 0");
+            return "NaN";
+        }
         float tempFloat;
         NumberFormat format = NumberFormat.getInstance();
         format.setMinimumFractionDigits(limit);
@@ -33,14 +36,19 @@ public class FloatUtils {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        else
-            throw new LibraryException(getClass(), value + "is not valid! It must be a \"float\" or a \"double\"");
+        else {
+            fileUtils.debugLog(value + "is not valid! It must be a \"float\" or a \"double\"");
+            return "NaN";
+        }
         return (String) value;
     }
 
-    public String getNumberFormat(Object value, int limit, boolean round, RoundingMode roundingMode) throws LibraryException {
-        if (limit <= 0)
-            throw new LibraryException(getClass(), limit + "is not valid! It must be higher than 0");
+    public static String getNumberFormat(Object value, int limit, boolean round, RoundingMode roundingMode) {
+        FileUtils fileUtils = new FileUtils();
+        if (limit <= 0) {
+            fileUtils.debugLog(limit + "is not valid! It must be higher than 0");
+            return "NaN";
+        }
         double tempDouble;
         NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
         format.setMinimumFractionDigits(limit);
@@ -59,8 +67,10 @@ public class FloatUtils {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        else
-            throw new LibraryException(getClass(), value + "is not valid! It must be a \"float\" or a \"double\"");
+        else {
+            fileUtils.debugLog(value + "is not valid! It must be a \"float\" or a \"double\"");
+            return "NaN";
+        }
         return (String) value;
     }
 }

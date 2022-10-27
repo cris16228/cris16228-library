@@ -6,7 +6,9 @@ import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.github.cris16228.library.FloatUtils;
 import com.github.cris16228.library.LibraryException;
@@ -43,6 +45,13 @@ public class DeviceUtils {
                 || Build.PRODUCT.contains("vbox86p")
                 || Build.PRODUCT.contains("emulator")
                 || Build.PRODUCT.contains("simulator");
+    }
+
+    public void clearFocus(Activity activity) {
+        View view = activity.getCurrentFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        view.clearFocus();
     }
 
     public String getDisplaySize(int limit) throws LibraryException {

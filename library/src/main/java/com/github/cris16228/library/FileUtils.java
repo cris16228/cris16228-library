@@ -258,7 +258,7 @@ public class FileUtils {
     }
 
     public void debugLog(String text) {
-        String path = context.getExternalFilesDir(null).getPath() + "/debug.log";
+        String path = getPersonalSpace(context) + "/debug.log";
         debugLog(path, text);
     }
 
@@ -268,8 +268,6 @@ public class FileUtils {
         sb.append("\n").append(fileText).append("\n").append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append("\n");
         System.out.println(sb);
         writeFile(path, sb.toString());
-        fileText = "";
-        sb = new StringBuilder();
     }
 
     public void writeJson(String file, String json) {
