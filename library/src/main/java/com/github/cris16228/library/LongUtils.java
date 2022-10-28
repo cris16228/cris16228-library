@@ -111,7 +111,26 @@ public class LongUtils {
     }
 
     public String toReadableTimeFull(long timeInMillis) {
+        return toReadableTimeFull(timeInMillis, "");
+    }
 
+    public String toReadableTimeFull(long timeInMillis, String timeFormat) {
+        boolean full = StringUtils.isEmpty(timeFormat);
+        char[] chars = timeFormat.toCharArray();
+        boolean add_seconds = false, add_minutes = false, add_hours = false, add_days = false, add_years = false;
+        System.out.println(chars);
+        for (char _char : chars) {
+            if (_char == 's')
+                add_seconds = true;
+            if (_char == 'm')
+                add_minutes = true;
+            if (_char == 'h')
+                add_hours = true;
+            if (_char == 'd')
+                add_days = true;
+            if (_char == 'y')
+                add_years = true;
+        }
         if (timeInMillis < 1) {
             return String.valueOf(timeInMillis);
         }
@@ -125,7 +144,8 @@ public class LongUtils {
         }
 
         long seconds = time % 60;
-        prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? " seconds" : " second");
+        if (add_seconds || full)
+            prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? " seconds" : " second");
 
         // minute(60s) & above
         time = time / 60;
@@ -134,7 +154,8 @@ public class LongUtils {
         }
 
         long minutes = time % 60;
-        prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? " minutes" : " minute");
+        if (add_minutes || full)
+            prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? " minutes" : " minute");
 
         // hour(60m) & above
         time = time / 60;
@@ -143,7 +164,8 @@ public class LongUtils {
         }
 
         long hours = time % 24;
-        prependTimeAndUnit(timeBuf, hours, hours > 0 ? " hours" : " hour");
+        if (add_hours || full)
+            prependTimeAndUnit(timeBuf, hours, hours > 0 ? " hours" : " hour");
 
         // day(24h) & above
         time = time / 24;
@@ -152,14 +174,16 @@ public class LongUtils {
         }
 
         long day = time % 365;
-        prependTimeAndUnit(timeBuf, day, minutes > 0 ? " days" : " day");
+        if (add_days || full)
+            prependTimeAndUnit(timeBuf, day, minutes > 0 ? " days" : " day");
 
         // year(365d) ...
         time = time / 365;
         if (time < 1) {
             return timeBuf.toString();
         }
-        prependTimeAndUnit(timeBuf, time, " years");
+        if (add_years || full)
+            prependTimeAndUnit(timeBuf, time, " years");
 
         return timeBuf.toString();
     }
