@@ -74,7 +74,6 @@ public class ServerUtils {
     }
 
     public String webURL(Context context) {
-        System.out.println("isConnectedWifi: " + isConnectedWifi(context) + " / isHome:" + isHome(context));
         if (isConnectedWifi(context) && isHome(context))
             return _local;
         else if (isConnectedWifi(context) && !isHome(context))
