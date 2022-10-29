@@ -52,9 +52,11 @@ public class ServerUtils {
             if (wifiInfo != null) {
                 String currentSSID = wifiInfo.getSSID();
                 System.out.println("Your SSID is: " + currentSSID);
-                if (DeviceUtils.isEmulator())
+                if (DeviceUtils.isEmulator()) {
                     System.out.println(currentSSID);
+                }
                 if (currentSSID != null) {
+                    currentSSID = currentSSID.replace("\"", "");
                     for (String ssid : SSIDs) {
                         System.out.println(ssid + " | " + currentSSID + " | " + currentSSID.equals(ssid));
                         if (currentSSID.equals(ssid)) {
