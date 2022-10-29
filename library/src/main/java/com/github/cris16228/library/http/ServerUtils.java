@@ -56,8 +56,8 @@ public class ServerUtils {
                     System.out.println(currentSSID);
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
-                        if (ssid.equals(currentSSID)) {
-                            System.out.println(ssid + " | " + currentSSID);
+                        System.out.println(ssid + " | " + currentSSID + " | " + currentSSID.equals(ssid));
+                        if (currentSSID.equals(ssid)) {
                             System.out.println("You're connected to " + currentSSID + " your ip should be: " + webURL(context));
                             isHome = true;
                             break;
@@ -72,7 +72,7 @@ public class ServerUtils {
     }
 
     public String webURL(Context context) {
-        System.out.println("isConnectedWifi: " + isConnectedWifi(context) + "/ isHome:" + isHome(context));
+        System.out.println("isConnectedWifi: " + isConnectedWifi(context) + " / isHome:" + isHome(context));
         if (isConnectedWifi(context) && isHome(context))
             return _local;
         else if (isConnectedWifi(context) && !isHome(context))
