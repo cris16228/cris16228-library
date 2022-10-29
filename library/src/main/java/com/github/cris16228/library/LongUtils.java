@@ -175,7 +175,7 @@ public class LongUtils {
 
         long day = time % 365;
         if (add_days || full)
-            prependTimeAndUnit(timeBuf, day, minutes > 0 ? " days" : " day");
+            prependTimeAndUnit(timeBuf, day, day > 0 ? " days" : " day");
 
         // year(365d) ...
         time = time / 365;
@@ -183,7 +183,7 @@ public class LongUtils {
             return timeBuf.toString();
         }
         if (add_years || full)
-            prependTimeAndUnit(timeBuf, time, " years");
+            prependTimeAndUnit(timeBuf, time, time > 1 ? " years" : " year");
 
         return timeBuf.toString();
     }

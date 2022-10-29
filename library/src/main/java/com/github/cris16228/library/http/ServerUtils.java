@@ -25,7 +25,7 @@ public class ServerUtils {
         return serverUtils;
     }
 
-    public static boolean isConnectedWifi(Context context) {
+    public boolean isConnectedWifi(Context context) {
         if (DeviceUtils.isEmulator()) {
             return true;
         }
@@ -41,7 +41,7 @@ public class ServerUtils {
         return false;
     }
 
-    public static boolean isHome(Context context) {
+    public boolean isHome(Context context) {
         boolean isHome = false;
         if (DeviceUtils.isEmulator()) {
             return true;
@@ -56,8 +56,9 @@ public class ServerUtils {
                     System.out.println(currentSSID);
                 if (currentSSID != null) {
                     for (String ssid : SSIDs) {
-                        System.out.println(ssid + " | " + currentSSID);
                         if (ssid.equals(currentSSID)) {
+                            System.out.println(ssid + " | " + currentSSID);
+                            System.out.println("You're connected to " + currentSSID + " your ip should be: " + webURL(context));
                             isHome = true;
                             break;
                         }
@@ -71,6 +72,7 @@ public class ServerUtils {
     }
 
     public String webURL(Context context) {
+        System.out.println("isConnectedWifi: " + isConnectedWifi(context) + "/ isHome:" + isHome(context));
         if (isConnectedWifi(context) && isHome(context))
             return _local;
         else if (isConnectedWifi(context) && !isHome(context))
