@@ -58,7 +58,6 @@ public class ServerUtils {
                 if (currentSSID != null) {
                     currentSSID = currentSSID.replace("\"", "");
                     for (String ssid : SSIDs) {
-                        System.out.println(ssid + " | " + currentSSID + " | " + currentSSID.equals(ssid));
                         if (currentSSID.equals(ssid)) {
                             System.out.println("You're connected to " + currentSSID + " your ip should be: " + webURL(context));
                             isHome = true;
