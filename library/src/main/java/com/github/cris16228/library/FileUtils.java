@@ -290,7 +290,7 @@ public class FileUtils {
 
     public void debugLog(String path, String text) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append("\n\r");
+        sb.append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text);
         writeFile(path, sb.toString(), true);
     }
 
