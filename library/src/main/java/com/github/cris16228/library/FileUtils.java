@@ -251,6 +251,31 @@ public class FileUtils {
             FileOutputStream fos = new FileOutputStream(f);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             osw.append(text);
+            osw.flush();
+            osw.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeFile(String file, String text, boolean lineSeparator) {
+        File f = new File(file);
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            String separator = System.getProperty("line.separator");
+            FileOutputStream fos = new FileOutputStream(f);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            osw.append(text);
+            if (lineSeparator)
+                osw.append(separator);
+            osw.flush();
             osw.close();
             fos.close();
         } catch (IOException e) {
@@ -267,7 +292,7 @@ public class FileUtils {
         String fileText = readFile(path);
         StringBuilder sb = new StringBuilder();
         sb.append("\n\r").append(fileText).append("\n\r").append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text).append("\n\r");
-        writeFile(path, sb.toString());
+        writeFile(path, sb.toString(), true);
     }
 
     public void writeJson(String file, String json) {

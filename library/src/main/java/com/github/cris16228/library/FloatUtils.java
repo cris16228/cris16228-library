@@ -20,7 +20,7 @@ public class FloatUtils {
     public static String getNumberFormat(Object value, int limit) {
         FileUtils fileUtils = new FileUtils();
         if (limit <= 0) {
-            fileUtils.debugLog(limit + "is not valid! It must be higher than 0");
+            fileUtils.debugLog(limit + " is not valid! It must be higher than 0");
             return "NaN";
         }
         float tempFloat;
@@ -37,7 +37,7 @@ public class FloatUtils {
                 e.printStackTrace();
             }
         else {
-            fileUtils.debugLog(value + "is not valid! It must be a \"float\" or a \"double\"");
+            fileUtils.debugLog(value + " is not valid! It must be a \"float\" or a \"double\"");
             return "NaN";
         }
         return (String) value;
@@ -46,7 +46,7 @@ public class FloatUtils {
     public static String getNumberFormat(Object value, int limit, Context context) {
         FileUtils fileUtils = FileUtils.with(context);
         if (limit <= 0) {
-            fileUtils.debugLog(limit + "is not valid! It must be higher than 0");
+            fileUtils.debugLog(limit + " is not valid! It must be higher than 0");
             return "NaN";
         }
         float tempFloat;
