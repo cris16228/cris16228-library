@@ -270,7 +270,7 @@ public class FileUtils {
         }
         try {
             String separator = System.getProperty("line.separator");
-            FileOutputStream fos = new FileOutputStream(f);
+            FileOutputStream fos = new FileOutputStream(f, true);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             osw.append(text);
             if (lineSeparator)
