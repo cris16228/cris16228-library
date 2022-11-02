@@ -17,11 +17,12 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 
 public class DownloadController {
@@ -38,7 +39,7 @@ public class DownloadController {
     Handler handler;
     private String original_app_name;
     private String authority;
-
+    NotificationBuilder notificationBuilder;
     public DownloadController(@NonNull Context context, @NonNull String url, String _app_name, boolean save_in_cache) {
         this.context = context;
         this.url = url;
@@ -131,13 +132,12 @@ public class DownloadController {
                             8192);
 
                     // Output stream
-                    OutputStream output = new FileOutputStream(destination);
+                    OutputStream output = Files.newOutputStream(Paths.get(destination));
 
                     byte[] data = new byte[1024];
 
                     long total = 0;
-                    LongUtils longUtils = new LongUtils();
-                    NotificationBuilder notificationBuilder = new NotificationBuilder(context);
+                    notificationBuilder = new NotificationBuilder(context);
                     notificationBuilder.createDownloadNotification(app_name, "Downloading update...", -1);
                     while ((count = input.read(data)) != -1) {
                         total += count;

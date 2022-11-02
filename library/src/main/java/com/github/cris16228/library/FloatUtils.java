@@ -43,6 +43,32 @@ public class FloatUtils {
         return (String) value;
     }
 
+    public static String getNumberFormat(Object value, int limit, Context context) {
+        FileUtils fileUtils = FileUtils.with(context);
+        if (limit <= 0) {
+            fileUtils.debugLog(limit + "is not valid! It must be higher than 0");
+            return "NaN";
+        }
+        float tempFloat;
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMinimumFractionDigits(limit);
+        format.setMaximumFractionDigits(limit);
+        if (value instanceof Float || value instanceof Double)
+            return format.format(value);
+        if (value instanceof String)
+            try {
+                tempFloat = Float.parseFloat((String) value);
+                return format.format(tempFloat);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        else {
+            fileUtils.debugLog(value + "is not valid! It must be a \"float\" or a \"double\"");
+            return "NaN";
+        }
+        return (String) value;
+    }
+
     public static String getNumberFormat(Object value, int limit, boolean round, RoundingMode roundingMode) {
         FileUtils fileUtils = new FileUtils();
         if (limit <= 0) {

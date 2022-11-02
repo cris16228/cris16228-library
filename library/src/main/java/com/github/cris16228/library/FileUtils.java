@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -174,7 +175,7 @@ public class FileUtils {
         File dir = new File(path + "/" + folderName);
         if (!dir.exists()) dir.mkdirs();
         File file = new File(dir, name);
-        OutputStream out = new FileOutputStream(file);
+        OutputStream out = Files.newOutputStream(file.toPath());
         BufferedOutputStream bos = new BufferedOutputStream(out);
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         bos.flush();

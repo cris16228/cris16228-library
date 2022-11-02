@@ -1,6 +1,5 @@
 package com.github.cris16228.library.deviceutils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -92,12 +91,11 @@ public class PackageUtils {
     }
 
 
-    public void uninstallApp(PackageInfo app, Activity activity) {
+    public void uninstallApp(PackageInfo app) {
         Intent delete_intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
         Uri uri = Uri.fromParts("package", app.packageName, null);
         delete_intent.setData(uri);
         context.startActivity(delete_intent);
-        activity.finish();
     }
 
     public void infoApp(PackageInfo app) {

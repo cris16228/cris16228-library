@@ -161,7 +161,7 @@ public class ActivityUtils {
         currentActivity.startActivity(activity);
         if (finish)
             try {
-                ((Activity) context).finish();
+                ((Activity) currentActivity).finish();
             } catch (Exception e) {
                 Log.e(getClass().getSimpleName(), e.toString());
             }

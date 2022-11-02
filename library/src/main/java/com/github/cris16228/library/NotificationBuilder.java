@@ -37,12 +37,12 @@ public class NotificationBuilder {
     public void updateDownloadNotification(int progress, int max) {
         if (notificationManager == null || builder == null) return;
         if (progress == 0 && max == 0) return;
-        builder.setProgress(max, progress, false);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
         if (progress >= max) {
             builder.setContentText("Download Complete");
             builder.setProgress(0, 0, false);
             notificationManager.notify(NOTIFICATION_ID, builder.build());
         }
+        builder.setProgress(max, progress, false);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 }
