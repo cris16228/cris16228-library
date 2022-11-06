@@ -21,7 +21,7 @@ public class App {
     private String versionCode;
     @SerializedName("description")
     @Expose
-    private String description;
+    private List<String> description;
     @SerializedName("icon")
     @Expose
     private String icon;
@@ -67,11 +67,11 @@ public class App {
         this.versionCode = versionCode;
     }
 
-    public String getDescription() {
+    public List<String> getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(List<String> description) {
         this.description = description;
     }
 
