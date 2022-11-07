@@ -263,6 +263,7 @@ public class FileUtils {
         File f = new File(file);
         if (!f.exists()) {
             try {
+                f.mkdirs();
                 f.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -285,10 +286,20 @@ public class FileUtils {
 
     public void debugLog(String text) {
         String path = getPersonalSpace(context) + "/debug.log";
-        debugLog(path, text);
+        Log(path, text);
     }
 
-    public void debugLog(String path, String text) {
+    public void debugLog(String text, String fileName) {
+        String path = getPersonalSpace(context) + fileName;
+        Log(path, text);
+    }
+
+    public void debugLog(String text, String fileName, String path) {
+        path += fileName;
+        Log(path, text);
+    }
+
+    public void Log(String path, String text) {
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text);
         writeFile(path, sb.toString(), true);
