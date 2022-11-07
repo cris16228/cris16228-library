@@ -36,11 +36,11 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         StackTraceElement[] arr = e.getStackTrace();
         StringBuilder report = new StringBuilder();
         report.append(e).append("\n").append("\n");
-        report.append("-------------------------------- Stack trace --------------------------------");
+        report.append("-------------------------------- Stack trace --------------------------------").append("\n");
         for (StackTraceElement stackTraceElement : arr) {
             report.append(stackTraceElement.toString()).append("\n");
         }
-        report.append("-----------------------------------------------------------------------------").append("\n");
+        report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
 
         report.append("----------------------------------- Cause -----------------------------------").append("\n");
         Throwable cause = e.getCause();
@@ -68,6 +68,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
             Uri uri = Uri.fromFile(new File(FileUtils.with(app).getPersonalSpace(app) + fileName));
             sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
             sendIntent.setType("message/rfc822");
+            app.startActivity(Intent.createChooser(sendIntent, "Send the crash report"));
         }
         defaultUEH.uncaughtException(t, e);
     }
