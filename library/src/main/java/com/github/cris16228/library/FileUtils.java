@@ -263,7 +263,7 @@ public class FileUtils {
         File f = new File(file);
         if (!f.exists()) {
             try {
-                f.mkdirs();
+                new File(f.getParent()).mkdirs();
                 f.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
