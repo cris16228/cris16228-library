@@ -21,9 +21,16 @@
     <style name="Theme.MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimaryMain</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryLightMain</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkMain</item>
-        <item name="colorAccent">@color/colorAccentMain</item>
-        <item name="android:statusBarColor">@color/colorPrimaryMain</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorSecondaryMain</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryLightMain</item>
+        <item name="colorSecondaryContainer">@color/colorSecondaryDarkMain</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

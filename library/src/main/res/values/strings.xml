@@ -21,6 +21,10 @@
     <string name="battery_status_unknown">Unknown</string>
     <string name="battery_status_not_charging">Not Charging</string>
 
+
+    <!-- Settings Titles -->
+    <string name="app_aspect_header">App aspect settings</string>
+
     <!-- Settings Preferences -->
     <string name="theme_title">Theme</string>
     <string name="theme_summary">Change the app aspect</string>

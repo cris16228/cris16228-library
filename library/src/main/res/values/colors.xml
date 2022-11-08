@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Main Theme https://www.materialpalette.com/blue/green -->
-    <color name="colorPrimaryMain">#2196F3</color> <!-- Primary color -->
-    <color name="colorPrimaryDarkMain">#1976D2</color> <!-- Dark primary color -->
-    <color name="colorAccentMain">#4CAF50</color> <!-- Accent color -->
+    <!-- Main Theme https://m2.material.io/resources/color/#!/?view.left=0&view.right=1&primary.color=1976D2&secondary.color=4CAF50 -->
+    <color name="colorPrimaryMain">#2196f3</color>
+    <color name="colorPrimaryLightMain">#6ec6ff</color>
+    <color name="colorPrimaryDarkMain">#0069c0</color>
+    <color name="colorSecondaryMain">#4caf50</color>
+    <color name="colorSecondaryLightMain">#80e27e</color>
+    <color name="colorSecondaryDarkMain">#087f23</color>
 
     <!-- Theme 1-->
     <color name="colorPrimary_1">#448AFF</color>
