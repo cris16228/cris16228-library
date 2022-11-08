@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Main Theme https://www.materialpalette.com/blue/green -->
+    <color name="colorPrimaryMain">#2196F3</color> <!-- Primary color -->
+    <color name="colorPrimaryDarkMain">#1976D2</color> <!-- Dark primary color -->
+    <color name="colorAccentMain">#4CAF50</color> <!-- Accent color -->
+
     <!-- Theme 1-->
     <color name="colorPrimary_1">#448AFF</color>
     <color name="colorPrimaryLight_1">#33A5E8</color>
@@ -55,9 +60,7 @@
     <color name="colorTextAlt">@color/white</color>
     <color name="colorTextError">#FF0000</color>
     <color name="app_background">#F3F3F3</color>
-    <color name="app_background_light">#FBFBFB</color>
-    <color name="app_background_alt">#F1F2F6</color>
-    <color name="reverse_app_background">#202020</color>
+    <color name="reverse_app_background">#121212</color>
     <color name="bottom_sheet_dialog_background">#448AFF</color>
     <color name="black_on_light_theme">@color/black</color>
     <color name="light_on_black_theme">@color/white</color>

@@ -63,4 +63,41 @@ public class PermissionsUtils {
     public interface permissionResult {
         void OnSuccess();
     }
+
+    private static class Permission {
+
+        public String ID;
+        public String name;
+        public String description;
+
+        public Permission(String ID, String name, String description) {
+            this.ID = ID;
+            this.name = name;
+            this.description = description;
+        }
+
+        public String getID() {
+            return ID;
+        }
+
+        public void setID(String ID) {
+            this.ID = ID;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+    }
 }
