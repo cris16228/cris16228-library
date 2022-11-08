@@ -34,7 +34,7 @@ public class LocaleUtils {
     }
 
     public void onStartSetLocale() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(prefUtils.PREF, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PrefUtils.PREF, MODE_PRIVATE);
         String language = sharedPreferences.getString(LOCALE, EN);
         setLocale(language);
     }
