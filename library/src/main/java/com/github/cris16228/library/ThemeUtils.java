@@ -1,9 +1,6 @@
 package com.github.cris16228.library;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -34,7 +31,17 @@ public class ThemeUtils {
         ThemeUtils themeUtils = new ThemeUtils();
         themeUtils.context = _context;
         if (themeUtils.prefUtils == null)
-            themeUtils.prefUtils = new PrefUtils();
+            themeUtils.prefUtils = PrefUtils.with(_context);
+        return themeUtils;
+    }
+
+    public static ThemeUtils with(Context _context, String prefName) {
+        ThemeUtils themeUtils = new ThemeUtils();
+        themeUtils.context = _context;
+        if (themeUtils.prefUtils == null)
+            themeUtils.prefUtils = PrefUtils.with(_context);
+        if (StringUtils.isEmpty(PrefUtils.PREF))
+            themeUtils.prefUtils.setSharedPref(prefName);
         return themeUtils;
     }
 
@@ -46,8 +53,8 @@ public class ThemeUtils {
     }
 
     public Theme getTheme() {
-        SharedPreferences pref = context.getSharedPreferences(PrefUtils.PREF, MODE_PRIVATE);
-        switch (pref.getString(THEME, LIGHT)) {
+        String theme = prefUtils.getString(THEME, AUTO);
+        switch (theme) {
             case DARK:
                 return Theme.DARK;
             case LIGHT:
