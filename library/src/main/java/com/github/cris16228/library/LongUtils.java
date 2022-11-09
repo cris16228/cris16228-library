@@ -132,6 +132,7 @@ public class LongUtils {
                 add_years = true;
         }
         boolean past = timeInMillis < 1;
+        timeInMillis *= -1;
 
         StringBuffer timeBuf = new StringBuffer();
 
