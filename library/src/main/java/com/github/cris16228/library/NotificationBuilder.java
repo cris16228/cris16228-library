@@ -39,7 +39,6 @@ public class NotificationBuilder {
         if (progress == 0 && max == 0) return;
         if (progress >= max) {
             builder.setContentText("Download Complete");
-            builder.setProgress(0, 0, false);
             notificationManager.notify(NOTIFICATION_ID, builder.build());
         }
         builder.setProgress(max, progress, false);

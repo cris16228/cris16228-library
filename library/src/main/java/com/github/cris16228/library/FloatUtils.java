@@ -18,9 +18,7 @@ public class FloatUtils {
     }
 
     public static String getNumberFormat(Object value, int limit) {
-        FileUtils fileUtils = new FileUtils();
         if (limit <= 0) {
-            fileUtils.debugLog(limit + " is not valid! It must be higher than 0");
             return "NaN";
         }
         float tempFloat;
@@ -37,7 +35,6 @@ public class FloatUtils {
                 e.printStackTrace();
             }
         else {
-            fileUtils.debugLog(value + " is not valid! It must be a \"float\" or a \"double\"");
             return "NaN";
         }
         return (String) value;
@@ -69,8 +66,8 @@ public class FloatUtils {
         return (String) value;
     }
 
-    public static String getNumberFormat(Object value, int limit, boolean round, RoundingMode roundingMode) {
-        FileUtils fileUtils = new FileUtils();
+    public static String getNumberFormat(Object value, int limit, boolean round, RoundingMode roundingMode, Context context) {
+        FileUtils fileUtils = FileUtils.with(context);
         if (limit <= 0) {
             fileUtils.debugLog(limit + "is not valid! It must be higher than 0");
             return "NaN";

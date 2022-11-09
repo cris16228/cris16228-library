@@ -49,9 +49,9 @@ public class DateTimeUtils {
         this.time = time;
     }
 
-    public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime) {
+    public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue) {
         Context context = activity.getBaseContext();
-        AtomicLong date_ms = new AtomicLong(0L);
+        AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
@@ -76,9 +76,9 @@ public class DateTimeUtils {
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime) {
+    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue) {
         Context context = activity.getBaseContext();
-        AtomicLong date_ms = new AtomicLong(0L);
+        AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
