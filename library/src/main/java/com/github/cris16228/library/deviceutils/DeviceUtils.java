@@ -74,7 +74,7 @@ public class DeviceUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return FloatUtils.with(context).getNumberFormat(Math.sqrt(x + y), limit, true, RoundingMode.HALF_UP) + "\"";
+        return FloatUtils.getNumberFormat(Math.sqrt(x + y), limit, true, RoundingMode.HALF_UP, context) + "\"";
     }
 
     public int getWidth() {
