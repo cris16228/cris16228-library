@@ -23,6 +23,7 @@
 
     <!-- Settings Titles -->
     <string name="app_aspect_header">App aspect settings</string>
+    <string name="security_header">App security</string>
 
     <!-- Settings Preferences -->
     <string name="theme_title">Theme</string>
@@ -35,6 +36,11 @@
     <string name="locale_summary">Choose the default language</string>
     <string name="english">English</string>
     <string name="italian">Italian</string>
+
+    <string name="use_pin_title">Enable access pin</string>
+    <string name="use_pin_summary">Protects the app with a pin</string>
+    <string name="use_fingerprint_title">Enable access fingerprint</string>
+    <string name="use_fingerprint_summary">Protects the app with a fingerprint</string>
 
     <!-- Passcode -->
     <string name="passcode_tip">Enter a passcode of 4 digits</string>

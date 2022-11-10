@@ -42,4 +42,9 @@
     <string name="passcode_enter_again">Inserisci di nuovo il codice</string>
     <string name="passcode_not_matching">Il codice non combacia</string>
     <string name="passcode_correct">Il codice è corretto</string>
+    <string name="use_pin_title">Abilita accesso con pin</string>
+    <string name="use_pin_summary">Protegge l\'app con un codice</string>
+    <string name="use_fingerprint_title">Abilita accesso con impronta</string>
+    <string name="use_fingerprint_summary">Protegge l\'app con l\'impronta</string>
+    <string name="security_header">Sicurezza app</string>
 </resources>
