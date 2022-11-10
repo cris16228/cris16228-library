@@ -315,11 +315,17 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         break;
                     case 4:
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
+                        System.out.println(firstInput);
+                        System.out.println(secondInput);
+                        System.out.println("TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput) " + (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)));
                         if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             firstInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             message.setText(secondInputTip);
+                            System.out.println("A");
                         }
+                        System.out.println("!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput) " + (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)));
                         if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
+                            System.out.println("B");
                             secondInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             if (secondInput.equals(firstInput)) {
                                 delayClear(500);
