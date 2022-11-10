@@ -321,7 +321,8 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             firstInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             message.setText(secondInputTip);
-                            System.out.println("A");
+                            delayClear(500);
+                            break;
                         }
                         System.out.println("!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput) " + (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)));
                         if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
