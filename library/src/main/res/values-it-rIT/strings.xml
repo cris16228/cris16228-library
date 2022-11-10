@@ -38,4 +38,8 @@
     <string name="clear">Cancella</string>
     <string name="downloading_app_name">Scaricando %s…</string>
     <string name="image_still_loading">L\'immagine sta ancora caricando…</string>
+    <string name="passcode_tip">Entra un codice di 4 numeri</string>
+    <string name="passcode_enter_again">Inserisci di nuovo il codice</string>
+    <string name="passcode_not_matching">Il codice non combacia</string>
+    <string name="passcode_correct">Il codice è corretto</string>
 </resources>

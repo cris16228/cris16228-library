@@ -34,7 +34,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.MainTheme.BlendstatusBar" parent="Theme.MainTheme">
+    <style name="Theme.MainTheme.BlendStatusBar" parent="Theme.MainTheme">
 
         <item name="android:statusBarColor">@color/app_background</item>
     </style>

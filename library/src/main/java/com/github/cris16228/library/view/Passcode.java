@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Base64;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,8 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.R;
+import com.github.cris16228.library.StringUtils;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
     private int errorColor = 0xFFF24055;
     private String firstInputTip = "Enter a passcode of 4 digits";
     private String secondInputTip = "Re-enter new passcode";
-    private String wrongLengthTip = "Enter a passcode of 4 digits";
     private String wrongInputTip = "Passcode do not match";
     private String correctInputTip = "Passcode is correct";
     private Drawable code_background;
@@ -71,17 +69,15 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
             errorColor = typedArray.getColor(R.styleable.Passcode_passcodeError, errorColor);
             firstInputTip = typedArray.getString(R.styleable.Passcode_firstInputTip);
             secondInputTip = typedArray.getString(R.styleable.Passcode_secondInputTip);
-            wrongLengthTip = typedArray.getString(R.styleable.Passcode_wrongLengthTip);
             wrongInputTip = typedArray.getString(R.styleable.Passcode_wrongInputTip);
             correctInputTip = typedArray.getString(R.styleable.Passcode_correctInputTip);
         } finally {
             typedArray.recycle();
         }
-        firstInputTip = firstInputTip == null ? "Enter a passcode of 4 digits" : firstInputTip;
-        secondInputTip = secondInputTip == null ? "Re-enter new passcode" : secondInputTip;
-        wrongLengthTip = wrongLengthTip == null ? firstInputTip : wrongLengthTip;
-        wrongInputTip = wrongInputTip == null ? "Passcode do not match" : wrongInputTip;
-        correctInputTip = correctInputTip == null ? "Passcode is correct" : correctInputTip;
+        firstInputTip = firstInputTip == null ? context.getResources().getString(R.string.passcode_tip) : firstInputTip;
+        secondInputTip = secondInputTip == null ? context.getResources().getString(R.string.passcode_enter_again) : secondInputTip;
+        wrongInputTip = wrongInputTip == null ? context.getResources().getString(R.string.passcode_not_matching) : wrongInputTip;
+        correctInputTip = correctInputTip == null ? context.getResources().getString(R.string.passcode_correct) : correctInputTip;
         initView(context);
     }
 
@@ -136,14 +132,6 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
 
     public void setSecondInputTip(String secondInputTip) {
         this.secondInputTip = secondInputTip;
-    }
-
-    public String getWrongLengthTip() {
-        return wrongLengthTip;
-    }
-
-    public void setWrongLengthTip(String wrongLengthTip) {
-        this.wrongLengthTip = wrongLengthTip;
     }
 
     public String getWrongInputTip() {
@@ -307,14 +295,13 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
     }
 
     private void passNumber(ArrayList<String> numbers_list) {
-        Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
-        Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
         if (numbers_list.size() <= 0) {
             dot_1.setBackgroundResource(R.drawable.passcode_background);
             dot_2.setBackgroundResource(R.drawable.passcode_background);
             dot_3.setBackgroundResource(R.drawable.passcode_background);
             dot_4.setBackgroundResource(R.drawable.passcode_background);
         } else {
+            System.out.println(TextUtils.isEmpty(passcode));
             if (TextUtils.isEmpty(passcode)) {
                 switch (numbers_list.size()) {
                     case 1:
@@ -329,11 +316,11 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                     case 4:
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
-                            firstInput = encoder.encrypt(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), Base64.DEFAULT, "");
+                            firstInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             message.setText(secondInputTip);
                         }
                         if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
-                            secondInput = encoder.encrypt(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), Base64.DEFAULT, "");
+                            secondInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             if (secondInput.equals(firstInput)) {
                                 delayClear(500);
                                 onPasswordListener.onPasswordCreated(secondInput);
@@ -363,7 +350,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
                         if (!TextUtils.isEmpty(passcode)) {
-                            if (String.valueOf(code).equals(decoder.decrypt(passcode, Base64.DEFAULT))) {
+                            if (String.valueOf(code).equals(StringUtils.binaryToString(passcode, true))) {
                                 lock.setBackgroundResource(R.drawable.lock_open);
                                 message.setText(correctInputTip);
                                 new Handler().postDelayed(() -> {
@@ -378,6 +365,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                                 message.setText(wrongInputTip);
                                 delayClear(1500);
                                 onPasswordListener.onPasswordNotMatch();
+                                message.setText(firstInputTip);
                             }
                         }
                         break;
