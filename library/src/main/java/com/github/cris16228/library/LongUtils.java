@@ -144,7 +144,7 @@ public class LongUtils {
 
         long seconds = time % 60;
         if (add_seconds || full)
-            prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? appendPast(" seconds", past) : appendPast(" second", past));
+            prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? " seconds" : " second");
 
         // minute(60s) & above
         time = time / 60;
@@ -154,7 +154,7 @@ public class LongUtils {
 
         long minutes = time % 60;
         if (add_minutes || full)
-            prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? appendPast(" minutes", past) : appendPast(" minute", past));
+            prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? " minutes" : " minute");
 
         // hour(60m) & above
         time = time / 60;
@@ -164,7 +164,7 @@ public class LongUtils {
 
         long hours = time % 24;
         if (add_hours || full)
-            prependTimeAndUnit(timeBuf, hours, hours > 0 ? appendPast(" hours", past) : appendPast(" hour", past));
+            prependTimeAndUnit(timeBuf, hours, hours > 0 ? " hours" : " hour");
 
         // day(24h) & above
         time = time / 24;
@@ -174,7 +174,7 @@ public class LongUtils {
 
         long day = time % 365;
         if (add_days || full)
-            prependTimeAndUnit(timeBuf, day, day > 0 ? appendPast(" days", past) : appendPast(" day", past));
+            prependTimeAndUnit(timeBuf, day, day > 0 ? " days" : " day");
 
         // year(365d) ...
         time = time / 365;
@@ -182,12 +182,9 @@ public class LongUtils {
             return timeBuf.toString();
         }
         if (add_years || full)
-            prependTimeAndUnit(timeBuf, time, time > 1 ? appendPast(" years", past) : appendPast(" year", past));
-
+            prependTimeAndUnit(timeBuf, time, time > 1 ? " years" : " year");
+        if (past)
+            timeBuf.append(" ago");
         return timeBuf.toString();
-    }
-
-    private String appendPast(String text, boolean past) {
-        return past ? text + " ago" : text;
     }
 }

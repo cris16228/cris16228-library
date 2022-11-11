@@ -33,6 +33,6 @@
     <style name="Theme.MainTheme.BlendStatusBar" parent="Theme.MainTheme">
 
         <item name="android:statusBarColor">@color/app_background</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

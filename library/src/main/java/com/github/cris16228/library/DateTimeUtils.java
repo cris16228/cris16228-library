@@ -92,6 +92,22 @@ public class DateTimeUtils {
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
+    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, String dateFormat) {
+        Context context = activity.getBaseContext();
+        AtomicLong date_ms = new AtomicLong(initValue);
+        StringBuilder dateTime = new StringBuilder();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
+                .build();
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
+            date_ms.set(selection);
+            datetime.setText(dateTime.toString());
+        });
+        datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+    }
+
     public String getDateTime(long millis, String formatter) {
         if (TextUtils.isEmpty(formatter))
             formatter = DEFAULT_FORMAT;
