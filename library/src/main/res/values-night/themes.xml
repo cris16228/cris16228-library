@@ -29,4 +29,10 @@
         <item name="android:statusBarColor">@color/colorPrimaryMain</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.MainTheme.BlendStatusBar" parent="Theme.MainTheme">
+
+        <item name="android:statusBarColor">@color/app_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

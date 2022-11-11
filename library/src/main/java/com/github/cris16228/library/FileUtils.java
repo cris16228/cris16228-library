@@ -228,6 +228,23 @@ public class FileUtils {
         return text.toString();
     }
 
+    public File getNewestFile(String directoryPath) {
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles(File::isFile);
+        long lastModifiedTime = Long.MIN_VALUE;
+        File fileChosen = null;
+        if (files != null) {
+            for (File file : files) {
+                if (file.lastModified() > lastModifiedTime) {
+                    fileChosen = file;
+                    lastModifiedTime = file.lastModified();
+
+                }
+            }
+        }
+        return fileChosen;
+    }
+
     public String binaryFileToString(String path, boolean print) {
         File file = new File(path);
         String text = "";
