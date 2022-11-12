@@ -308,14 +308,26 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
                 switch (numbers_list.size()) {
                     case 1:
                         dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_background);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 2:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 3:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_3.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 4:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             firstInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
