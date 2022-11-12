@@ -1,6 +1,10 @@
 package com.github.cris16228.library;
 
+import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
+
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +38,12 @@ public class ActivityUtils {
         if (DeviceUtils.isEmulator())
             System.out.println("Finishing " + currentActivity.getClass().getSimpleName());
         restartActivity(currentActivity, destinationActivity);
+    }
+
+    public static boolean isAppBackground() {
+        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(appProcessInfo);
+        return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE);
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish) {

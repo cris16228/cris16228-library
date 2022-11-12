@@ -274,7 +274,7 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
         } else if (id == R.id.btn_number_9) {
             numbers_list.add("9");
             passNumber(numbers_list);
-        } else if (id == R.id.btn_clear) {
+        } else if (id == R.id.btn_delete) {
             if (numbers_list.size() > 1)
                 numbers_list.remove(numbers_list.size() - 1);
             else
