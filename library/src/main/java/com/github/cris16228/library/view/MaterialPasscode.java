@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,12 +20,11 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.github.cris16228.library.R;
 import com.github.cris16228.library.StringUtils;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class Passcode extends FrameLayout implements View.OnClickListener {
+public class MaterialPasscode extends FrameLayout implements View.OnClickListener {
 
     private final ArrayList<String> numbers_list = new ArrayList<>();
     private final int buttonColor = 0x00000000;
@@ -33,8 +33,8 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
     private String firstInput = "";
     private onPasswordListener onPasswordListener;
     private View dot_1, dot_2, dot_3, dot_4;
-    private MaterialButton btn_number_1, btn_number_2, btn_number_3, btn_number_4, btn_number_5, btn_number_6, btn_number_7, btn_number_8, btn_number_9, btn_number_0,
-            btn_clear;
+    private RelativeLayout btn_number_1, btn_number_2, btn_number_3, btn_number_4, btn_number_5, btn_number_6, btn_number_7, btn_number_8, btn_number_9, btn_number_0;
+    private ImageView btn_delete;
     private ImageView lock;
     private char[] code;
     private int backgroundColor = 0xFFAAAAAA;
@@ -49,17 +49,17 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
     private Drawable code_error;
     private TextView message;
 
-    public Passcode(@NonNull Context context) {
+    public MaterialPasscode(@NonNull Context context) {
         super(context);
         initView(context);
     }
 
-    public Passcode(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public MaterialPasscode(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public Passcode(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MaterialPasscode(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Passcode);
         try {
@@ -81,7 +81,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         initView(context);
     }
 
-    public Passcode(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public MaterialPasscode(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initView(context);
     }
@@ -216,7 +216,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         btn_number_7 = view.findViewById(R.id.btn_number_7);
         btn_number_8 = view.findViewById(R.id.btn_number_8);
         btn_number_9 = view.findViewById(R.id.btn_number_9);
-        btn_clear = view.findViewById(R.id.btn_clear);
+        btn_delete = view.findViewById(R.id.btn_delete);
 
         btn_number_0.setOnClickListener(this);
         btn_number_1.setOnClickListener(this);
@@ -228,7 +228,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         btn_number_7.setOnClickListener(this);
         btn_number_8.setOnClickListener(this);
         btn_number_9.setOnClickListener(this);
-        btn_clear.setOnClickListener(this);
+        btn_delete.setOnClickListener(this);
         btn_number_0.setBackgroundColor(buttonColor);
         btn_number_1.setBackgroundColor(buttonColor);
         btn_number_2.setBackgroundColor(buttonColor);
@@ -239,7 +239,6 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
         btn_number_7.setBackgroundColor(buttonColor);
         btn_number_8.setBackgroundColor(buttonColor);
         btn_number_9.setBackgroundColor(buttonColor);
-        btn_clear.setBackgroundColor(buttonColor);
     }
 
     @Override
@@ -276,7 +275,10 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
             numbers_list.add("9");
             passNumber(numbers_list);
         } else if (id == R.id.btn_clear) {
-            numbers_list.clear();
+            if (numbers_list.size() > 1)
+                numbers_list.remove(numbers_list.size() - 1);
+            else
+                numbers_list.clear();
             passNumber(numbers_list);
         }
     }
@@ -318,7 +320,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                         if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             firstInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             message.setText(secondInputTip);
-                            delayClear(500);
+                            delayClear(100);
                             break;
                         }
                         if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {

@@ -68,6 +68,7 @@
     <color name="black_on_light_theme">@color/black</color>
     <color name="light_on_black_theme">@color/white</color>
     <color name="passcode_background">#AAAAAA</color>
+    <color name="passcode_button">#D1D1D1</color>
     <color name="passcode_overlay">@color/colorPrimary_1</color>
     <color name="passcode_wrong">#F24055</color>
     <color name="transparent">#00000000</color>

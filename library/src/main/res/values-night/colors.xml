@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorText">@color/white</color>
     <color name="colorTextAlt">@color/black</color>
+    <color name="passcode_button">#1E1E1E</color>
 
     <color name="app_background">#121212</color>
     <color name="reverse_app_background">#F3F3F3</color>
