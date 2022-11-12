@@ -184,7 +184,7 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
 
     private void initView(Context context) {
         code = new char[4];
-        View view = inflate(context, R.layout.layout_passcode, this);
+        View view = inflate(context, R.layout.layout_passcode_new, this);
 
         code_background = ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_background, null);
         if (code_background != null) {
