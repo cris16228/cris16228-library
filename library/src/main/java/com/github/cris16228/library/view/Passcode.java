@@ -306,19 +306,31 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                 switch (numbers_list.size()) {
                     case 1:
                         dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_background);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 2:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 3:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_3.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 4:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         if (TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             firstInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             message.setText(secondInputTip);
-                            delayClear(500);
+                            delayClear(200);
                             break;
                         }
                         if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
@@ -341,14 +353,26 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                 switch (numbers_list.size()) {
                     case 1:
                         dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_background);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 2:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 3:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_3.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 4:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
                         if (!TextUtils.isEmpty(passcode)) {
@@ -358,7 +382,7 @@ public class Passcode extends FrameLayout implements View.OnClickListener {
                                 new Handler().postDelayed(() -> {
                                     numbers_list.clear();
                                     onPasswordListener.onPasswordMatch();
-                                }, 500);
+                                }, 200);
                             } else {
                                 dot_1.setBackgroundResource(R.drawable.passcode_error);
                                 dot_2.setBackgroundResource(R.drawable.passcode_error);

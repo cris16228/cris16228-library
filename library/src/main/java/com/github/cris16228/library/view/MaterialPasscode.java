@@ -305,7 +305,6 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
             dot_3.setBackgroundResource(R.drawable.passcode_background);
             dot_4.setBackgroundResource(R.drawable.passcode_background);
         } else {
-            System.out.println(TextUtils.isEmpty(passcode));
             if (TextUtils.isEmpty(passcode)) {
                 switch (numbers_list.size()) {
                     case 1:
@@ -340,7 +339,7 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
                         if (!TextUtils.isEmpty(firstInput) && TextUtils.isEmpty(secondInput)) {
                             secondInput = StringUtils.stringToBinary(String.valueOf(numbers_list.stream().collect(Collectors.joining()).toCharArray()), true);
                             if (secondInput.equals(firstInput)) {
-                                delayClear(100);
+                                delayClear(200);
                                 onPasswordListener.onPasswordCreated(secondInput);
                             } else {
                                 message.setText(wrongInputTip);
@@ -357,14 +356,26 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
                 switch (numbers_list.size()) {
                     case 1:
                         dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_background);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 2:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_background);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 3:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_3.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_4.setBackgroundResource(R.drawable.passcode_background);
                         break;
                     case 4:
+                        dot_1.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_2.setBackgroundResource(R.drawable.passcode_overlay);
+                        dot_3.setBackgroundResource(R.drawable.passcode_overlay);
                         dot_4.setBackgroundResource(R.drawable.passcode_overlay);
                         code = numbers_list.stream().collect(Collectors.joining()).toCharArray();
                         if (!TextUtils.isEmpty(passcode)) {
@@ -374,7 +385,7 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
                                 new Handler().postDelayed(() -> {
                                     numbers_list.clear();
                                     onPasswordListener.onPasswordMatch();
-                                }, 500);
+                                }, 200);
                             } else {
                                 dot_1.setBackgroundResource(R.drawable.passcode_error);
                                 dot_2.setBackgroundResource(R.drawable.passcode_error);
@@ -382,8 +393,6 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
                                 dot_4.setBackgroundResource(R.drawable.passcode_error);
                                 message.setText(wrongInputTip);
                                 delayClear(600);
-                                onPasswordListener.onPasswordNotMatch();
-                                message.setText(firstInputTip);
                             }
                         }
                         break;
