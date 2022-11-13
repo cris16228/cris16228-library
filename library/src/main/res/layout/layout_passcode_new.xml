@@ -99,6 +99,9 @@
 
                 <RelativeLayout
                     android:id="@+id/btn_number_1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?selectableItemBackground"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -125,6 +128,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?selectableItemBackground"
                     android:background="@color/app_background">
 
                     <ImageView
@@ -146,6 +152,9 @@
                 <RelativeLayout
                     android:id="@+id/btn_number_3"
                     android:layout_width="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?selectableItemBackground"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/app_background">
@@ -188,6 +197,9 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?selectableItemBackground"
                         android:layout_centerInParent="true"
                         android:src="@drawable/passcode_button" />
 
@@ -211,6 +223,9 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?selectableItemBackground"
                         android:layout_centerInParent="true"
                         android:src="@drawable/passcode_button" />
 
@@ -235,6 +250,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?selectableItemBackground"
                         android:src="@drawable/passcode_button" />
 
                     <TextView
