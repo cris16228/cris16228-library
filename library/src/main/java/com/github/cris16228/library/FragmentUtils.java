@@ -23,6 +23,16 @@ public class FragmentUtils {
                 fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
     }
 
+    public void replace(@IdRes int containerViewId, @NonNull Fragment fragment, boolean addToBackStack) {
+        FragmentManager manager = fragmentActivity.getSupportFragmentManager();
+        if (addToBackStack)
+            manager.beginTransaction().replace(containerViewId,
+                    fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
+        else
+            manager.beginTransaction().replace(containerViewId,
+                    fragment, fragment.getClass().getSimpleName()).commit();
+    }
+
     public void refreshFragment(FragmentActivity fragmentActivity, Fragment fragment) {
         FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
         ft.detach(fragment).attach(fragment).commit();
