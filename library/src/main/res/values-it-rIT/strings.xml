@@ -47,5 +47,5 @@
     <string name="use_fingerprint_title">Abilita accesso con impronta</string>
     <string name="use_fingerprint_summary">Protegge l\'app con l\'impronta</string>
     <string name="security_header">Sicurezza app</string>
-    <string name="fingerprint_title">Autenticati con l'impronta</string>
+    <string name="fingerprint_title">Autenticati con l\'impronta</string>
 </resources>
