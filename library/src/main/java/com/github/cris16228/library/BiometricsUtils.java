@@ -15,6 +15,7 @@ public class BiometricsUtils {
     private onBiometric onBiometric;
     private onBiometricPrompt onBiometricPrompt;
 
+
     public BiometricsUtils(FragmentActivity context) {
         this.context = context;
     }
@@ -23,12 +24,59 @@ public class BiometricsUtils {
         onBiometric = _onBiometric;
     }
 
+    public BiometricsUtils.onBiometric getOnBiometric() {
+        return onBiometric;
+    }
+
     public void setOnBiometricPrompt(onBiometricPrompt _onBiometricPrompt) {
         onBiometricPrompt = _onBiometricPrompt;
     }
 
-    public void create() {
-        isSecure();
+    public BiometricsUtils.onBiometricPrompt getOnBiometricPrompt() {
+        return onBiometricPrompt;
+    }
+
+    public void create(onBiometricPrompt onBiometricPrompt) {
+        create(new onBiometric() {
+            @Override
+            public void onBiometricHWUnavailable() {
+
+            }
+
+            @Override
+            public void onBiometricNoneEnrolled() {
+
+            }
+
+            @Override
+            public void onBiometricNoHardware() {
+
+            }
+
+            @Override
+            public void onBiometricSecurityUpdateAvailable() {
+
+            }
+
+            @Override
+            public void onBiometricUnsupported() {
+
+            }
+
+            @Override
+            public void onBiometricStatusUnknown() {
+
+            }
+
+            @Override
+            public void onBiometricSuccess() {
+
+            }
+        }, onBiometricPrompt);
+    }
+
+    public void create(onBiometric onBiometric, onBiometricPrompt onBiometricPrompt) {
+        if (!isSecure()) return;
         BiometricManager biometricManager = BiometricManager.from(context);
         switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
@@ -58,13 +106,14 @@ public class BiometricsUtils {
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
-                    onBiometricPrompt.buttonClick();
+                    onBiometricPrompt.NegativeButtonClick();
                 }
             }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
+                onBiometricPrompt.onAuthenticationSuccess();
             }
 
             @Override
@@ -78,16 +127,15 @@ public class BiometricsUtils {
         biometricPrompt.authenticate(builder.build());
     }
 
-    private boolean isSecure() {
+    public boolean isSecure() {
         KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        System.out.println(keyguardManager.isKeyguardSecure());
-        System.out.println(keyguardManager.isDeviceSecure());
-        System.out.println(keyguardManager.isKeyguardLocked());
         return keyguardManager.isKeyguardSecure();
     }
 
     public interface onBiometricPrompt {
-        void buttonClick();
+        void NegativeButtonClick();
+
+        void onAuthenticationSuccess();
     }
 
     public interface onBiometric {
