@@ -79,4 +79,7 @@
     <string name="downloading_app_size" translatable="false">%s/%s</string>
     <string name="downloading_app_percent" translatable="false">%s%%</string>
     <string name="image_still_loading">Image is still loading…</string>
+    <string name="fingerprint_title">Authenticate with your finger</string>
+    <string name="fingerprint_use_pin" translatable="false">PIN</string>
+
 </resources>
