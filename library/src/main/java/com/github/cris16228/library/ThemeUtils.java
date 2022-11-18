@@ -13,10 +13,10 @@ enum Theme {
 public class ThemeUtils {
 
     //Theme
-    public final String THEME = "theme";
-    public final String LIGHT = "light";
-    public final String DARK = "dark";
-    public final String AUTO = "follow_system";
+    public static final String THEME = "theme";
+    public static final String LIGHT = "light";
+    public static final String DARK = "dark";
+    public static final String AUTO = "follow_system";
     public Theme theme;
     Context context;
     private PrefUtils prefUtils;

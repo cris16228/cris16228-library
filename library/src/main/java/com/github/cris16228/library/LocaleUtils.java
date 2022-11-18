@@ -12,9 +12,9 @@ import java.util.Locale;
 public class LocaleUtils {
 
     //Locale
-    public final String LOCALE = "locale";
-    public final String EN = "en";
-    public final String IT = "it";
+    public static final String LOCALE = "locale";
+    public static final String EN = "en";
+    public static final String IT = "it";
     PrefUtils prefUtils;
     Context context;
 
