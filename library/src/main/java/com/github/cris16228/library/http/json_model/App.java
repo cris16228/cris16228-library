@@ -25,6 +25,9 @@ public class App {
     @SerializedName("icon")
     @Expose
     private String icon;
+    @SerializedName("size")
+    @Expose
+    private long size;
     @SerializedName("screenshots")
     @Expose
     private List<String> screenshots = null;
@@ -81,6 +84,14 @@ public class App {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     public List<String> getScreenshots() {
