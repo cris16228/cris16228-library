@@ -7,6 +7,9 @@ import java.util.List;
 
 public class App {
 
+    @SerializedName("hidden")
+    @Expose
+    private boolean hidden;
     @SerializedName("packageName")
     @Expose
     private String packageName;
@@ -37,6 +40,14 @@ public class App {
     @SerializedName("download")
     @Expose
     private Download download;
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
 
     public String getPackageName() {
         return packageName;
