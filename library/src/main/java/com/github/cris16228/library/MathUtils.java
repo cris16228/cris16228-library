@@ -6,7 +6,7 @@ public class MathUtils {
     public static String result;
 
     public static String SolveMath(String input) {
-        input = toCalculate;
+        toCalculate = input;
         if (toCalculate.split("\\+").length == 2) {
             String[] numbers = input.split("\\+");
             try {
