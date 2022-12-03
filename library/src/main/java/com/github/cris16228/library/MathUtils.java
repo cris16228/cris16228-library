@@ -43,7 +43,7 @@ public class MathUtils {
                 result = "NaN";
             }
         }
-        return "NaN";
+        return result;
     }
 
     public static String cutDecimal(String input) {
