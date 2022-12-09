@@ -81,5 +81,10 @@
     <string name="image_still_loading">Image is still loading…</string>
     <string name="fingerprint_title">Authenticate with your finger</string>
     <string name="fingerprint_use_pin" translatable="false">PIN</string>
-
+    <string name="setup_text_needed">Few things needed before you can proceed</string>
+    <string name="setup_currency_hint">Currency</string>
+    <string name="setup_date_format_hint">Date format</string>
+    <string name="setup_currency">Select your currency</string>
+    <string name="setup_date_format">Select your date format</string>
+    <string name="finish">Finish</string>
 </resources>

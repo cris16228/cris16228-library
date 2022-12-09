@@ -38,4 +38,15 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="android:textColorHint">@color/colorText</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
+    <style name="TextInputLayoutStyle.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="android:textColorHint">@color/colorText</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
 </resources>
