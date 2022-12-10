@@ -52,8 +52,8 @@ public class DateTimeUtils {
 
     public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue) {
         Context context = activity.getBaseContext();
-        AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
+        AtomicLong date_ms = new AtomicLong(initValue);
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
                 .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
