@@ -28,6 +28,25 @@ public class Base64Utils {
             return encryptedString;
         }
 
+        public byte[] encryptV2(String unencryptedString, String unicode_format) {
+            byte[] encryptedString = null;
+            try {
+                byte[] plainText;
+                if (TextUtils.isEmpty(unicode_format))
+                    plainText = unencryptedString.getBytes();
+                else
+                    plainText = unencryptedString.getBytes(unicode_format);
+                encryptedString = java.util.Base64.getEncoder().encode(plainText);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return encryptedString;
+        }
+
+        public byte[] encryptV2(String unencryptedString) {
+            return java.util.Base64.getEncoder().encode(unencryptedString.getBytes());
+        }
+
         public String encrypt(byte[] bytes, int flag) {
             String encryptedString = null;
             try {
@@ -49,6 +68,25 @@ public class Base64Utils {
                 e.printStackTrace();
             }
             return unencryptedString;
+        }
+
+        public byte[] decryptV2(String encryptedString, String unicode_format) {
+            byte[] unencryptedString = null;
+            try {
+                byte[] plainText;
+                if (TextUtils.isEmpty(unicode_format))
+                    plainText = encryptedString.getBytes();
+                else
+                    plainText = encryptedString.getBytes(unicode_format);
+                unencryptedString = java.util.Base64.getDecoder().decode(plainText);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return unencryptedString;
+        }
+
+        public byte[] decryptV2(String encryptedString) {
+            return java.util.Base64.getDecoder().decode(encryptedString);
         }
     }
 }

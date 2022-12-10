@@ -170,12 +170,14 @@ public class FileUtils {
         }
     }
 
+    //Get saved base64 Image
     public Bitmap getBitmap(String base64String) {
         Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
         InputStream is = new ByteArrayInputStream(decoder.decrypt(base64String, Base64.DEFAULT).getBytes());
         return BitmapFactory.decodeStream(is);
     }
 
+    //Save image to base64
     public String saveBitmap(Bitmap bitmap) {
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
