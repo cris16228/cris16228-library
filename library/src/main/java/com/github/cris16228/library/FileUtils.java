@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -15,6 +16,8 @@ import com.github.cris16228.library.http.image_loader.interfaces.ConnectionError
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -165,6 +168,19 @@ public class FileUtils {
                 connectionErrors.NormalError();
             return null;
         }
+    }
+
+    public Bitmap getBitmap(String base64String) {
+        Base64Utils.Base64Decoder decoder = new Base64Utils.Base64Decoder();
+        InputStream is = new ByteArrayInputStream(decoder.decrypt(base64String, Base64.DEFAULT).getBytes());
+        return BitmapFactory.decodeStream(is);
+    }
+
+    public String saveBitmap(Bitmap bitmap) {
+        Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return encoder.encrypt(bytes, Base64.DEFAULT);
     }
 
     private void saveImage(Bitmap bitmap, String folderName) throws LibraryException, IOException {

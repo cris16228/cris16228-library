@@ -5,7 +5,11 @@ import android.util.Base64;
 
 public class Base64Utils {
 
-    private static final String UNICODE_FORMAT = "UTF8";
+    static final String UNICODE_FORMAT = "UTF8";
+
+    public static String getUnicodeFormat() {
+        return UNICODE_FORMAT;
+    }
 
     public static class Base64Encoder {
 
@@ -18,6 +22,16 @@ public class Base64Utils {
                 else
                     plainText = unencryptedString.getBytes(unicode_format);
                 encryptedString = Base64.encodeToString(plainText, flag);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return encryptedString;
+        }
+
+        public String encrypt(byte[] bytes, int flag) {
+            String encryptedString = null;
+            try {
+                encryptedString = Base64.encodeToString(bytes, flag);
             } catch (Exception e) {
                 e.printStackTrace();
             }
