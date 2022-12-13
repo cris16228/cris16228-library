@@ -26,16 +26,6 @@ public class DateTimeUtils {
     private long date;
     private long time;
 
-    private String dateString;
-
-    public String getDateString() {
-        return dateString;
-    }
-
-    public void setDateString(String dateString) {
-        this.dateString = dateString;
-    }
-
     public String getDefaultFormat() {
         return DEFAULT_FORMAT;
     }
@@ -60,14 +50,11 @@ public class DateTimeUtils {
         this.time = time;
     }
 
-    public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue) {
+    public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         StringBuilder dateTime = new StringBuilder();
         AtomicLong date_ms = new AtomicLong(initValue);
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
-                .build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
             dateTime.append(" ");
@@ -78,23 +65,20 @@ public class DateTimeUtils {
                     .setTimeFormat(TimeFormat.CLOCK_24H)
                     .setHour(calendar.get(Calendar.HOUR_OF_DAY)).setMinute(calendar.get(Calendar.MINUTE)).build();
             timePicker.addOnPositiveButtonClickListener(v -> {
-                dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
-                        "0" + timePicker.getMinute() : timePicker.getMinute()));
+                dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ? "0" + timePicker.getMinute() : timePicker.getMinute()));
+                if (isHint) datetime.setHint(dateTime.toString());
+                else datetime.setText(dateTime.toString());
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
-            timePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDateTime(AppCompatActivity activity, TextInputEditText datetime, long initValue) {
+    public void getDateTime(AppCompatActivity activity, TextInputEditText datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
-                .build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
             dateTime.append(" ");
@@ -105,75 +89,71 @@ public class DateTimeUtils {
                     .setTimeFormat(TimeFormat.CLOCK_24H)
                     .setHour(calendar.get(Calendar.HOUR_OF_DAY)).setMinute(calendar.get(Calendar.MINUTE)).build();
             timePicker.addOnPositiveButtonClickListener(v -> {
-                dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
-                        "0" + timePicker.getMinute() : timePicker.getMinute()));
+                dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ? "0" + timePicker.getMinute() : timePicker.getMinute()));
+
+                if (isHint) datetime.setHint(dateTime.toString());
+                else datetime.setText(dateTime.toString());
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
-            timePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue) {
+    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
-                .build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
+
+            if (isHint) datetime.setHint(dateTime.toString());
+            else datetime.setText(dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue) {
+    public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
-                .build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
+
+            if (isHint) datetime.setHint(dateTime.toString());
+            else datetime.setText(dateTime.toString());
         });
-        datePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue, String dateFormat) {
+    public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue, String dateFormat, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
-                .build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
+            if (isHint) datetime.setHint(dateTime.toString());
+            else datetime.setText(dateTime.toString());
         });
-        datePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, String dateFormat) {
+    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, String dateFormat, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get())
-                .build();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
+            if (isHint) datetime.setHint(dateTime.toString());
+            else datetime.setText(dateTime.toString());
         });
-        datePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
