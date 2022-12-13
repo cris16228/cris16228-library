@@ -26,6 +26,16 @@ public class DateTimeUtils {
     private long date;
     private long time;
 
+    private String dateString;
+
+    public String getDateString() {
+        return dateString;
+    }
+
+    public void setDateString(String dateString) {
+        this.dateString = dateString;
+    }
+
     public String getDefaultFormat() {
         return DEFAULT_FORMAT;
     }
@@ -70,9 +80,9 @@ public class DateTimeUtils {
             timePicker.addOnPositiveButtonClickListener(v -> {
                 dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
                         "0" + timePicker.getMinute() : timePicker.getMinute()));
-                datetime.setText(dateTime.toString());
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+            timePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
@@ -97,9 +107,9 @@ public class DateTimeUtils {
             timePicker.addOnPositiveButtonClickListener(v -> {
                 dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ?
                         "0" + timePicker.getMinute() : timePicker.getMinute()));
-                datetime.setText(dateTime.toString());
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+            timePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
@@ -115,7 +125,6 @@ public class DateTimeUtils {
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
-            datetime.setText(dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
@@ -131,8 +140,8 @@ public class DateTimeUtils {
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
-            datetime.setText(dateTime.toString());
         });
+        datePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
@@ -147,8 +156,8 @@ public class DateTimeUtils {
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
-            datetime.setText(dateTime.toString());
         });
+        datePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
@@ -163,8 +172,8 @@ public class DateTimeUtils {
         datePicker.addOnPositiveButtonClickListener(selection -> {
             dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
-            datetime.setText(dateTime.toString());
         });
+        datePicker.addOnPositiveButtonClickListener(v -> dateString = dateTime.toString());
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
