@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -224,6 +225,14 @@ public class DateTimeUtils {
                         e.printStackTrace();
                         FileUtils.with(context).debugLog(e.toString());
                     }
+                } else if (datetime instanceof TextInputLayout) {
+                    try {
+                        TextInputLayout textInputLayout = (TextInputLayout) datetime;
+                        textInputLayout.setHint(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
                 }
             } else {
                 if (datetime instanceof AutoCompleteTextView) {
@@ -238,6 +247,14 @@ public class DateTimeUtils {
                     try {
                         TextInputEditText textInputEditText = (TextInputEditText) datetime;
                         textInputEditText.setText(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                } else if (datetime instanceof TextInputLayout) {
+                    try {
+                        TextInputLayout textInputLayout = (TextInputLayout) datetime;
+                        textInputLayout.setHint(dateTime.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                         FileUtils.with(context).debugLog(e.toString());
