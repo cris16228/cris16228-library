@@ -50,7 +50,7 @@ public class DateTimeUtils {
         this.time = time;
     }
 
-    public void getDateTime(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, boolean isHint) {
+    public void getDateTime(AppCompatActivity activity, Object datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         StringBuilder dateTime = new StringBuilder();
         AtomicLong date_ms = new AtomicLong(initValue);
@@ -66,15 +66,50 @@ public class DateTimeUtils {
                     .setHour(calendar.get(Calendar.HOUR_OF_DAY)).setMinute(calendar.get(Calendar.MINUTE)).build();
             timePicker.addOnPositiveButtonClickListener(v -> {
                 dateTime.append(timePicker.getHour()).append(":").append(timePicker.getMinute() == 0 ? "00" : (timePicker.getMinute() <= 9 ? "0" + timePicker.getMinute() : timePicker.getMinute()));
-                if (isHint) datetime.setHint(dateTime.toString());
-                else datetime.setText(dateTime.toString());
+                if (isHint) {
+                    if (datetime instanceof AutoCompleteTextView) {
+                        try {
+                            AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) datetime;
+                            autoCompleteTextView.setHint(dateTime.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            FileUtils.with(context).debugLog(e.toString());
+                        }
+                    } else if (datetime instanceof TextInputEditText) {
+                        try {
+                            TextInputEditText textInputEditText = (TextInputEditText) datetime;
+                            textInputEditText.setHint(dateTime.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            FileUtils.with(context).debugLog(e.toString());
+                        }
+                    }
+                } else {
+                    if (datetime instanceof AutoCompleteTextView) {
+                        try {
+                            AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) datetime;
+                            autoCompleteTextView.setText(dateTime.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            FileUtils.with(context).debugLog(e.toString());
+                        }
+                    } else if (datetime instanceof TextInputEditText) {
+                        try {
+                            TextInputEditText textInputEditText = (TextInputEditText) datetime;
+                            textInputEditText.setText(dateTime.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            FileUtils.with(context).debugLog(e.toString());
+                        }
+                    }
+                }
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDateTime(AppCompatActivity activity, TextInputEditText datetime, long initValue, boolean isHint) {
+    /*public void getDateTime(AppCompatActivity activity, TextInputEditText datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
@@ -97,9 +132,59 @@ public class DateTimeUtils {
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+    }*/
+
+    public void getDate(AppCompatActivity activity, Object datetime, long initValue, boolean isHint) {
+        Context context = activity.getBaseContext();
+        AtomicLong date_ms = new AtomicLong(initValue);
+        StringBuilder dateTime = new StringBuilder();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
+            date_ms.set(selection);
+
+            if (isHint) {
+                if (datetime instanceof AutoCompleteTextView) {
+                    try {
+                        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) datetime;
+                        autoCompleteTextView.setHint(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                } else if (datetime instanceof TextInputEditText) {
+                    try {
+                        TextInputEditText textInputEditText = (TextInputEditText) datetime;
+                        textInputEditText.setHint(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                }
+            } else {
+                if (datetime instanceof AutoCompleteTextView) {
+                    try {
+                        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) datetime;
+                        autoCompleteTextView.setText(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                } else if (datetime instanceof TextInputEditText) {
+                    try {
+                        TextInputEditText textInputEditText = (TextInputEditText) datetime;
+                        textInputEditText.setText(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                }
+            }
+        });
+        datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, boolean isHint) {
+    /*public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
@@ -112,24 +197,58 @@ public class DateTimeUtils {
             else datetime.setText(dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
-    }
+    }*/
 
-    public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue, boolean isHint) {
+    public void getDate(AppCompatActivity activity, Object datetime, long initValue, String dateFormat, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            dateTime.append(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date(selection)));
+            dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
             date_ms.set(selection);
-
-            if (isHint) datetime.setHint(dateTime.toString());
-            else datetime.setText(dateTime.toString());
+            if (isHint) {
+                if (datetime instanceof AutoCompleteTextView) {
+                    try {
+                        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) datetime;
+                        autoCompleteTextView.setHint(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                } else if (datetime instanceof TextInputEditText) {
+                    try {
+                        TextInputEditText textInputEditText = (TextInputEditText) datetime;
+                        textInputEditText.setHint(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                }
+            } else {
+                if (datetime instanceof AutoCompleteTextView) {
+                    try {
+                        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) datetime;
+                        autoCompleteTextView.setText(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                } else if (datetime instanceof TextInputEditText) {
+                    try {
+                        TextInputEditText textInputEditText = (TextInputEditText) datetime;
+                        textInputEditText.setText(dateTime.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FileUtils.with(context).debugLog(e.toString());
+                    }
+                }
+            }
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
 
-    public void getDate(AppCompatActivity activity, TextInputEditText datetime, long initValue, String dateFormat, boolean isHint) {
+    /*public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, String dateFormat, boolean isHint) {
         Context context = activity.getBaseContext();
         AtomicLong date_ms = new AtomicLong(initValue);
         StringBuilder dateTime = new StringBuilder();
@@ -141,21 +260,7 @@ public class DateTimeUtils {
             else datetime.setText(dateTime.toString());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
-    }
-
-    public void getDate(AppCompatActivity activity, AutoCompleteTextView datetime, long initValue, String dateFormat, boolean isHint) {
-        Context context = activity.getBaseContext();
-        AtomicLong date_ms = new AtomicLong(initValue);
-        StringBuilder dateTime = new StringBuilder();
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(date_ms.get() == 0L ? MaterialDatePicker.todayInUtcMilliseconds() : date_ms.get()).build();
-        datePicker.addOnPositiveButtonClickListener(selection -> {
-            dateTime.append(new SimpleDateFormat(StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat, Locale.getDefault()).format(new Date(selection)));
-            date_ms.set(selection);
-            if (isHint) datetime.setHint(dateTime.toString());
-            else datetime.setText(dateTime.toString());
-        });
-        datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
-    }
+    }*/
 
     public String getDateTime(long millis, String formatter) {
         if (TextUtils.isEmpty(formatter))
