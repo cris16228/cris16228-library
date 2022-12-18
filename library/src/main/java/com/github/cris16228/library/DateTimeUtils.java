@@ -239,6 +239,17 @@ public class DateTimeUtils {
         return new SimpleDateFormat(formatter, Locale.getDefault()).format(millis);
     }
 
+    public long dateToExact(String date, String dateFormat) {
+        Calendar current = Calendar.getInstance();
+        current.setTime(new Date());
+        Calendar exactCal = Calendar.getInstance();
+        exactCal.setTime(new Date(getMilliseconds(date, StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat)));
+        exactCal.set(Calendar.HOUR_OF_DAY, current.get(Calendar.HOUR_OF_DAY));
+        exactCal.set(Calendar.HOUR, current.get(Calendar.HOUR));
+        exactCal.set(Calendar.MINUTE, current.get(Calendar.MINUTE));
+        exactCal.set(Calendar.MILLISECOND, current.get(Calendar.MILLISECOND));
+        return exactCal.getTimeInMillis();
+    }
 
     private String timePicker(MaterialTimePicker timePicker) {
         return timePicker.getHour() + ":" + (timePicker.getMinute() == 0 ? "00" : timePicker.getMinute());
