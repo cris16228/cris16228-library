@@ -49,4 +49,14 @@
         <item name="android:textColorHint">@color/colorText</item>
         <item name="strokeWidth">2dp</item>
     </style>
+
+    <style name="TextInputLayoutRoundedCorners" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="android:textColorHint">@color/colorText</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="boxCornerRadiusBottomEnd">15dp</item>
+        <item name="boxCornerRadiusBottomStart">15dp</item>
+        <item name="boxCornerRadiusTopStart">15dp</item>
+        <item name="boxCornerRadiusTopEnd">15dp</item>
+    </style>
 </resources>

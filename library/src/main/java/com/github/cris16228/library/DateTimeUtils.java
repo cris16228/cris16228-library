@@ -245,9 +245,9 @@ public class DateTimeUtils {
         Calendar exactCal = Calendar.getInstance();
         exactCal.setTime(new Date(getMilliseconds(date, StringUtils.isEmpty(dateFormat) ? "dd/MM/yyyy" : dateFormat)));
         exactCal.set(Calendar.HOUR_OF_DAY, current.get(Calendar.HOUR_OF_DAY));
-        exactCal.set(Calendar.HOUR, current.get(Calendar.HOUR));
-        exactCal.set(Calendar.MINUTE, current.get(Calendar.MINUTE));
-        exactCal.set(Calendar.MILLISECOND, current.get(Calendar.MILLISECOND));
+        exactCal.set(Calendar.HOUR, 0);
+        exactCal.set(Calendar.MINUTE, 0);
+        exactCal.set(Calendar.SECOND, 1);
         return exactCal.getTimeInMillis();
     }
 
