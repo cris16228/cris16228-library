@@ -140,6 +140,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
 
     @Override
     public void setImageBitmap(Bitmap bm) {
+        if (bm == null) return;
         super.setImageBitmap(bm);
         bmWidth = bm.getWidth();
         bmHeight = bm.getHeight();
