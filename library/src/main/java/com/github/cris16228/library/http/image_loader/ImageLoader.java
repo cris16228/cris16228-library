@@ -286,6 +286,7 @@ public class ImageLoader {
                     if (loadImage != null)
                         loadImage.onSuccess(bitmap);
                     photoToLoad.imageView.setImageBitmap(bitmap);
+                    photoToLoad.imageView.invalidate();
                 } else {
                     if (loadImage != null)
                         loadImage.onFail();
