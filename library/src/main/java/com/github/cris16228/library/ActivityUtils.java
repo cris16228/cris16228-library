@@ -112,6 +112,10 @@ public class ActivityUtils {
         currentActivity.startActivity(activity);
     }
 
+    public void startIntent(Context currentActivity, Intent intent) {
+        currentActivity.startActivity(intent);
+    }
+
     public void restartActivity(Context currentActivity, Class<?> destinationActivity) {
         Intent activity = new Intent(currentActivity, destinationActivity);
         activity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

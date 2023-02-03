@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
 
 public class PackageUtils {
-
     Context context;
-
     public static PackageUtils with(Context _context) {
         PackageUtils packageUtils = new PackageUtils();
         packageUtils.context = _context;
@@ -89,8 +90,6 @@ public class PackageUtils {
         if (open_app_intent != null)
             context.startActivity(open_app_intent);
     }
-
-
     public void uninstallApp(PackageInfo app) {
         Intent delete_intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
         Uri uri = Uri.fromParts("package", app.packageName, null);
@@ -103,5 +102,14 @@ public class PackageUtils {
         Uri uri = Uri.fromParts("package", app.packageName, null);
         open_info_intent.setData(uri);
         context.startActivity(open_info_intent);
+    }
+
+    public Bitmap getAppIcon(String pkg) {
+        try {
+            Drawable icon = context.getPackageManager().getApplicationIcon(pkg);
+            return ((BitmapDrawable) icon).getBitmap();
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
