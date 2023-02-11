@@ -68,7 +68,7 @@ public class NotificationsUtils {
         Icon largeIcon = notification.getLargeIcon();
         if (largeIcon != null) {
             largeIcon.loadDrawable(context);
-            return (Bitmap) BitmapFactory.decodeResource(context.getResources(), largeIcon.getResId());
+            return BitmapFactory.decodeResource(context.getResources(), largeIcon.getResId());
         }
         return null;
     }

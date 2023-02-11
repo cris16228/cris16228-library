@@ -14,7 +14,7 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ServerUtils {
 
-    private static final String[] SSIDs = {"Casa", "Casa5GHz", "It hurts when IP"};
+    private static final String[] SSIDs = {"BobHouse"};
     private final String _local = "http://192.168.1.11/";
     private final String _public = "http://www.cris16228.com/";
     private Context context;

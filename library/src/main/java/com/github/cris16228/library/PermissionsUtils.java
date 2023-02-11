@@ -38,6 +38,19 @@ public class PermissionsUtils {
         }
     }
 
+    public void checkPermission(List<String> permissions, int requestCode) {
+        if (permissions.size() > 0) {
+            String permission = permissions.get(0);
+            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+                checkPermission(permissions, requestCode);
+            } else {
+                permissions.remove(0);
+                checkPermission(permissions, requestCode);
+            }
+        }
+    }
+
     public void checkPermissions(List<String> permissions, List<Integer> requestCodes, permissionResult permissionResult) {
         if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
             if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
