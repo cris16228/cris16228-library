@@ -69,10 +69,12 @@ public class ServerUtils {
         } catch (SecurityException e) {
             System.out.println("Please add \"android.permission.ACCESS_WIFI_STATE\" in your AndroidManifest.xml");
         }
+        FileUtils.with(context).debugLog("isHome: " + isHome);
         return isHome;
     }
 
     public String webURL(Context context) {
+        FileUtils.with(context).debugLog("isConnectedWifi: " + isConnectedWifi(context));
         if (isConnectedWifi(context) && isHome(context))
             return _local;
         else if (isConnectedWifi(context) && !isHome(context))
