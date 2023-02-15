@@ -59,6 +59,7 @@ public class ServerUtils {
                 if (currentSSID != null) {
                     currentSSID = currentSSID.replace("\"", "");
                     for (String ssid : SSIDs) {
+                        FileUtils.with(context).debugLog(String.valueOf(currentSSID.equals(ssid)));
                         if (currentSSID.equals(ssid)) {
                             isHome = true;
                             break;
