@@ -75,13 +75,15 @@ public class ServerUtils {
     }
 
     public String webURL(Context context) {
-        FileUtils.with(context).debugLog("isConnectedWifi: " + isConnectedWifi(context));
-        if (isConnectedWifi(context) && isHome(context))
-            return _local;
-        else if (isConnectedWifi(context) && !isHome(context))
+        if (isConnectedWifi(context)) {
+            if (isHome(context)) {
+                return _local;
+            } else if (!isHome(context))
+                return _public;
+        } else {
             return _public;
-        else
-            return _local;
+        }
+        return null;
     }
 
 
