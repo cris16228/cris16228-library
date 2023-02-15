@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager;
 
 import androidx.annotation.NonNull;
 
+import com.github.cris16228.library.FileUtils;
 import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ServerUtils {
@@ -51,9 +52,9 @@ public class ServerUtils {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             if (wifiInfo != null) {
                 String currentSSID = wifiInfo.getSSID();
-                System.out.println("Your SSID is: " + currentSSID);
+                FileUtils.with(context).debugLog("Your SSID is: " + currentSSID);
                 if (DeviceUtils.isEmulator()) {
-                    System.out.println(currentSSID);
+                    FileUtils.with(context).debugLog(currentSSID);
                 }
                 if (currentSSID != null) {
                     currentSSID = currentSSID.replace("\"", "");
@@ -87,6 +88,7 @@ public class ServerUtils {
         if (url.startsWith("/")) {
             url = url.substring(1);
         }
+        FileUtils.with(context).debugLog(webURL(context) + url);
         return webURL(context) + url;
     }
 
