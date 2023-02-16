@@ -14,6 +14,7 @@ import androidx.annotation.RawRes;
 
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
+import com.github.cris16228.library.QueueUtils;
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
 import com.github.cris16228.library.http.image_loader.interfaces.LoadImage;
 
@@ -27,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
@@ -114,6 +116,24 @@ public class ImageLoader {
         }
     }
 
+    public void load(List<Object> urls, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
+        QueueUtils queueUtils = new QueueUtils();
+        queueUtils.setQueue(urls);
+        String url = (String) queueUtils.dequeue();
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            imageView.invalidate();
+            load(urls, imageView, loadImage, connectionErrors);
+        } else {
+            imageViews.put(imageView, url);
+            queuePhoto(urls, url, imageView, loadImage, connectionErrors);
+        }
+    }
+
+
     public void load(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
@@ -157,6 +177,11 @@ public class ImageLoader {
     public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         PhotoToLoad photoToLoad = new PhotoToLoad(bytes, imageView);
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors));
+    }
+
+    private void queuePhoto(List<Object> urls, String url, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
+        PhotoToLoad photoToLoad = new PhotoToLoad(url, imageView);
+        executor.submit(new PhotoLoader(urls, photoToLoad, loadImage, connectionErrors));
     }
 
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
@@ -233,14 +258,23 @@ public class ImageLoader {
 
     class PhotoLoader implements Runnable {
 
+        public List<Object> urls;
         PhotoToLoad photoToLoad;
         LoadImage loadImage;
         ConnectionErrors connectionErrors;
+
 
         PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors) {
             photoToLoad = _photoToLoad;
             loadImage = _loadImage;
             connectionErrors = _connectionErrors;
+        }
+
+        PhotoLoader(List<Object> _urls, PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors) {
+            photoToLoad = _photoToLoad;
+            loadImage = _loadImage;
+            connectionErrors = _connectionErrors;
+            urls = _urls;
         }
 
         @Override
@@ -259,7 +293,12 @@ public class ImageLoader {
             }
             if (imageViewReused(photoToLoad))
                 return;
-            Displacer displacer = new Displacer(bitmap, photoToLoad, loadImage);
+            Displacer displacer;
+            if (urls.size() > 0) {
+                displacer = new Displacer(urls, bitmap, photoToLoad, loadImage, connectionErrors);
+            } else {
+                displacer = new Displacer(bitmap, photoToLoad, loadImage);
+            }
             executor.execute(displacer);
             photoToLoad.imageView.invalidate();
         }
@@ -267,14 +306,24 @@ public class ImageLoader {
 
     public class Displacer implements Runnable {
 
+        public List<Object> urls;
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
         LoadImage loadImage;
+        ConnectionErrors connectionErrors;
 
         public Displacer(Bitmap bitmap, PhotoToLoad photoToLoad, LoadImage _loadImage) {
             this.bitmap = bitmap;
             this.photoToLoad = photoToLoad;
             this.loadImage = _loadImage;
+        }
+
+        public Displacer(List<Object> _urls, Bitmap bitmap, PhotoToLoad photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors) {
+            this.bitmap = bitmap;
+            this.photoToLoad = photoToLoad;
+            this.loadImage = _loadImage;
+            connectionErrors = _connectionErrors;
+            urls = _urls;
         }
 
         @Override
@@ -287,6 +336,7 @@ public class ImageLoader {
                         loadImage.onSuccess(bitmap);
                     photoToLoad.imageView.setImageBitmap(bitmap);
                     photoToLoad.imageView.invalidate();
+                    load(urls, photoToLoad.imageView, loadImage, connectionErrors);
                 } else {
                     if (loadImage != null)
                         loadImage.onFail();
