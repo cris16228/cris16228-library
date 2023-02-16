@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
 
@@ -29,19 +30,36 @@ public class MemoryCache {
     }
 
     public void loadCache(String path) {
-        File[] files = new File(path).listFiles();
-        if (files != null && files.length > 0) {
-            for (File file : files) {
-
-                if (!cache.containsKey(file.getAbsolutePath()))
-                    try {
-                        cache.put(file.getAbsolutePath(), getBitmap(Files.readAllBytes(file.toPath())));
-                        System.out.println("cache doesn't contain " + file.getPath() + " adding it");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        AsyncUtils loadCache = AsyncUtils.get();
+        loadCache.onExecuteListener(new AsyncUtils.onExecuteListener() {
+            @Override
+            public void preExecute() {
+                cache.clear();
             }
-        }
+
+            @Override
+            public void doInBackground() {
+                File[] files = new File(path).listFiles();
+                if (files != null && files.length > 0) {
+                    for (File file : files) {
+
+                        if (!cache.containsKey(file.getAbsolutePath()))
+                            try {
+                                cache.put(file.getAbsolutePath(), getBitmap(Files.readAllBytes(file.toPath())));
+                                System.out.println("cache doesn't contain " + file.getPath() + " adding it");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                }
+            }
+
+            @Override
+            public void postDelayed() {
+
+            }
+        });
+        loadCache.execute();
     }
 
     public Bitmap getBitmap(byte[] bytes) {

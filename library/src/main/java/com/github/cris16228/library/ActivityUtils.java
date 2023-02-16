@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ContentInfoCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -22,12 +24,28 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ActivityUtils {
 
+    private static int timeInterval = 2000;
     Context context;
+    private long mBackPressed;
+
+    public static int getTimeInterval() {
+        return timeInterval;
+    }
+
+    public static void setTimeInterval(int timeInterval) {
+        ActivityUtils.timeInterval = timeInterval;
+    }
 
     public static ActivityUtils with(Context _context) {
         ActivityUtils activityUtils = new ActivityUtils();
         activityUtils.context = _context;
         return activityUtils;
+    }
+
+    public static boolean isAppBackground() {
+        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(appProcessInfo);
+        return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE);
     }
 
     public void restartApp(Context currentActivity, Class<?> destinationActivity) {
@@ -38,12 +56,6 @@ public class ActivityUtils {
         if (DeviceUtils.isEmulator())
             System.out.println("Finishing " + currentActivity.getClass().getSimpleName());
         restartActivity(currentActivity, destinationActivity);
-    }
-
-    public static boolean isAppBackground() {
-        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
-        ActivityManager.getMyMemoryState(appProcessInfo);
-        return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE);
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish) {
@@ -58,6 +70,15 @@ public class ActivityUtils {
                     ((Activity) context).finish();
             }, delay);
         }
+    }
+
+    public void delayedCloseApp() {
+        if (mBackPressed + timeInterval > System.currentTimeMillis()) {
+            ((AppCompatActivity) context).onBackPressed();
+        } else {
+            Toast.makeText(context, context.getResources().getString(R.string.press_back_twice), Toast.LENGTH_SHORT).show();
+        }
+        mBackPressed = System.currentTimeMillis();
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, Bundle... bundles) {

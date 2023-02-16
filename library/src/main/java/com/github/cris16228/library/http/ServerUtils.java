@@ -97,6 +97,16 @@ public class ServerUtils {
         return webURL(context) + url;
     }
 
+    public String getRawURL(@NonNull String url) {
+        if (url.startsWith(_local)) {
+            return url.replace(_local, "");
+        } else if (url.startsWith(_public)) {
+            return url.replace(_public, "");
+        } else {
+            return url;
+        }
+    }
+
     public enum actions {
         UPLOAD("upload"),
         DOWNLOAD("download");
