@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ContentInfoCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -74,7 +73,8 @@ public class ActivityUtils {
 
     public void delayedCloseApp() {
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
-            ((AppCompatActivity) context).onBackPressed();
+            ((Activity) context).finish();
+            return;
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.press_back_twice), Toast.LENGTH_SHORT).show();
         }
