@@ -274,15 +274,15 @@ public class ImageLoader {
             }
             if (imageViewReused(photoToLoad))
                 return;
-            Displacer displacer;
-            System.out.println((urls == null) + " " + urls.size());
+            /*System.out.println((urls == null) + " " + urls.size());
             if (urls.size() > 0) {
                 System.out.println("dispatcher queue");
                 displacer = new Displacer(urls, bitmap, photoToLoad, loadImage, connectionErrors);
             } else {
                 System.out.println("dispatcher normal");
-                displacer = new Displacer(bitmap, photoToLoad, loadImage);
-            }
+                */
+            Displacer displacer = new Displacer(bitmap, photoToLoad, loadImage);
+            /*}*/
             executor.execute(displacer);
             photoToLoad.imageView.invalidate();
         }
