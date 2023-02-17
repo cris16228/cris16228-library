@@ -45,25 +45,6 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
-   /* public static ImageLoader with(Context _context, String path) {
-        ImageLoader imageLoader = new ImageLoader();
-        imageLoader.fileCache = new FileCache(path);
-        imageLoader.executor = Executors.newFixedThreadPool(3);
-        imageLoader.fileUtils = new FileUtils();
-        imageLoader.context = _context;
-        imageLoader.init();
-        return imageLoader;
-    }
-
-    public static ImageLoader with(Context _context) {
-        ImageLoader imageLoader = new ImageLoader();
-        imageLoader.fileCache = new FileCache(_context);
-        imageLoader.executor = Executors.newFixedThreadPool(3);
-        imageLoader.fileUtils = new FileUtils();
-        imageLoader.context = _context;
-        return imageLoader;
-    }*/
-
     public static ImageLoader get() {
         return new ImageLoader();
     }
@@ -336,7 +317,9 @@ public class ImageLoader {
                         loadImage.onSuccess(bitmap);
                     photoToLoad.imageView.setImageBitmap(bitmap);
                     photoToLoad.imageView.invalidate();
-                    load(urls, photoToLoad.imageView, loadImage, connectionErrors);
+                    if (urls.size() > 0) {
+                        load(urls, photoToLoad.imageView, loadImage, connectionErrors);
+                    }
                 } else {
                     if (loadImage != null)
                         loadImage.onFail();
