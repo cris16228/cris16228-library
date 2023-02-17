@@ -274,15 +274,12 @@ public class ImageLoader {
             }
             if (imageViewReused(photoToLoad))
                 return;
-            /*System.out.println((urls == null) + " " + urls.size());
-            if (urls.size() > 0) {
-                System.out.println("dispatcher queue");
+            Displacer displacer;
+            if (urls != null && urls.size() > 0) {
                 displacer = new Displacer(urls, bitmap, photoToLoad, loadImage, connectionErrors);
             } else {
-                System.out.println("dispatcher normal");
-                */
-            Displacer displacer = new Displacer(bitmap, photoToLoad, loadImage);
-            /*}*/
+                displacer = new Displacer(bitmap, photoToLoad, loadImage);
+            }
             executor.execute(displacer);
             photoToLoad.imageView.invalidate();
         }
@@ -320,9 +317,9 @@ public class ImageLoader {
                         loadImage.onSuccess(bitmap);
                     photoToLoad.imageView.setImageBitmap(bitmap);
                     photoToLoad.imageView.invalidate();
-                    /*if (urls.size() > 0) {
+                    if (urls != null && urls.size() > 0) {
                         load(urls, photoToLoad.imageView, loadImage, connectionErrors);
-                    }*/
+                    }
                 } else {
                     if (loadImage != null)
                         loadImage.onFail();
