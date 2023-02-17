@@ -10,7 +10,6 @@ import android.net.wifi.WifiManager;
 
 import androidx.annotation.NonNull;
 
-import com.github.cris16228.library.FileUtils;
 import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ServerUtils {
@@ -52,14 +51,9 @@ public class ServerUtils {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             if (wifiInfo != null) {
                 String currentSSID = wifiInfo.getSSID();
-                FileUtils.with(context).debugLog("Your SSID is: " + currentSSID);
-                if (DeviceUtils.isEmulator()) {
-                    FileUtils.with(context).debugLog(currentSSID);
-                }
                 if (currentSSID != null) {
                     currentSSID = currentSSID.replace("\"", "");
                     for (String ssid : SSIDs) {
-                        FileUtils.with(context).debugLog(String.valueOf(currentSSID.equals(ssid)));
                         if (currentSSID.equals(ssid)) {
                             isHome = true;
                             break;
@@ -70,7 +64,6 @@ public class ServerUtils {
         } catch (SecurityException e) {
             System.out.println("Please add \"android.permission.ACCESS_WIFI_STATE\" in your AndroidManifest.xml");
         }
-        FileUtils.with(context).debugLog("isHome: " + isHome);
         return isHome;
     }
 
@@ -93,7 +86,6 @@ public class ServerUtils {
         if (url.startsWith("/")) {
             url = url.substring(1);
         }
-        FileUtils.with(context).debugLog(webURL(context) + url);
         return webURL(context) + url;
     }
 
