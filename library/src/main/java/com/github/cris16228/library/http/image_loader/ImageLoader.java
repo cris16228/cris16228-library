@@ -320,9 +320,9 @@ public class ImageLoader {
                         loadImage.onSuccess(bitmap);
                     photoToLoad.imageView.setImageBitmap(bitmap);
                     photoToLoad.imageView.invalidate();
-                    if (urls.size() > 0) {
+                    /*if (urls.size() > 0) {
                         load(urls, photoToLoad.imageView, loadImage, connectionErrors);
-                    }
+                    }*/
                 } else {
                     if (loadImage != null)
                         loadImage.onFail();
