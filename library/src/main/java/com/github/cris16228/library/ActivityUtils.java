@@ -23,17 +23,8 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ActivityUtils {
 
-    private static int timeInterval = 2000;
     Context context;
     private long mBackPressed;
-
-    public static int getTimeInterval() {
-        return timeInterval;
-    }
-
-    public static void setTimeInterval(int timeInterval) {
-        ActivityUtils.timeInterval = timeInterval;
-    }
 
     public static ActivityUtils with(Context _context) {
         ActivityUtils activityUtils = new ActivityUtils();
@@ -72,6 +63,10 @@ public class ActivityUtils {
     }
 
     public void delayedCloseApp() {
+        delayedCloseApp(2000);
+    }
+
+    public void delayedCloseApp(int timeInterval) {
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
             ((Activity) context).finish();
             return;
