@@ -42,9 +42,9 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         }
         report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
 
-        report.append("----------------------------------- Cause -----------------------------------").append("\n");
         Throwable cause = e.getCause();
         if (cause != null) {
+            report.append("----------------------------------- Cause -----------------------------------").append("\n");
             report.append(cause).append("\n");
             arr = cause.getStackTrace();
             for (StackTraceElement stackTraceElement : arr) {
