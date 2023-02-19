@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 
 public class FileCache {
 
-    private final File cacheDir;
+    public final File cacheDir;
 
     public FileCache(Context context) {
         cacheDir = context.getCacheDir();

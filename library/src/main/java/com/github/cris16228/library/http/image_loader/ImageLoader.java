@@ -71,7 +71,6 @@ public class ImageLoader {
         executor = Executors.newFixedThreadPool(3);
         fileUtils = new FileUtils();
         context = _context;
-        /*init();*/
         return this;
     }
 
@@ -174,8 +173,8 @@ public class ImageLoader {
             Bitmap _webImage;
             URL imageURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
-            connection.setConnectTimeout(0);
-            connection.setReadTimeout(0);
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
             OutputStream os = new FileOutputStream(file);

@@ -1,5 +1,6 @@
 package com.github.cris16228.library.http.image_loader;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -7,11 +8,13 @@ import android.util.Base64;
 import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
+import com.github.cris16228.library.http.image_loader.models.CacheModel;
+import com.github.cris16228.library.http.image_loader.models.ImageModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -23,7 +26,11 @@ public class MemoryCache {
     private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<>(10, 1.5f, true));
     private long size = 0;
     private long imageSize;
-    private long limit = Long.MAX_VALUE;
+    private long limit = 1000000;
+
+    private CacheModel imageCache;
+    private FileCache fileCache;
+    private Context context;
 
     public MemoryCache() {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
@@ -39,18 +46,12 @@ public class MemoryCache {
 
             @Override
             public void doInBackground() {
-                File[] files = new File(path).listFiles();
-                if (files != null && files.length > 0) {
-                    for (File file : files) {
-
-                        if (!cache.containsKey(file.getAbsolutePath()))
-                            try {
-                                cache.put(file.getAbsolutePath(), getBitmap(Files.readAllBytes(file.toPath())));
-                                System.out.println("cache doesn't contain " + file.getPath() + " adding it");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                    }
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                FileUtils fileUtils = new FileUtils();
+                imageCache = gson.fromJson(fileUtils.readJson(fileCache.getCacheDir() + "/images.json"), CacheModel.class);
+                if (imageCache == null) {
+                    imageCache = new CacheModel();
+                    imageCache.imageModelList = new ArrayList<>();
                 }
             }
 
@@ -88,29 +89,16 @@ public class MemoryCache {
         }
     }
 
-    public void remove(String id) {
-        try {
-            if (cache.containsKey(id)) {
-                size -= sizeInBytes(cache.get(id));
-                cache.remove(id);
-                checkSize();
-            }
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public boolean isCacheValid(String id, int size) {
-        System.out.println(sizeInBytes(cache.get(id)) + " / " + size);
-        return sizeInBytes(cache.get(id)) == size;
-    }
-
     public void put(String id, Bitmap bitmap) {
         try {
             if (cache.containsKey(id))
                 size -= sizeInBytes(cache.get(id));
             cache.put(id, bitmap);
             size += sizeInBytes(bitmap);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            FileUtils fileUtils = new FileUtils();
+            imageCache.imageModelList.add(new ImageModel(id));
+            fileUtils.writeJson(fileCache.getCacheDir() + "/images.json", gson.toJson(imageCache.getImageModelList()));
             checkSize();
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -142,9 +130,6 @@ public class MemoryCache {
     long sizeInBytes(Bitmap bitmap) {
         if (bitmap == null)
             return 0;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] imageInByte = stream.toByteArray();
-        return imageInByte.length;
+        return (long) bitmap.getRowBytes() * bitmap.getHeight();
     }
 }
