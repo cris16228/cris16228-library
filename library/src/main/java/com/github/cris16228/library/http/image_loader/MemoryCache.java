@@ -29,8 +29,8 @@ public class MemoryCache {
     private long limit = 1000000;
 
     private CacheModel imageCache;
-    private FileCache fileCache;
-    private Context context;
+    public FileCache fileCache;
+    public Context context;
 
     public MemoryCache() {
         setLimit(Runtime.getRuntime().maxMemory() / 4);
