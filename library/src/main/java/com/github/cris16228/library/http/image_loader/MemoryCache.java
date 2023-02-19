@@ -5,16 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
-import com.github.cris16228.library.http.image_loader.models.CacheModel;
-import com.github.cris16228.library.http.image_loader.models.ImageModel;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.github.cris16228.library.LongUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,41 +21,11 @@ public class MemoryCache {
     private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<>(10, 1.5f, true));
     private long size = 0;
     private long limit = 1000000;
+    private final Context context;
 
-    private CacheModel imageCache;
-    public FileCache fileCache;
-    public Context context;
-
-    public MemoryCache() {
+    public MemoryCache(Context context) {
+        this.context = context;
         setLimit(Runtime.getRuntime().maxMemory() / 4);
-    }
-
-    public void loadCache(String path) {
-        AsyncUtils loadCache = AsyncUtils.get();
-        loadCache.onExecuteListener(new AsyncUtils.onExecuteListener() {
-            @Override
-            public void preExecute() {
-                cache.clear();
-            }
-
-            @Override
-            public void doInBackground() {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                FileUtils fileUtils = new FileUtils();
-                imageCache = gson.fromJson(fileUtils.readJson(fileCache.getCacheDir() + "/images.json"), CacheModel.class);
-                if (imageCache == null) {
-                    imageCache = new CacheModel();
-                    imageCache.imageModelList = new ArrayList<>();
-                    fileUtils.writeJson(fileCache.getCacheDir() + "/images.json", gson.toJson(imageCache));
-                }
-            }
-
-            @Override
-            public void postDelayed() {
-
-            }
-        });
-        loadCache.execute();
     }
 
     public Bitmap getBitmap(byte[] bytes) {
@@ -75,6 +40,7 @@ public class MemoryCache {
 
     public void setLimit(long _limit) {
         limit = _limit;
+        FileUtils.with(context).debugLog("MemoryCache will use up to " + LongUtils.with(context).getSize(size));
     }
 
 
@@ -95,10 +61,6 @@ public class MemoryCache {
                 size -= sizeInBytes(cache.get(id));
             cache.put(id, bitmap);
             size += sizeInBytes(bitmap);
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileUtils fileUtils = new FileUtils();
-            imageCache.getImageModelList().add(new ImageModel(id));
-            fileUtils.writeJson(fileCache.getCacheDir() + "/images.json", gson.toJson(imageCache));
             checkSize();
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -106,6 +68,7 @@ public class MemoryCache {
     }
 
     private void checkSize() {
+        FileUtils.with(context).debugLog("Cache size" + size + " length=" + cache.size());
         if (size > limit) {
             Iterator<Map.Entry<String, Bitmap>> iterator = cache.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -115,6 +78,7 @@ public class MemoryCache {
                 if (size <= limit)
                     break;
             }
+            FileUtils.with(context).debugLog("Clean Cache. New size " + cache.size());
         }
     }
 

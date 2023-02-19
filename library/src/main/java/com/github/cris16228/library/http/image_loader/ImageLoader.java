@@ -49,30 +49,12 @@ public class ImageLoader {
         return new ImageLoader();
     }
 
-    public MemoryCache getMemoryCache() {
-        return memoryCache;
-    }
-
     public ImageLoader with(Context _context, String path) {
         fileCache = new FileCache(path);
         executor = Executors.newFixedThreadPool(3);
         fileUtils = new FileUtils();
         context = _context;
-        memoryCache = new MemoryCache();
-        memoryCache.context = _context;
-        memoryCache.fileCache = fileCache;
-        /*init();*/
-        return this;
-    }
-
-    public ImageLoader with(Context _context, String path, MemoryCache memoryCache) {
-        fileCache = new FileCache(path);
-        executor = Executors.newFixedThreadPool(3);
-        fileUtils = new FileUtils();
-        context = _context;
-        this.memoryCache = memoryCache;
-        memoryCache.context = _context;
-        memoryCache.fileCache = fileCache;
+        memoryCache = new MemoryCache(context);
         /*init();*/
         return this;
     }
@@ -91,10 +73,6 @@ public class ImageLoader {
         fileUtils = new FileUtils();
         context = _context;
         return this;
-    }
-
-    public void init() {
-        memoryCache.loadCache(fileCache.getCacheDir().getAbsolutePath());
     }
 
     public ImageLoader asBitmap() {
@@ -192,15 +170,15 @@ public class ImageLoader {
             Bitmap _webImage;
             URL imageURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
+            connection.setConnectTimeout(0);
+            connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
+            connection.disconnect();
             os.close();
             is.close();
-            connection.disconnect();
             _webImage = fileUtils.decodeFile(file);
             return _webImage;
         } catch (OutOfMemoryError outOfMemoryError) {
