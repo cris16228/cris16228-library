@@ -52,6 +52,7 @@ public class MemoryCache {
                 if (imageCache == null) {
                     imageCache = new CacheModel();
                     imageCache.imageModelList = new ArrayList<>();
+                    fileUtils.writeJson(fileCache.getCacheDir() + "/images.json", gson.toJson(imageCache));
                 }
             }
 
@@ -97,8 +98,8 @@ public class MemoryCache {
             size += sizeInBytes(bitmap);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             FileUtils fileUtils = new FileUtils();
-            imageCache.imageModelList.add(new ImageModel(id));
-            fileUtils.writeJson(fileCache.getCacheDir() + "/images.json", gson.toJson(imageCache.getImageModelList()));
+            imageCache.getImageModelList().add(new ImageModel(id));
+            fileUtils.writeJson(fileCache.getCacheDir() + "/images.json", gson.toJson(imageCache));
             checkSize();
         } catch (Throwable ex) {
             ex.printStackTrace();
