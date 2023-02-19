@@ -202,7 +202,7 @@ public class FileUtils {
 
     public void copyStream(InputStream is, OutputStream os) {
         try {
-            byte[] data = new byte[256000];
+            byte[] data = new byte[8388608];
             int count;
             while ((count = is.read(data, 0, data.length)) != -1) {
                 os.write(data, 0, count);

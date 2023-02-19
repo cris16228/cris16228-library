@@ -40,7 +40,7 @@ public class MemoryCache {
 
     public void setLimit(long _limit) {
         limit = _limit;
-        FileUtils.with(context).debugLog("MemoryCache will use up to " + LongUtils.with(context).getSize(size));
+        FileUtils.with(context).debugLog("MemoryCache will use up to " + LongUtils.with(context).getSize(limit));
     }
 
 
