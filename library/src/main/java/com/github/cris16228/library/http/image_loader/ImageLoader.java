@@ -45,6 +45,10 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
+    public static ImageLoader get() {
+        return new ImageLoader();
+    }
+
     public MemoryCache getMemoryCache() {
         return memoryCache;
     }
@@ -55,6 +59,18 @@ public class ImageLoader {
         fileUtils = new FileUtils();
         context = _context;
         memoryCache = new MemoryCache();
+        memoryCache.context = _context;
+        memoryCache.fileCache = fileCache;
+        /*init();*/
+        return this;
+    }
+
+    public ImageLoader with(Context _context, String path, MemoryCache memoryCache) {
+        fileCache = new FileCache(path);
+        executor = Executors.newFixedThreadPool(3);
+        fileUtils = new FileUtils();
+        context = _context;
+        this.memoryCache = memoryCache;
         memoryCache.context = _context;
         memoryCache.fileCache = fileCache;
         /*init();*/
