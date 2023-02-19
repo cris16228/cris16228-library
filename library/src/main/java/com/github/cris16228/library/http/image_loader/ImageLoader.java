@@ -45,6 +45,14 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
 
+    public MemoryCache getMemoryCache() {
+        return memoryCache;
+    }
+
+    public void setMemoryCache(MemoryCache memoryCache) {
+        this.memoryCache = memoryCache;
+    }
+
     public static ImageLoader get() {
         return new ImageLoader();
     }

@@ -25,7 +25,6 @@ public class MemoryCache {
 
     private final Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<>(10, 1.5f, true));
     private long size = 0;
-    private long imageSize;
     private long limit = 1000000;
 
     private CacheModel imageCache;
