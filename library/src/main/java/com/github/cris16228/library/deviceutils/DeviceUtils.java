@@ -109,8 +109,9 @@ public class DeviceUtils {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
-        int calculatedPercentage = (width) * percent / 100;
-        return ((xValue >= minXRange && xValue <= maxXRange) && xValue <= calculatedPercentage);
+        float minCalculatedPercentage = (width) * minXRange / 100;
+        float maxCalculatedPercentage = (width) * maxXRange / 100;
+        return (xValue >= minCalculatedPercentage && xValue <= maxCalculatedPercentage);
     }
 
     public String getResolution() {
