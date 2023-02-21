@@ -89,6 +89,30 @@ public class DeviceUtils {
         return dm.heightPixels;
     }
 
+    public boolean isLeftSideTouchInRange(Activity activity, int percent, float xValue) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int calculatedPercentage = (width) * percent / 100;
+        return (xValue <= calculatedPercentage);
+    }
+
+    public boolean isRightSideTouchInRange(Activity activity, int percent, float xValue, float minXRange) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int calculatedPercentage = (width) * percent / 100;
+        return (xValue >= minXRange && xValue <= calculatedPercentage);
+    }
+
+    public boolean isMiddleSideTouchInRange(Activity activity, int percent, float xValue, float minXRange, float maxXRange) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int calculatedPercentage = (width) * percent / 100;
+        return ((xValue >= minXRange && xValue <= maxXRange) && xValue <= calculatedPercentage);
+    }
+
     public String getResolution() {
         return getWidth() + "x" + getHeight();
     }
