@@ -102,7 +102,8 @@ public class DeviceUtils {
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int calculatedPercentage = (width) * percent / 100;
-        return (xValue >= minXRange && xValue <= calculatedPercentage);
+        float calculatedPercentageRange = (width) * minXRange / 100;
+        return (xValue >= calculatedPercentageRange && xValue <= calculatedPercentage);
     }
 
     public boolean isMiddleSideTouchInRange(Activity activity, int percent, float xValue, float minXRange, float maxXRange) {
