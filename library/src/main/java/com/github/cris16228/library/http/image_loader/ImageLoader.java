@@ -93,6 +93,19 @@ public class ImageLoader {
         }
     }
 
+    public void load(String url, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors, String offlineUrl) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            imageView.invalidate();
+        } else {
+            imageViews.put(imageView, offlineUrl);
+            queuePhoto(url, imageView, loadImage, connectionErrors);
+        }
+    }
+
     public void load(List<Object> urls, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors) {
         QueueUtils queueUtils = new QueueUtils();
         queueUtils.setQueue(urls);
