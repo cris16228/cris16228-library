@@ -57,6 +57,23 @@ public class MaterialPasscode extends FrameLayout implements View.OnClickListene
     public MaterialPasscode(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Passcode);
+        try {
+            passcode = typedArray.getString(R.styleable.Passcode_pass);
+            backgroundColor = typedArray.getColor(R.styleable.Passcode_passcodeBackground, backgroundColor);
+            overlayColor = typedArray.getColor(R.styleable.Passcode_passcodeOverlay, overlayColor);
+            errorColor = typedArray.getColor(R.styleable.Passcode_passcodeError, errorColor);
+            firstInputTip = typedArray.getString(R.styleable.Passcode_firstInputTip);
+            secondInputTip = typedArray.getString(R.styleable.Passcode_secondInputTip);
+            wrongInputTip = typedArray.getString(R.styleable.Passcode_wrongInputTip);
+            correctInputTip = typedArray.getString(R.styleable.Passcode_correctInputTip);
+        } finally {
+            typedArray.recycle();
+        }
+        firstInputTip = firstInputTip == null ? context.getResources().getString(R.string.passcode_tip) : firstInputTip;
+        secondInputTip = secondInputTip == null ? context.getResources().getString(R.string.passcode_enter_again) : secondInputTip;
+        wrongInputTip = wrongInputTip == null ? context.getResources().getString(R.string.passcode_not_matching) : wrongInputTip;
+        correctInputTip = correctInputTip == null ? context.getResources().getString(R.string.passcode_correct) : correctInputTip;
     }
 
     public MaterialPasscode(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

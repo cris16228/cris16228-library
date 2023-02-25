@@ -29,6 +29,12 @@ public class RoundCornerImageView extends ImageView {
 
     public RoundCornerImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundCornerImageView);
+        try {
+            roundCorners = typedArray.getFloat(R.styleable.RoundCornerImageView_roundCorners, 0);
+        } finally {
+            typedArray.recycle();
+        }
     }
 
     public RoundCornerImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
