@@ -93,6 +93,13 @@ public class ImageLoader {
         }
     }
 
+    public void download(String url, LoadImage loadImage, ConnectionErrors connectionErrors) {
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap == null) {
+            queuePhoto(url, loadImage, connectionErrors);
+        }
+    }
+
     public void load(String url, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors, String offlineUrl) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
@@ -174,6 +181,11 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(urls, photoToLoad, loadImage, connectionErrors));
     }
 
+    private void queuePhoto(String url, LoadImage loadImage, ConnectionErrors connectionErrors) {
+        PhotoToLoad photoToLoad = new PhotoToLoad(url);
+        executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors));
+    }
+
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
@@ -243,6 +255,10 @@ public class ImageLoader {
         public PhotoToLoad(byte[] _bytes, ImageView _imageView) {
             bytes = _bytes;
             imageView = _imageView;
+        }
+
+        public PhotoToLoad(String _url) {
+            url = _url;
         }
     }
 
@@ -324,10 +340,12 @@ public class ImageLoader {
                 if (bitmap != null) {
                     if (loadImage != null)
                         loadImage.onSuccess(bitmap);
-                    photoToLoad.imageView.setImageBitmap(bitmap);
-                    photoToLoad.imageView.invalidate();
-                    if (urls != null && urls.size() > 0) {
-                        load(urls, photoToLoad.imageView, loadImage, connectionErrors);
+                    if (photoToLoad.imageView != null) {
+                        photoToLoad.imageView.setImageBitmap(bitmap);
+                        photoToLoad.imageView.invalidate();
+                        if (urls != null && urls.size() > 0) {
+                            load(urls, photoToLoad.imageView, loadImage, connectionErrors);
+                        }
                     }
                 } else {
                     if (loadImage != null)
