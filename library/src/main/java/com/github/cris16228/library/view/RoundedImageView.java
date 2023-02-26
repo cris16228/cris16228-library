@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class RoundedImageView extends ImageView {
+
     public RoundedImageView(Context context) {
         super(context);
     }

@@ -49,15 +49,18 @@
     <string name="passcode_correct">Passcode is correct</string>
 
     <!-- Error messages-->
-    <string name="generic_error_messages_funny">I don\'t know what the fuck happened but your %s could not be loaded</string>
-    <string name="generic_error_messages_idk_emoji">¯\\_(ツ)_/¯</string>
-    <string name="generic_error_messages_omg_emoji">ಠ_ಠ</string>
-    <string name="generic_error_messages_doit_emoji">(ง •̀_•́)ง</string>
-    <string name="generic_error_messages_happy_emoji">•ᴗ•</string>
-    <string name="generic_error_messages_tableflit_emoji">(╯°□°）╯︵ ┻━┻</string>
-    <string name="generic_error_messages_tableunflit_emoji">┬──┬ ノ(ò_óノ)</string>
-    <string name="generic_error_messages_help_emoji">\\(°Ω°)/</string>
-    <string name="generic_error_messages_wtf_emoji">(⊙＿⊙\')</string>
+    <string name="generic_error_messages_funny">I don\'t know what the fuck just happened but your %s could not be loaded</string>
+    <string name="generic_error_messages_idk_emoji" translatable="false">¯\\_(ツ)_/¯</string>
+    <string name="generic_error_messages_omg_emoji" translatable="false">ಠ_ಠ</string>
+    <string name="generic_error_messages_do_it_emoji" translatable="false">(ง •̀_•́)ง</string>
+    <string name="generic_error_messages_happy_emoji" translatable="false">•ᴗ•</string>
+    <string name="generic_error_messages_table_flip_emoji" translatable="false">(╯°□°）╯︵ ┻━┻</string>
+    <string name="generic_error_messages_table_unflip_emoji" translatable="false">┬──┬ ノ(ò_óノ)</string>
+    <string name="generic_error_messages_help_emoji" translatable="false">\\(°Ω°)/</string>
+    <string name="generic_error_messages_wtf_emoji" translatable="false">(⊙＿⊙\')</string>
+    <string name="generic_error_messages_at_what_cost_emoji" translatable="false">ლ(ಠ益ಠლ)</string>
+    <string name="generic_error_messages_wtf_breakdown" translatable="false">ಥ﹏ಥ</string>
+    <string name="generic_error_messages_crying_emoji" translatable="false">ಥ_ಥ</string>
 
 
     <string name="cancel">Cancel</string>
