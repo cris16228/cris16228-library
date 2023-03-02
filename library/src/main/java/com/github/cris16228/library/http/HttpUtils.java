@@ -173,7 +173,7 @@ public class HttpUtils {
                 for (String key : files.keySet()) {
                     int bytesRead, bytesAvailable, bufferSize;
                     byte[] buffer;
-                    int maxBuffer = 1 * 1024 * 1024;
+                    int maxBuffer = 1024 * 1024;
 
                     File selectedFile = new File(files.get(key));
                     if (!selectedFile.isFile()) {
