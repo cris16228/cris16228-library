@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +25,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class HttpUtils {
@@ -124,7 +125,7 @@ public class HttpUtils {
             File tmp = new File(path);
             String tmp_path = tmp.getParent();
             if (tmp_path != null && !new File(tmp_path).exists()) tmp.mkdirs();
-            OutputStream output = new FileOutputStream(path);
+            OutputStream output = Files.newOutputStream(Paths.get(path));
 
             byte[] data = new byte[1024];
 

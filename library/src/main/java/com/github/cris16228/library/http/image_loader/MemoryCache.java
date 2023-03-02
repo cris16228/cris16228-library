@@ -7,7 +7,6 @@ import android.util.Base64;
 
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
-import com.github.cris16228.library.LongUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -40,7 +39,6 @@ public class MemoryCache {
 
     public void setLimit(long _limit) {
         limit = _limit;
-        FileUtils.with(context).debugLog("MemoryCache will use up to " + LongUtils.with(context).getSize(limit));
     }
 
 
@@ -68,7 +66,6 @@ public class MemoryCache {
     }
 
     private void checkSize() {
-        FileUtils.with(context).debugLog("Cache size" + size + " length=" + cache.size());
         if (size > limit) {
             Iterator<Map.Entry<String, Bitmap>> iterator = cache.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -78,7 +75,6 @@ public class MemoryCache {
                 if (size <= limit)
                     break;
             }
-            FileUtils.with(context).debugLog("Clean Cache. New size " + cache.size());
         }
     }
 
