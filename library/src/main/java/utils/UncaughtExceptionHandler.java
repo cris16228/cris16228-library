@@ -16,7 +16,7 @@ import java.util.Locale;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUEH;
-    private Activity app = null;
+    private final Activity app;
 
     public UncaughtExceptionHandler(Activity app) {
         this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
