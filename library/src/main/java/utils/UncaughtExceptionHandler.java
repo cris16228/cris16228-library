@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
+import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.FileUtils;
 import com.github.cris16228.library.NetworkUtils;
 import com.github.cris16228.library.http.HttpUtils;
@@ -17,22 +18,48 @@ import java.util.Locale;
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUEH;
     private final Activity app;
+    private final boolean newPhp;
 
     public UncaughtExceptionHandler(Activity app) {
         this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         this.app = app;
+        newPhp = false;
+    }
+
+    public UncaughtExceptionHandler(Activity app, boolean newPhp) {
+        this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+        this.app = app;
+        this.newPhp = newPhp;
     }
 
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
-        String crashPath = FileUtils.with(app).getPersonalSpace(app) + "/crash-reports/";
-        if (FileUtils.with(app).getNewestFile(crashPath) != null) {
-            if (NetworkUtils.with(app).isConnectedTo(app)) {
-                File crashFile = FileUtils.with(app).getNewestFile(crashPath);
-                HttpUtils httpUtils = HttpUtils.get();
-                httpUtils.uploadFile(ServerUtils.get(app).getValidURL("/upload.php"), httpUtils.defaultParams(), httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
+        AsyncUtils uploadCrash = AsyncUtils.get();
+        uploadCrash.onExecuteListener(new AsyncUtils.onExecuteListener() {
+            @Override
+            public void preExecute() {
+
             }
-        }
+
+            @Override
+            public void doInBackground() {
+                String crashPath = FileUtils.with(app).getPersonalSpace(app) + "/crash-reports/";
+                if (FileUtils.with(app).getNewestFile(crashPath) != null) {
+                    if (NetworkUtils.with(app).isConnectedTo(app)) {
+                        File crashFile = FileUtils.with(app).getNewestFile(crashPath);
+                        HttpUtils httpUtils = HttpUtils.get();
+                        httpUtils.uploadFile(ServerUtils.get(app).getValidURL(newPhp ? "/android.php" : "/upload.php"), httpUtils.defaultParams(),
+                                httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
+                    }
+                }
+            }
+
+            @Override
+            public void postDelayed() {
+
+            }
+        });
+        uploadCrash.execute();
         StackTraceElement[] arr = e.getStackTrace();
         StringBuilder report = new StringBuilder();
         report.append(e).append("\n").append("\n");
