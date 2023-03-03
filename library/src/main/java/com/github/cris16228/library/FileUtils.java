@@ -88,6 +88,10 @@ public class FileUtils {
         return _context.getExternalFilesDir(null).getAbsolutePath();
     }
 
+    public String getPersonalSpace() {
+        return context.getExternalFilesDir(null).getAbsolutePath();
+    }
+
     public int getIndex() throws LibraryException {
         if (folderName == null || folderName.isEmpty())
             throw new LibraryException(getClass(), "\"folderName\" is empty or null");

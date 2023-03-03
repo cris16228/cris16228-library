@@ -54,6 +54,12 @@ public class DeviceUtils {
         view.clearFocus();
     }
 
+    public void clearFocus(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        view.clearFocus();
+    }
+
     public String getDisplaySize(int limit) throws LibraryException {
         double x = 0, y = 0;
         int mWidthPixels, mHeightPixels;
