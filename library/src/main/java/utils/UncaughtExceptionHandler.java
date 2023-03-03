@@ -18,18 +18,10 @@ import java.util.Locale;
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUEH;
     private final Activity app;
-    private final boolean newPhp;
 
     public UncaughtExceptionHandler(Activity app) {
         this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         this.app = app;
-        newPhp = false;
-    }
-
-    public UncaughtExceptionHandler(Activity app, boolean newPhp) {
-        this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-        this.app = app;
-        this.newPhp = newPhp;
     }
 
     @Override
@@ -48,8 +40,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
                     if (NetworkUtils.with(app).isConnectedTo(app)) {
                         File crashFile = FileUtils.with(app).getNewestFile(crashPath);
                         HttpUtils httpUtils = HttpUtils.get();
-                        httpUtils.uploadFile(ServerUtils.get(app).getValidURL(newPhp ? "/android.php" : "/upload.php"), httpUtils.defaultParams(),
-                                httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
+                        httpUtils.uploadFile(ServerUtils.get(app).getValidURL("/upload.php"), httpUtils.defaultParams(), httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
                     }
                 }
             }
