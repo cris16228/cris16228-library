@@ -14,10 +14,34 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 public class ServerUtils {
 
-    private static final String[] SSIDs = {"BobHouse", "BobHouse 5GHz"};
-    private final String _local = "http://192.168.1.11/";
-    private final String _public = "http://www.cris16228.com/";
+    private static String[] SSIDs = {"BobHouse", "BobHouse 5GHz"};
+    private String localIP = "http://192.168.1.47/";
+    private String publicIP = "http://www.cris16228.com/";
     private Context context;
+
+    public static String[] getSSIDs() {
+        return SSIDs;
+    }
+
+    public static void setSSIDs(String[] SSIDs) {
+        ServerUtils.SSIDs = SSIDs;
+    }
+
+    public String getLocalIP() {
+        return localIP;
+    }
+
+    public void setLocalIP(String localIP) {
+        this.localIP = localIP;
+    }
+
+    public String getPublicIP() {
+        return publicIP;
+    }
+
+    public void setPublicIP(String publicIP) {
+        this.publicIP = publicIP;
+    }
 
     public static ServerUtils get(Context context) {
         ServerUtils serverUtils = new ServerUtils();
@@ -70,18 +94,18 @@ public class ServerUtils {
     public String webURL(Context context) {
         if (isConnectedWifi(context)) {
             if (isHome(context)) {
-                return _local;
+                return getLocalIP();
             } else if (!isHome(context))
-                return _public;
+                return getPublicIP();
         } else {
-            return _public;
+            return getPublicIP();
         }
         return null;
     }
 
 
     public String getValidURL(@NonNull String url) {
-        if (url.startsWith(_local) || url.startsWith(_public))
+        if (url.startsWith(getLocalIP()) || url.startsWith(getPublicIP()))
             return url;
         if (url.startsWith("/")) {
             url = url.substring(1);
@@ -90,10 +114,10 @@ public class ServerUtils {
     }
 
     public String getRawURL(@NonNull String url) {
-        if (url.startsWith(_local)) {
-            return url.replace(_local, "");
-        } else if (url.startsWith(_public)) {
-            return url.replace(_public, "");
+        if (url.startsWith(getLocalIP())) {
+            return url.replace(getLocalIP(), "");
+        } else if (url.startsWith(getPublicIP())) {
+            return url.replace(getPublicIP(), "");
         } else {
             return url;
         }
