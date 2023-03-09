@@ -184,7 +184,7 @@ public class HttpUtils {
                     flag = true;
                     dos.writeBytes(sb.toString());
                 }
-                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage());
+                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage() + "url: " + sb);
                 dos.flush();
                 dos.close();
             }
