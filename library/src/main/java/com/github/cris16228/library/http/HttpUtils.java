@@ -170,7 +170,23 @@ public class HttpUtils {
                     dos.writeBytes(lineEnd);
                     dos.writeBytes(twoHyphens + boundary + lineEnd);
                 }
-
+                StringBuilder sb = new StringBuilder();
+                boolean flag = false;
+                for (String key : params.keySet()) {
+                    try {
+                        if (flag) {
+                            sb.append("&");
+                        }
+                        sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    flag = true;
+                    dos.writeBytes(sb.toString());
+                }
+                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage());
+                dos.flush();
+                dos.close();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
