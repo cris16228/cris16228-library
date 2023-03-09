@@ -160,6 +160,7 @@ public class HttpUtils {
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(50000);
             conn.connect();
+            dos = new DataOutputStream(conn.getOutputStream());
             if (params != null) {
                 for (String key : params.keySet()) {
                     dos.writeBytes(twoHyphens + boundary + lineEnd);
