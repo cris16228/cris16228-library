@@ -145,6 +145,56 @@ public class HttpUtils {
         }
     }
 
+    public JSONObject post(String _url, HashMap<String, String> params) {
+        if (TextUtils.isEmpty(_url))
+            url = _url;
+        result = new StringBuilder();
+        try {
+            conn = (HttpURLConnection) new URL(_url).openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(50000);
+            conn.connect();
+            if (params != null) {
+                for (String key : params.keySet()) {
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd);
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(params.get(key));
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                }
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(conn.getInputStream())));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+            Log.d(TAG, "Result: " + result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        conn.disconnect();
+
+        try {
+            jsonObject = new JSONObject(result.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parsing data " + e);
+        }
+
+        return jsonObject;
+    }
+
     public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
         if (TextUtils.isEmpty(_url))
             url = _url;
