@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,12 +20,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -150,60 +153,54 @@ public class HttpUtils {
             url = _url;
         result = new StringBuilder();
         try {
-            conn = (HttpURLConnection) new URL(_url).openConnection();
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setUseCaches(false);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("Accept-Charset", "UTF-8");
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(50000);
-            conn.connect();
-            dos = new DataOutputStream(conn.getOutputStream());
-            if (params != null) {
-                for (String key : params.keySet()) {
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd);
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(params.get(key));
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                }
-                StringBuilder sb = new StringBuilder();
-                boolean flag = false;
-                for (String key : params.keySet()) {
-                    try {
-                        if (flag) {
-                            sb.append("&");
-                        }
-                        sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    flag = true;
-                    dos.writeBytes(sb.toString());
-                }
-                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage());
-                dos.flush();
-                dos.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            URL url = new URL(_url);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(conn.getInputStream())));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                result.append(line);
+            urlConnection.setUseCaches(false);
+            urlConnection.setReadTimeout(5000);
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestMethod("POST");
+
+            urlConnection.connect();
+
+
+            OutputStream os = urlConnection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            boolean flag = false;
+            for (String key : params.keySet()) {
+                try {
+                    if (flag) {
+                        sb.append("&");
+                    }
+                    sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                flag = true;
             }
-            Log.d(TAG, "Result: " + result);
-        } catch (IOException e) {
-            e.printStackTrace();
+            writer.write(sb.toString());
+            writer.flush();
+            writer.close();
+            os.close();
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(urlConnection.getInputStream())));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+                Log.d(TAG, "Result: " + result);
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            urlConnection.disconnect();
+        } catch (Exception ignored) {
+
         }
-        conn.disconnect();
 
         try {
             jsonObject = new JSONObject(result.toString());
