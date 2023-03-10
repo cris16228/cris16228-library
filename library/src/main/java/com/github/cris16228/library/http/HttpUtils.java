@@ -157,6 +157,7 @@ public class HttpUtils {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Accept-Charset", "UTF-8");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(50000);
             conn.connect();
