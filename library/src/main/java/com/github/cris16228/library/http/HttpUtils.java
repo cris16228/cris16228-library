@@ -184,13 +184,14 @@ public class HttpUtils {
                     flag = true;
                     dos.writeBytes(sb.toString());
                 }
-                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage() + "url: " + sb);
+                Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage());
                 dos.flush();
                 dos.close();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(conn.getInputStream())));
             String line;
