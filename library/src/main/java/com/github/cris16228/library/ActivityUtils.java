@@ -63,13 +63,13 @@ public class ActivityUtils {
     }
 
     public void delayedCloseApp(Activity activity) {
-        delayedCloseApp(2000);
+        delayedCloseApp(activity, 2000);
     }
 
-    public void delayedCloseApp(int timeInterval) {
+    public void delayedCloseApp(Activity activity, int timeInterval) {
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
-            ((Activity) context).finishAffinity();
-            ((Activity) context).finish();
+            activity.finishAffinity();
+            activity.finish();
             return;
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.press_back_twice), Toast.LENGTH_SHORT).show();
