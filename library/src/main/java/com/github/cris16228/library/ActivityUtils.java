@@ -24,7 +24,6 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 public class ActivityUtils {
 
     Context context;
-    private long mBackPressed;
 
     public static ActivityUtils with(Context _context) {
         ActivityUtils activityUtils = new ActivityUtils();
@@ -62,19 +61,18 @@ public class ActivityUtils {
         }
     }
 
-    public void delayedCloseApp(long mBackPressed) {
-        delayedCloseApp(mBackPressed, 2000);
+    public long delayedCloseApp(long mBackPressed) {
+        return delayedCloseApp(mBackPressed, 2000);
     }
 
-    public void delayedCloseApp(long _mBackPressed, int timeInterval) {
-        mBackPressed = _mBackPressed;
+    public long delayedCloseApp(long mBackPressed, int timeInterval) {
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
             ((Activity) context).finish();
-            return;
+            return mBackPressed;
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.press_back_twice), Toast.LENGTH_SHORT).show();
         }
-        mBackPressed = System.currentTimeMillis();
+        return mBackPressed = System.currentTimeMillis();
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, Bundle... bundles) {
