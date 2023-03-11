@@ -63,7 +63,7 @@ public class ActivityUtils {
     }
 
     public void delayedCloseApp(Activity activity) {
-        delayedCloseApp(activity, 2000);
+        delayedCloseApp(activity, 4000);
     }
 
     public void delayedCloseApp(Activity activity, int timeInterval) {
