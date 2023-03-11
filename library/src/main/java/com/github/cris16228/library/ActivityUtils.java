@@ -67,6 +67,7 @@ public class ActivityUtils {
     }
 
     public void delayedCloseApp(int timeInterval) {
+        System.out.println("mBackPressed: " + mBackPressed + " " + (mBackPressed + timeInterval > System.currentTimeMillis()));
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
             ((Activity) context).finish();
             return;
