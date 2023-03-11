@@ -62,20 +62,19 @@ public class ActivityUtils {
         }
     }
 
-    public void delayedCloseApp(Activity activity) {
-        delayedCloseApp(activity, 4000);
+    public void delayedCloseApp(long mBackPressed) {
+        delayedCloseApp(mBackPressed, 2000);
     }
 
-    public void delayedCloseApp(Activity activity, int timeInterval) {
+    public void delayedCloseApp(long _mBackPressed, int timeInterval) {
+        mBackPressed = _mBackPressed;
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
-            activity.finishAffinity();
-            activity.finish();
+            ((Activity) context).finish();
             return;
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.press_back_twice), Toast.LENGTH_SHORT).show();
         }
         mBackPressed = System.currentTimeMillis();
-        System.out.println(mBackPressed + "/" + (mBackPressed + timeInterval) + "/" + System.currentTimeMillis());
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, Bundle... bundles) {
