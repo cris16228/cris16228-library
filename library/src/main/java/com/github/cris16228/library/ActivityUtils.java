@@ -67,7 +67,6 @@ public class ActivityUtils {
     }
 
     public void delayedCloseApp(int timeInterval) {
-        System.out.println("mBackPressed: " + mBackPressed + " " + (mBackPressed + timeInterval > System.currentTimeMillis()));
         if (mBackPressed + timeInterval > System.currentTimeMillis()) {
             ((Activity) context).finish();
             return;
@@ -75,6 +74,7 @@ public class ActivityUtils {
             Toast.makeText(context, context.getResources().getString(R.string.press_back_twice), Toast.LENGTH_SHORT).show();
         }
         mBackPressed = System.currentTimeMillis();
+        System.out.println("mBackPressed: " + mBackPressed + " " + (mBackPressed + timeInterval > System.currentTimeMillis()));
     }
 
     public void delayActivity(Class<?> destinationActivity, long delay, boolean finish, Bundle... bundles) {
