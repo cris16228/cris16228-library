@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -27,6 +28,34 @@ public class FloatUtils {
         format.setMaximumFractionDigits(limit);
         if (value instanceof Float || value instanceof Double)
             return format.format(value);
+        if (value instanceof String)
+            try {
+                tempFloat = Float.parseFloat((String) value);
+                return format.format(tempFloat);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        else {
+            return "NaN";
+        }
+        return (String) value;
+    }
+
+    public static String getNumberFormatSmart(Object value, int limit) {
+        if (limit <= 0) {
+            return "NaN";
+        }
+        float tempFloat;
+        DecimalFormat format = new DecimalFormat("#.##");
+        format.setMinimumFractionDigits(limit);
+        format.setMaximumFractionDigits(limit);
+        if (value instanceof Float || value instanceof Double) {
+            if ((double) value == Math.round((double) value)) {
+                format.setMaximumFractionDigits(0);
+                format.setMinimumFractionDigits(0);
+            }
+            return format.format(value);
+        }
         if (value instanceof String)
             try {
                 tempFloat = Float.parseFloat((String) value);
