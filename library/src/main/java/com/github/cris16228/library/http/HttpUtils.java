@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 public class HttpUtils {
 
-    String url = "http://192.168.1.11/upload.php";
+    String url = "http://192.168.1.5/upload.php";
     String lineEnd = "\r\n";
     String twoHyphens = "--";
     String boundary = "*****";
@@ -67,6 +67,41 @@ public class HttpUtils {
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
                 urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
+                urlConnection.setDoOutput(true);
+                urlConnection.connect();
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                br.close();
+                jsonString = sb.toString();
+                if (printJSON && DeviceUtils.isEmulator())
+                    System.out.println("JSON: " + jsonString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonString;
+    }
+
+    public static String getJSON(String urlString, boolean printJSON, int readTimeout, int connectionTimeout) {
+        HttpURLConnection urlConnection;
+        StringBuilder sb = new StringBuilder();
+        String jsonString = null;
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpUtils httpUtils = new HttpUtils();
+        try {
+            if (url != null) {
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setReadTimeout(readTimeout /* milliseconds */);
+                urlConnection.setConnectTimeout(connectionTimeout /* milliseconds */);
                 urlConnection.setDoOutput(true);
                 urlConnection.connect();
                 BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
