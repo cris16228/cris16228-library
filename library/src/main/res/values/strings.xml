@@ -90,7 +90,10 @@
     <string name="user_name">%s</string>
     <string name="user_mail_text">Email: </string>
     <string name="user_email">%s</string>
+    <string name="profile_upload_picture">Upload</string>
     <string name="update_password">Update password</string>
+    <string name="user_registration_date_text">Registration date:</string>
+    <string name="user_registration_date">%s</string>
 
 
     <string name="cancel">Cancel</string>
