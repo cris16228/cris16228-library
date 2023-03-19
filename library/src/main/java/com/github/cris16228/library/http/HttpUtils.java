@@ -52,7 +52,6 @@ public class HttpUtils {
         httpUtils.debug = false;
         return httpUtils;
     }
-
     public static HttpUtils get(boolean debug) {
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.debug = debug;
@@ -226,20 +225,13 @@ public class HttpUtils {
                 flag = true;
             }
             if (debug)
-                System.out.println(_url + sb);
+                System.out.println(sb);
             writer.write(sb.toString());
             writer.flush();
             writer.close();
             os.close();
-            InputStream is = null;
             try {
-                if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 400) {
-                    // Create an InputStream in order to extract the response object
-                    is = conn.getInputStream();
-                } else {
-                    is = conn.getErrorStream();
-                }
-                BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(is)));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(urlConnection.getInputStream())));
                 String line;
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
