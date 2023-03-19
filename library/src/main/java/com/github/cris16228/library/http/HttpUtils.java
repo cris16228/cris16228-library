@@ -95,7 +95,6 @@ public class HttpUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        HttpUtils httpUtils = new HttpUtils();
         try {
             if (url != null) {
                 urlConnection = (HttpURLConnection) url.openConnection();
