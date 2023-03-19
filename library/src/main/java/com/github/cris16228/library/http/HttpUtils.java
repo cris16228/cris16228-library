@@ -45,9 +45,18 @@ public class HttpUtils {
     private HttpURLConnection conn;
     private DataOutputStream dos;
     private JSONObject jsonObject;
+    private boolean debug;
 
     public static HttpUtils get() {
-        return new HttpUtils();
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.debug = false;
+        return httpUtils;
+    }
+
+    public static HttpUtils get(boolean debug) {
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.debug = debug;
+        return httpUtils;
     }
 
     public static String getJSON(String urlString, boolean printJSON) {
@@ -110,7 +119,7 @@ public class HttpUtils {
                 }
                 br.close();
                 jsonString = sb.toString();
-                if (printJSON && DeviceUtils.isEmulator())
+                if (printJSON || DeviceUtils.isEmulator())
                     System.out.println("JSON: " + jsonString);
             }
         } catch (IOException e) {
@@ -216,6 +225,8 @@ public class HttpUtils {
                 }
                 flag = true;
             }
+            if (debug)
+                System.out.println(sb);
             writer.write(sb.toString());
             writer.flush();
             writer.close();
@@ -328,6 +339,8 @@ public class HttpUtils {
                     flag = true;
                     dos.writeBytes(sb.toString());
                 }
+                if (debug)
+                    System.out.println(sb);
                 Log.d(TAG, "RC: " + conn.getResponseCode() + " RM: " + conn.getResponseMessage());
                 dos.flush();
                 dos.close();
