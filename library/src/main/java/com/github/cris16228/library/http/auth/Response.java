@@ -1,17 +1,28 @@
 package com.github.cris16228.library.http.auth;
 
-public class Response {
-    public String statusCode;
-    public String statusMessage;
-    public String errorCode;
-    public User user;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    public String getStatusCode() {
-        return statusCode;
+public class Response {
+    @SerializedName("status_message")
+    @Expose
+    public String statusMessage;
+    @SerializedName("status")
+    @Expose
+    private String status;
+    @SerializedName("error")
+    @Expose
+    private String error;
+    @SerializedName("data")
+    @Expose
+    private Data data;
+
+    public String getStatus() {
+        return status;
     }
 
-    public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getStatusMessage() {
@@ -22,19 +33,20 @@ public class Response {
         this.statusMessage = statusMessage;
     }
 
-    public String getErrorCode() {
-        return errorCode;
+    public String getError() {
+        return error;
     }
 
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
+    public void setError(String error) {
+        this.error = error;
     }
 
-    public User getUser() {
-        return user;
+    public Data getData() {
+        return data;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setData(Data data) {
+        this.data = data;
     }
+
 }
