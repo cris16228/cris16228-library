@@ -182,7 +182,7 @@ public class HttpUtils {
         }
     }
 
-    public JSONObject post(String _url, HashMap<String, String> params) {
+    public String post(String _url, HashMap<String, String> params) {
         if (TextUtils.isEmpty(_url))
             url = _url;
         result = new StringBuilder();
@@ -242,7 +242,7 @@ public class HttpUtils {
             Log.e(TAG, "Error parsing data " + e);
         }
 
-        return jsonObject;
+        return result.toString();
     }
 
     public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
