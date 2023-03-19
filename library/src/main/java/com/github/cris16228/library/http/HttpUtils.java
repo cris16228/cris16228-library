@@ -231,12 +231,18 @@ public class HttpUtils {
             writer.close();
             os.close();
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(urlConnection.getInputStream())));
+                InputStream in;
+                if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 400) {
+                    in = urlConnection.getInputStream();
+                } else {
+                    in = urlConnection.getErrorStream();
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(in)));
                 String line;
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
-                Log.d(TAG, "Result: " + result);
+                Log.d("TAG", "Result: " + result);
                 reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
