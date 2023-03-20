@@ -242,7 +242,6 @@ public class HttpUtils {
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
-                Log.d("TAG", "Result: " + result);
                 reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -360,7 +359,6 @@ public class HttpUtils {
             while ((line = reader.readLine()) != null) {
                 result.append(line);
             }
-            Log.d(TAG, "Result: " + result);
         } catch (IOException e) {
             e.printStackTrace();
         }
