@@ -36,6 +36,32 @@ public class SecurityUtils {
         return "";
     }
 
+    public String sha256(String s) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = s.getBytes(StandardCharsets.ISO_8859_1);
+            messageDigest.update(bytes, 0, bytes.length);
+            byte[] sha1hash = messageDigest.digest();
+            return convertToHex(sha1hash);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public String sha512(String s) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            byte[] bytes = s.getBytes(StandardCharsets.ISO_8859_1);
+            messageDigest.update(bytes, 0, bytes.length);
+            byte[] sha1hash = messageDigest.digest();
+            return convertToHex(sha1hash);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     private String convertToHex(byte[] sha1hash) {
         StringBuilder buf = new StringBuilder();
         for (byte b : sha1hash) {
