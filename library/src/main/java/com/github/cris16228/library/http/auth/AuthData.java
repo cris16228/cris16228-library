@@ -11,6 +11,9 @@ public class AuthData {
     @SerializedName("user")
     @Expose
     private String user;
+    @SerializedName("email")
+    @Expose
+    private String email;
     @SerializedName("pic")
     @Expose
     private String pic;
@@ -24,6 +27,14 @@ public class AuthData {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getDate() {
