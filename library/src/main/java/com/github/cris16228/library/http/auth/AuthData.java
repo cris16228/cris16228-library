@@ -3,7 +3,7 @@ package com.github.cris16228.library.http.auth;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Data {
+public class AuthData {
 
     @SerializedName("date")
     @Expose

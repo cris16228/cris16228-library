@@ -3,7 +3,7 @@ package com.github.cris16228.library.http.auth;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Response {
+public class AuthResponse {
     @SerializedName("status_message")
     @Expose
     public String statusMessage;
@@ -15,7 +15,7 @@ public class Response {
     private String error;
     @SerializedName("data")
     @Expose
-    private Data data;
+    private AuthData data;
 
     public String getStatus() {
         return status;
@@ -41,12 +41,12 @@ public class Response {
         this.error = error;
     }
 
-    public Data getData() {
+    public AuthData getData() {
         return data;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setData(AuthData authData) {
+        this.data = authData;
     }
 
 }
