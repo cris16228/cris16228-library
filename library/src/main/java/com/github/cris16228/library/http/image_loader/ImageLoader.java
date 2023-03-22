@@ -14,6 +14,7 @@ import androidx.annotation.RawRes;
 
 import com.github.cris16228.library.Base64Utils;
 import com.github.cris16228.library.FileUtils;
+import com.github.cris16228.library.LongUtils;
 import com.github.cris16228.library.QueueUtils;
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
 import com.github.cris16228.library.http.image_loader.interfaces.LoadImage;
@@ -199,6 +200,7 @@ public class ImageLoader {
             connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
+            System.out.println("URL: " + url + "\nlength: " + is.available() + "(" + LongUtils.with(context).getSize(is.available()) + ")");
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
             connection.disconnect();
