@@ -198,6 +198,7 @@ public class ImageLoader {
             connection.setConnectTimeout(0);
             connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
+            connection.setRequestProperty("Accept-Encoding", "identity");
             InputStream is = connection.getInputStream();
            /* byte[] data = new byte[8388608];
             int count;
