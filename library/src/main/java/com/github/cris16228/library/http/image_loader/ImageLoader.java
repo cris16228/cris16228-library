@@ -205,7 +205,7 @@ public class ImageLoader {
 
             }*/
             OutputStream os = new FileOutputStream(file);
-            fileUtils.copyStream(is, os);
+            fileUtils.copyStream(is, os, connection.getContentLength());
             connection.disconnect();
             os.close();
             is.close();

@@ -204,13 +204,15 @@ public class FileUtils {
         bos.close();
     }
 
-    public void copyStream(InputStream is, OutputStream os) {
+    public void copyStream(InputStream is, OutputStream os, long totalLength) {
         try {
-            byte[] data = new byte[8388608];
+            byte[] data = new byte[512];
             int count;
             while ((count = is.read(data, 0, data.length)) != -1) {
                 os.write(data, 0, count);
-                System.out.println(LongUtils.with(context).getSize(count));
+                if (totalLength > 0) {
+                    System.out.println(LongUtils.with(context).getSize(count) + "/" + LongUtils.with(context).getSize(totalLength));
+                }
             }
             is.close();
             os.close();
