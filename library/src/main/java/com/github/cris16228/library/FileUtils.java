@@ -212,7 +212,7 @@ public class FileUtils {
             while ((count = is.read(data, 0, data.length)) != -1) {
                 progress += count;
                 os.write(data, 0, count);
-                System.out.println(LongUtils.with(context).getSize(progress) + "/" + LongUtils.with(context).getSize(contentLength));
+                System.out.println(LongUtils.with(context).getSize(progress) + "/" + LongUtils.with(context).getSize(contentLength) + "(" + progress + "/" + contentLength + ")");
             }
             is.close();
             os.close();
