@@ -200,7 +200,7 @@ public class ImageLoader {
             connection.setReadTimeout(0);
             connection.setInstanceFollowRedirects(true);
             InputStream is = connection.getInputStream();
-            System.out.println("URL: " + url + "\nlength: " + is.available() + "(" + LongUtils.with(context).getSize(is.available()) + ")");
+            System.out.println("URL: " + url + "\nlength: " + is.read() + "(" + LongUtils.with(context).getSize(is.available()) + ")\nconnection.getContentLength(): " + connection.getContentLength());
             OutputStream os = new FileOutputStream(file);
             fileUtils.copyStream(is, os);
             connection.disconnect();
