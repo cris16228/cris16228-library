@@ -44,6 +44,7 @@ public class ImageLoader {
     private FileUtils fileUtils;
     private Context context;
     private boolean asBitmap = false;
+    private DownloadProgress downloadProgress;
 
     public static ImageLoader get() {
         return new ImageLoader();
@@ -187,6 +188,10 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors) {
+        return getBitmap(url, connectionErrors, null);
+    }
+
+    private Bitmap getBitmap(String url, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null)
@@ -200,13 +205,12 @@ public class ImageLoader {
             connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("Accept-Encoding", "identity");
             InputStream is = connection.getInputStream();
-           /* byte[] data = new byte[8388608];
-            int count;
-            while ((count = is.read(data, 0, data.length)) != -1) {
-
-            }*/
             OutputStream os = new FileOutputStream(file);
-            fileUtils.copyStream(is, os, connection.getContentLength());
+            if (downloadProgress != null) {
+                fileUtils.copyStream(is, os, connection.getContentLength(), downloadProgress);
+            } else {
+                fileUtils.copyStream(is, os, connection.getContentLength());
+            }
             connection.disconnect();
             os.close();
             is.close();
@@ -361,4 +365,10 @@ public class ImageLoader {
         }
     }
 
+    public interface DownloadProgress {
+
+        void downloadInProgress(Long progress, long total);
+
+        void downloadComplete();
+    }
 }

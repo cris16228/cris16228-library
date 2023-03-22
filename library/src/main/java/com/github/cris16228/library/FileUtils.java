@@ -12,6 +12,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
+import com.github.cris16228.library.http.image_loader.ImageLoader;
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
 
 import java.io.BufferedOutputStream;
@@ -204,7 +205,7 @@ public class FileUtils {
         bos.close();
     }
 
-    public void copyStream(InputStream is, OutputStream os, int contentLength) {
+    public void copyStream(InputStream is, OutputStream os, int contentLength, ImageLoader.DownloadProgress downloadProgress) {
         try {
             byte[] data = new byte[8388608];
             int count;
@@ -212,13 +213,21 @@ public class FileUtils {
             while ((count = is.read(data, 0, data.length)) != -1) {
                 progress += count;
                 os.write(data, 0, count);
-                System.out.println(LongUtils.with(context).getSize(progress) + "/" + LongUtils.with(context).getSize(contentLength) + "(" + progress + "/" + contentLength + ")");
+                if (contentLength > 0) {
+                    if (downloadProgress != null) {
+                        downloadProgress.downloadInProgress(progress, contentLength);
+                    }
+                }
             }
             is.close();
             os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void copyStream(InputStream is, OutputStream os, int contentLength) {
+        copyStream(is, os, contentLength, null);
     }
 
     public String readJson(String file) {
