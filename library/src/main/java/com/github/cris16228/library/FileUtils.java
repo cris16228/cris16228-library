@@ -210,6 +210,7 @@ public class FileUtils {
             int count;
             while ((count = is.read(data, 0, data.length)) != -1) {
                 os.write(data, 0, count);
+                System.out.println(LongUtils.with(context).getSize(count));
             }
             is.close();
             os.close();
