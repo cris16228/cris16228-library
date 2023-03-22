@@ -118,7 +118,7 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/update_password_btn"
+            android:id="@+id/updatePasswordButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/button_background_20"
@@ -129,7 +129,7 @@
             app:backgroundTint="@color/colorSecondaryMain" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/logout_btn"
+            android:id="@+id/logoutButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/button_background_20"

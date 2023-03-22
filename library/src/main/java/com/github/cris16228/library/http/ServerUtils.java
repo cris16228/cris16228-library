@@ -122,18 +122,4 @@ public class ServerUtils {
             return url;
         }
     }
-
-    public enum actions {
-        UPLOAD("upload"),
-        DOWNLOAD("download");
-        private final String action;
-
-        actions(String _action) {
-            this.action = _action;
-        }
-
-        public String getValue() {
-            return action;
-        }
-    }
 }

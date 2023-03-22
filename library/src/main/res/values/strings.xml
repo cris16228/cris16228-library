@@ -67,6 +67,7 @@
     <string name="title_fragment_login">Login</string>
     <string name="email_hint" translatable="false">Email</string>
     <string name="password_hint" translatable="false">Password</string>
+    <string name="confirm_password_hint" translatable="false">Confirm password</string>
     <string name="username_hint" translatable="false">Username</string>
     <string name="register">Register</string>
     <string name="already_account">Do you already have an account?</string>

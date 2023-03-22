@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.github.cris16228.library.StringUtils;
 import com.github.cris16228.library.deviceutils.DeviceUtils;
 
 import org.json.JSONException;
@@ -52,6 +53,7 @@ public class HttpUtils {
         httpUtils.debug = false;
         return httpUtils;
     }
+
     public static HttpUtils get(boolean debug) {
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.debug = debug;
@@ -125,6 +127,10 @@ public class HttpUtils {
             e.printStackTrace();
         }
         return jsonString;
+    }
+
+    public boolean postSuccess() {
+        return !StringUtils.isEmpty(result.toString());
     }
 
     public HashMap<String, String> defaultParams() {
