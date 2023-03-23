@@ -137,4 +137,5 @@
     <string name="setup_date_format">Select your date format</string>
     <string name="finish">Finish</string>
     <string name="press_back_twice">Press back again to close the app</string>
+    <string name="authError">%s</string>
 </resources>
