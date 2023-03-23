@@ -219,6 +219,9 @@ public class FileUtils {
                     }
                 }
             }
+            if (downloadProgress != null) {
+                downloadProgress.downloadComplete();
+            }
             is.close();
             os.close();
         } catch (Exception e) {
