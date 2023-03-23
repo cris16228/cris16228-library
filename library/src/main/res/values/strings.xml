@@ -71,7 +71,7 @@
     <string name="username_hint" translatable="false">Username</string>
     <string name="register">Register</string>
     <string name="already_account">Do you already have an account?</string>
-    <string name="login" translatable="false">Login</string>
+    <string name="login">Login</string>
     <string name="fill_every_detail">Please fill every detail</string>
     <string name="password_short">The password needs to be at least 8 characters long</string>
     <string name="account_created_successfully">Account created successfully</string>
@@ -88,13 +88,14 @@
     <string name="email_not_exists">"The account associated to the mail %s doesn't exists "</string>
     <string name="sign_out">Log out</string>
     <string name="user_name_text">Username: </string>
-    <string name="user_name">%s</string>
-    <string name="user_mail_text">Email: </string>
-    <string name="user_email">%s</string>
+    <string name="user_name" translatable="false">%s</string>
+    <string name="user_mail_text" translatable="false">Email: </string>
+    <string name="user_email" translatable="false">%s</string>
     <string name="profile_upload_picture">Upload</string>
     <string name="update_password">Update password</string>
     <string name="user_registration_date_text">Registration date:</string>
-    <string name="user_registration_date">%s</string>
+    <string name="user_registration_date" translatable="false">%s</string>
+    <string name="authError" translatable="false">%s</string>
 
 
     <string name="cancel">Cancel</string>
@@ -137,5 +138,5 @@
     <string name="setup_date_format">Select your date format</string>
     <string name="finish">Finish</string>
     <string name="press_back_twice">Press back again to close the app</string>
-    <string name="authError">%s</string>
+    <string name="image_download_progress">%s%%</string>
 </resources>
