@@ -109,8 +109,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:text="@string/authError"
-            android:textColor="@color/colorText"
-            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textColor="@color/colorTextError"
+            android:textSize="14sp"
             android:visibility="invisible" />
     </LinearLayout>
 
