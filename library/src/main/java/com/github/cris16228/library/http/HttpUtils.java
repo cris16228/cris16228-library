@@ -248,6 +248,8 @@ public class HttpUtils {
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
+                if (debug)
+                    System.out.println(result);
                 reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -263,6 +265,8 @@ public class HttpUtils {
             Log.e(TAG, "Error parsing data " + e);
         }
 
+        if (debug)
+            System.out.println(jsonObject);
         return result.toString();
     }
 
