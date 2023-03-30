@@ -67,6 +67,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     start.set(last);
                     mode = DRAG;
                     stopInterceptEvent();
+                    performClick();
                     break;
 
                 case MotionEvent.ACTION_MOVE:
