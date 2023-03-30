@@ -102,7 +102,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
 
             setImageMatrix(matrix);
             invalidate();
-            return true; // indicate event was handled
+            return false; // indicate event was handled
         });
     }
 
