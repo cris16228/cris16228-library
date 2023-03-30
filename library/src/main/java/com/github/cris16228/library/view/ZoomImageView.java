@@ -82,11 +82,12 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                         matrix.postTranslate(fixTransX, fixTransY);
                         fixTrans();
                         last.set(curr.x, curr.y);
-                        if (mScaleDetector.getScaleFactor() == saveScale)
-                            startInterceptEvent();
-                        else
-                            stopInterceptEvent();
+
                     }
+                    if (mScaleDetector.getScaleFactor() == saveScale && mode != DRAG)
+                        startInterceptEvent();
+                    else
+                        stopInterceptEvent();
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -98,9 +99,6 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     startInterceptEvent();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
-                    System.out.println(mode);
-                    mode = DRAG;
-                    System.out.println(mode);
                     stopInterceptEvent();
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
