@@ -43,11 +43,11 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
     }
 
     private void stopInterceptEvent() {
-        getParent().requestDisallowInterceptTouchEvent(true);
+        if (getParent() != null) getParent().requestDisallowInterceptTouchEvent(true);
     }
 
     private void startInterceptEvent() {
-        getParent().requestDisallowInterceptTouchEvent(false);
+        if (getParent() != null) getParent().requestDisallowInterceptTouchEvent(false);
     }
 
     private void sharedConstructing(Context context) {
@@ -58,11 +58,10 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
         m = new float[9];
         setImageMatrix(matrix);
         setScaleType(ScaleType.MATRIX);
-        startInterceptEvent();
         setOnTouchListener((v, event) -> {
             mScaleDetector.onTouchEvent(event);
             PointF curr = new PointF(event.getX(), event.getY());
-
+            startInterceptEvent();
             switch (event.getAction() & event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     last.set(curr);
