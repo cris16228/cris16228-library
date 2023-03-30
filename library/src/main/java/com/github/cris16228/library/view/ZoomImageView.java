@@ -61,13 +61,12 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
         setOnTouchListener((v, event) -> {
             mScaleDetector.onTouchEvent(event);
             PointF curr = new PointF(event.getX(), event.getY());
-            startInterceptEvent();
             switch (event.getAction() & event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     last.set(curr);
                     start.set(last);
                     mode = DRAG;
-                    stopInterceptEvent();
+                    /*stopInterceptEvent();*/
                     break;
 
                 case MotionEvent.ACTION_MOVE:
