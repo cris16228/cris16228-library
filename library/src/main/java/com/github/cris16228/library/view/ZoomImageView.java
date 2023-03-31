@@ -16,6 +16,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
     static final int DRAG = 1;
     static final int ZOOM = 2;
     static final int CLICK = 3;
+    private final int CLICK_THRESHOLD = 20;
     public int mode = NONE;
     protected float origWidth, origHeight;
     Matrix matrix;
@@ -67,10 +68,10 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     start.set(last);
                     mode = DRAG;
                     stopInterceptEvent();
-                    performClick();
                     break;
 
                 case MotionEvent.ACTION_MOVE:
+                    stopInterceptEvent();
                     if (mode == DRAG) {
                         float deltaX = curr.x - last.x;
                         float deltaY = curr.y - last.y;
@@ -92,7 +93,7 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     mode = NONE;
                     int xDiff = (int) Math.abs(curr.x - start.x);
                     int yDiff = (int) Math.abs(curr.y - start.y);
-                    if (xDiff < CLICK && yDiff < CLICK)
+                    if (xDiff < CLICK_THRESHOLD || yDiff < CLICK_THRESHOLD)
                         performClick();
                     startInterceptEvent();
                     break;
