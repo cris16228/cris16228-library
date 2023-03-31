@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 
 public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView {
 
@@ -93,8 +94,11 @@ public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView 
                     mode = NONE;
                     int xDiff = (int) Math.abs(curr.x - start.x);
                     int yDiff = (int) Math.abs(curr.y - start.y);
-                    if (xDiff < CLICK_THRESHOLD || yDiff < CLICK_THRESHOLD)
-                        performClick();
+                    if (xDiff < CLICK_THRESHOLD || yDiff < CLICK_THRESHOLD) {
+                        System.out.println("performClick()");
+                        View parent = (View) getParent();
+                        parent.performClick();
+                    }
                     startInterceptEvent();
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
