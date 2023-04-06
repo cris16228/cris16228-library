@@ -15,7 +15,7 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 public class ServerUtils {
 
     private static String[] SSIDs = {"BobHouse", "BobHouse 5GHz"};
-    private String localIP = "http://192.168.1.5/";
+    /*private String localIP = "http://192.168.1.5/";*/
     private String publicIP = "https://www.cris16228.com/";
     private Context context;
 
@@ -27,13 +27,13 @@ public class ServerUtils {
         ServerUtils.SSIDs = SSIDs;
     }
 
-    public String getLocalIP() {
+    /*public String getLocalIP() {
         return localIP;
     }
 
     public void setLocalIP(String localIP) {
         this.localIP = localIP;
-    }
+    }*/
 
     public String getPublicIP() {
         return publicIP;
@@ -92,7 +92,7 @@ public class ServerUtils {
     }
 
     public String webURL(Context context) {
-        if (isConnectedWifi(context)) {
+        /*if (isConnectedWifi(context)) {
             if (isHome(context)) {
                 return getLocalIP();
             } else if (!isHome(context))
@@ -100,12 +100,13 @@ public class ServerUtils {
         } else {
             return getPublicIP();
         }
-        return null;
+        return null;*/
+        return getPublicIP();
     }
 
 
     public String getValidURL(@NonNull String url) {
-        if (url.startsWith(getLocalIP()) || url.startsWith(getPublicIP()))
+        if (/*url.startsWith(getLocalIP()) ||*/ url.startsWith(getPublicIP()))
             return url;
         if (url.startsWith("/")) {
             url = url.substring(1);
@@ -114,9 +115,10 @@ public class ServerUtils {
     }
 
     public String getRawURL(@NonNull String url) {
-        if (url.startsWith(getLocalIP())) {
+        /*if (url.startsWith(getLocalIP())) {
             return url.replace(getLocalIP(), "");
-        } else if (url.startsWith(getPublicIP())) {
+        } else */
+        if (url.startsWith(getPublicIP())) {
             return url.replace(getPublicIP(), "");
         } else {
             return url;
