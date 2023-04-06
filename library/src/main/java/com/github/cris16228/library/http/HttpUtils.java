@@ -35,7 +35,7 @@ import java.util.HashMap;
 
 public class HttpUtils {
 
-    String url = "https://192.168.1.5/upload.php";
+    String url = "http://192.168.1.5/upload.php";
     String lineEnd = "\r\n";
     String twoHyphens = "--";
     String boundary = "*****";
