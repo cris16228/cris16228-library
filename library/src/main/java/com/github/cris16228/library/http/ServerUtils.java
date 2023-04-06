@@ -15,8 +15,8 @@ import com.github.cris16228.library.deviceutils.DeviceUtils;
 public class ServerUtils {
 
     private static String[] SSIDs = {"BobHouse", "BobHouse 5GHz"};
-    private String localIP = "http://192.168.1.5/";
-    private String publicIP = "http://www.cris16228.com/";
+    private String localIP = "https://192.168.1.5/";
+    private String publicIP = "https://www.cris16228.com/";
     private Context context;
 
     public static String[] getSSIDs() {
