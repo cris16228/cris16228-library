@@ -78,6 +78,7 @@ public class HttpUtils {
                 urlConnection.setReadTimeout(httpUtils.readTimeout /* milliseconds */);
                 urlConnection.setConnectTimeout(httpUtils.connectionTimeout /* milliseconds */);
                 urlConnection.setDoOutput(true);
+
                 urlConnection.connect();
                 BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
                 String line;
