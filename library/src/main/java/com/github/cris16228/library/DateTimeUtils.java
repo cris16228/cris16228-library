@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class DateTimeUtils {
 
-    private final String DEFAULT_FORMAT_DATE = "dd/MM/yyyy";
-    private final String DEFAULT_FORMAT_TIME = "HH:mm";
+    private String DEFAULT_FORMAT_DATE = "dd/MM/yyyy";
+    private String DEFAULT_FORMAT_TIME = "HH:mm";
     private String DEFAULT_FORMAT = "dd/MM/yyyy HH:mm:ss";
     private long date;
     private long time;
@@ -33,6 +33,22 @@ public class DateTimeUtils {
 
     public void setDefaultFormat(String defaultFormat) {
         this.DEFAULT_FORMAT = defaultFormat;
+    }
+
+    public String getDefaultFormatDate() {
+        return DEFAULT_FORMAT_DATE;
+    }
+
+    public void setDefaultFormatDate(String defaultFormatDate) {
+        this.DEFAULT_FORMAT_DATE = defaultFormatDate;
+    }
+
+    public String getDefaultFormatTime() {
+        return DEFAULT_FORMAT_TIME;
+    }
+
+    public void setDefaultFormatTime(String defaultFormatTime) {
+        this.DEFAULT_FORMAT_TIME = defaultFormatTime;
     }
 
     public long getDate() {
@@ -110,7 +126,9 @@ public class DateTimeUtils {
                         }
                     }
                 }
-                onDateTimeSet.onConfirm(dateTime.toString());
+                if (onDateTimeSet != null) {
+                    onDateTimeSet.onConfirm(dateTime.toString());
+                }
             });
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
         });
@@ -162,7 +180,9 @@ public class DateTimeUtils {
                     }
                 }
             }
-            onDateTimeSet.onConfirm(dateTime.toString());
+            if (onDateTimeSet != null) {
+                onDateTimeSet.onConfirm(dateTime.toString());
+            }
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
@@ -228,7 +248,9 @@ public class DateTimeUtils {
                     }
                 }
             }
-            onDateTimeSet.onConfirm(dateTime.toString());
+            if (onDateTimeSet != null) {
+                onDateTimeSet.onConfirm(dateTime.toString());
+            }
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
     }
