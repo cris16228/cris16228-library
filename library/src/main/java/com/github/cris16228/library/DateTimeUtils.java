@@ -26,6 +26,7 @@ public class DateTimeUtils {
     private String DEFAULT_FORMAT = "dd/MM/yyyy HH:mm:ss";
     private long date;
     private long time;
+    private onDateTimeSet onDateTimeSet;
 
     public String getDefaultFormat() {
         return DEFAULT_FORMAT;
@@ -66,8 +67,6 @@ public class DateTimeUtils {
     public void setTime(long time) {
         this.time = time;
     }
-
-    private onDateTimeSet onDateTimeSet;
 
     public void setOnDateTimeSet(onDateTimeSet onDateTimeSet) {
         this.onDateTimeSet = onDateTimeSet;
