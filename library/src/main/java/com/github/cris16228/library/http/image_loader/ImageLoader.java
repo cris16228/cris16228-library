@@ -37,26 +37,32 @@ import java.util.concurrent.Executors;
 public class ImageLoader {
 
     private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<>());
-    MemoryCache memoryCache;
-    FileCache fileCache;
-    ExecutorService executor = Executors.newSingleThreadExecutor();
-    Handler handler = new Handler(Looper.getMainLooper());
+    private static final int THREAD_POOL_SIZE = 3;
+    private MemoryCache memoryCache;
+    private FileCache fileCache;
+    private ExecutorService executor;
     private FileUtils fileUtils;
     private Context context;
     private boolean asBitmap = false;
+    private Handler handler;
+
+    public static ImageLoader with(Context context, String path) {
+        ImageLoader loader = new ImageLoader();
+        loader.init(context, path);
+        return loader;
+    }
 
     public static ImageLoader get() {
         return new ImageLoader();
     }
 
-    public ImageLoader with(Context _context, String path) {
+    private void init(Context context, String path) {
         fileCache = new FileCache(path);
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        handler = new Handler(Looper.getMainLooper());
         fileUtils = new FileUtils();
-        context = _context;
+        this.context = context;
         memoryCache = new MemoryCache(context);
-        /*init();*/
-        return this;
     }
 
     public void fileCache(Context _context) {
@@ -245,6 +251,7 @@ public class ImageLoader {
     public void clearCache() {
         memoryCache.clear();
         fileCache.clear();
+        executor.shutdown();
     }
 
     static class PhotoToLoad {

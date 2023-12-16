@@ -39,28 +39,30 @@ public class FileCache {
         return cacheDir;
     }
 
-    public long lenght() {
-        long size = 0;
-        size += cacheDir.length();
-        for (File file : cacheDir.listFiles()) {
-            if (file != null && file.isFile())
-                size += file.length();
+    public long length() {
+        long size = cacheDir.length();
+        File[] files = cacheDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file != null && file.isFile()) {
+                    size += file.length();
+                }
+            }
         }
         return size;
     }
 
     public int size() {
         File[] files = cacheDir.listFiles();
-        if (files != null)
-            return files.length;
-        return 0;
+        return files != null ? files.length : 0;
     }
 
     public void clear() {
         File[] files = cacheDir.listFiles();
-        if (files == null)
-            return;
-        for (File file : files)
-            file.delete();
+        if (files != null) {
+            for (File file : files) {
+                file.delete();
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
@@ -171,31 +172,28 @@ public class HttpUtils {
             URL url = new URL(_url);
             URLConnection connection = url.openConnection();
             connection.connect();
-            InputStream input = new BufferedInputStream(url.openStream(),
-                    8192);
-            /*if (input.available() > 0) {*/
-            File tmp = new File(path);
-            String tmp_path = tmp.getParent();
-            if (tmp_path != null && !new File(tmp_path).exists()) tmp.mkdirs();
-            OutputStream output = Files.newOutputStream(Paths.get(path));
 
-            byte[] data = new byte[1024];
+            try (InputStream input = new BufferedInputStream(url.openStream(), 8192)) {
+                File tmp = new File(path);
+                String tmpPath = tmp.getParent();
+                if (tmpPath != null && !new File(tmpPath).exists()) tmp.mkdirs();
 
-            while ((count = input.read(data)) != -1) {
-                output.write(data, 0, count);
+                try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(Paths.get(path)))) {
+                    byte[] data = new byte[8192]; // Use a larger buffer size for better performance
+
+                    while ((count = input.read(data)) != -1) {
+                        output.write(data, 0, count);
+                    }
+
+                    // flushing output
+                    output.flush();
+                }
             }
-
-            // flushing output
-            output.flush();
-
-            // closing streams
-            output.close();
-            input.close();
-            /*   }*/
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
         }
     }
+
 
     public String post(String _url, HashMap<String, String> params) {
         if (TextUtils.isEmpty(_url))

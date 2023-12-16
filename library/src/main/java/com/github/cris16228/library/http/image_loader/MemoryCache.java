@@ -2,13 +2,10 @@ package com.github.cris16228.library.http.image_loader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import com.github.cris16228.library.Base64Utils;
-import com.github.cris16228.library.FileUtils;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,18 +26,13 @@ public class MemoryCache {
 
     public Bitmap getBitmap(byte[] bytes) {
         Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
-        FileUtils fileUtils = new FileUtils();
-        File file = new File(encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null));
-        Bitmap _image = fileUtils.decodeFile(file);
-        if (_image != null)
-            return _image;
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        String key = encoder.encrypt(Arrays.toString(bytes), Base64.NO_WRAP, null);
+        return get(key);
     }
 
     public void setLimit(long _limit) {
         limit = _limit;
     }
-
 
     public Bitmap get(String id) {
         try {
@@ -87,9 +79,9 @@ public class MemoryCache {
         }
     }
 
-    long sizeInBytes(Bitmap bitmap) {
+    private long sizeInBytes(Bitmap bitmap) {
         if (bitmap == null)
             return 0;
-        return (long) bitmap.getRowBytes() * bitmap.getHeight();
+        return (long) bitmap.getByteCount();
     }
 }
