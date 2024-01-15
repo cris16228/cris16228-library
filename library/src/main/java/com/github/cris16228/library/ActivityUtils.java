@@ -148,10 +148,9 @@ public class ActivityUtils {
 
     public void startActivity(Context currentActivity, Class<?> destinationActivity, @ContentInfoCompat.Flags int[] flags) {
         Intent activity = new Intent(currentActivity, destinationActivity);
-        if (flags.length > 0)
-            for (int flag : flags) {
-                activity.addFlags(flag);
-            }
+        for (int flag : flags) {
+            activity.addFlags(flag);
+        }
         currentActivity.startActivity(activity);
     }
 

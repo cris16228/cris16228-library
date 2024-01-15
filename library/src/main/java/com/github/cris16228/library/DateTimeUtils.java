@@ -23,7 +23,7 @@ public class DateTimeUtils {
 
     private String DEFAULT_FORMAT_DATE = "dd/MM/yyyy";
     private String DEFAULT_FORMAT_TIME = "HH:mm";
-    private String DEFAULT_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    private String DEFAULT_FORMAT = "EE MMM dd HH:mm:ss z yyyy";
     private long date;
     private long time;
     private onDateTimeSet onDateTimeSet;
@@ -288,10 +288,11 @@ public class DateTimeUtils {
     }
 
     public long getMilliseconds(String date, String formatting) {
-        SimpleDateFormat format = new SimpleDateFormat(formatting, Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat(formatting,
+                Locale.getDefault());
         Date temp_date = null;
         try {
-            temp_date = format.parse(date);
+            temp_date = sdf.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

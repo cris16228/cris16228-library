@@ -82,6 +82,6 @@ public class MemoryCache {
     private long sizeInBytes(Bitmap bitmap) {
         if (bitmap == null)
             return 0;
-        return (long) bitmap.getByteCount();
+        return bitmap.getByteCount();
     }
 }

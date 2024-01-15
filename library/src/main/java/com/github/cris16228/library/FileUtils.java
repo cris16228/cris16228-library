@@ -356,9 +356,7 @@ public class FileUtils {
     }
 
     public void Log(String path, String text) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[").append(new DateTimeUtils().getDateTime(new Date().getTime(), null)).append("]: ").append(text);
-        writeFile(path, sb.toString(), true);
+        writeFile(path, "[" + new DateTimeUtils().getDateTime(new Date().getTime(), null) + "]: " + text, true);
     }
 
     public void writeJson(String file, String json) {
