@@ -31,21 +31,23 @@ public class LongUtils {
     public String getSize(long size) {
         long n = 1000;
         String s;
-        double kb = size / n;
+        double kb = size / (double) n;
         double mb = kb / n;
         double gb = mb / n;
         double tb = gb / n;
+
         if (size < n) {
             s = size + " Bytes";
         } else if (size < n * n) {
-            s = String.format("%.2f", kb) + " KB";
+            s = String.format(Locale.US, "%.2f KB", kb);
         } else if (size < n * n * n) {
-            s = String.format("%.2f", mb) + " MB";
+            s = String.format(Locale.US, "%.2f MB", mb);
         } else if (size < n * n * n * n) {
-            s = String.format("%.2f", gb) + " GB";
+            s = String.format(Locale.US, "%.2f GB", gb);
         } else {
-            s = String.format("%.2f", tb) + " TB";
+            s = String.format(Locale.US, "%.2f TB", tb);
         }
+
         return s;
     }
 
@@ -116,75 +118,44 @@ public class LongUtils {
 
     public String toReadableTimeFull(long timeInMillis, String timeFormat) {
         boolean full = StringUtils.isEmpty(timeFormat);
-        char[] chars = timeFormat.toCharArray();
-        boolean add_seconds = false, add_minutes = false, add_hours = false, add_days = false, add_years = false;
-        System.out.println(chars);
-        for (char _char : chars) {
-            if (_char == 's')
-                add_seconds = true;
-            if (_char == 'm')
-                add_minutes = true;
-            if (_char == 'h')
-                add_hours = true;
-            if (_char == 'd')
-                add_days = true;
-            if (_char == 'y')
-                add_years = true;
-        }
-        boolean past = timeInMillis < 1;
-        if (past)
-            timeInMillis = timeInMillis * -1;
-        StringBuffer timeBuf = new StringBuffer();
+        char[] units = {'s', 'm', 'h', 'd', 'y'};
+        boolean[] addUnit = new boolean[5];
 
-        // second (1000ms) & above
-        long time = timeInMillis / 1000;
-        if (time < 1) {
-            return "now";
+        for (int i = 0; i < units.length; i++) {
+            char currentUnit = units[i];
+            if (timeFormat.indexOf(currentUnit) != -1) {
+                addUnit[i] = true;
+            }
         }
 
-        long seconds = time % 60;
-        if (add_seconds || full)
-            prependTimeAndUnit(timeBuf, seconds, seconds > 0 ? " seconds" : " second");
+        boolean past = timeInMillis < 0;
+        if (past) timeInMillis = -timeInMillis;
 
-        // minute(60s) & above
-        time = time / 60;
-        if (time < 1) {
-            return timeBuf.toString();
+        StringBuilder timeBuf = new StringBuilder();
+
+        long[] divisor = {1000, 60, 60, 24, 365};
+        String[] unitNames = {" seconds", " minutes", " hours", " days", " years"};
+
+        for (int i = 0; i < divisor.length; i++) {
+            long time = timeInMillis / divisor[i];
+            if (time < 1) {
+                break;
+            }
+
+            long currentValue = time % (i == 4 ? Long.MAX_VALUE : divisor[i + 1]);
+            if (addUnit[i] || full) {
+                prependTimeAndUnit(timeBuf, currentValue, currentValue > 1 ? unitNames[i] : unitNames[i].replace("s", ""));
+            }
         }
 
-        long minutes = time % 60;
-        if (add_minutes || full)
-            prependTimeAndUnit(timeBuf, minutes, minutes > 0 ? " minutes" : " minute");
-
-        // hour(60m) & above
-        time = time / 60;
-        if (time < 1) {
-            return timeBuf.toString();
-        }
-
-        long hours = time % 24;
-        if (add_hours || full)
-            prependTimeAndUnit(timeBuf, hours, hours > 0 ? " hours" : " hour");
-
-        // day(24h) & above
-        time = time / 24;
-        if (time < 1) {
-            return timeBuf.toString();
-        }
-
-        long day = time % 365;
-        if (add_days || full)
-            prependTimeAndUnit(timeBuf, day, day > 0 ? " days" : " day");
-
-        // year(365d) ...
-        time = time / 365;
-        if (time < 1) {
-            return timeBuf.toString();
-        }
-        if (add_years || full)
-            prependTimeAndUnit(timeBuf, time, time > 1 ? " years" : " year");
-        if (past)
+        if (past) {
             timeBuf.append(" ago");
-        return timeBuf.toString();
+        }
+
+        return timeBuf.toString().trim();
+    }
+
+    private void prependTimeAndUnit(StringBuilder buffer, long value, String unit) {
+        buffer.insert(0, value + unit + " ");
     }
 }
