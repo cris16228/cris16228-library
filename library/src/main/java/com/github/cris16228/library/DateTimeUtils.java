@@ -268,7 +268,8 @@ public class DateTimeUtils {
         exactCal.set(Calendar.HOUR_OF_DAY, current.get(Calendar.HOUR_OF_DAY));
         exactCal.set(Calendar.HOUR, 0);
         exactCal.set(Calendar.MINUTE, 0);
-        exactCal.set(Calendar.SECOND, 1);
+        exactCal.set(Calendar.SECOND, 0);
+        exactCal.set(Calendar.MILLISECOND, 0);
         return exactCal.getTimeInMillis();
     }
 

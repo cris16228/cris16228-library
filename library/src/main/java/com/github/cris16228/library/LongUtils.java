@@ -149,7 +149,7 @@ public class LongUtils {
         }
 
         if (past) {
-            timeBuf.append(" ago");
+            timeBuf.append("ago");
         }
 
         return timeBuf.toString().trim();
