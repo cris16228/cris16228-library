@@ -1,5 +1,7 @@
 package com.github.cris16228.library;
 
+import androidx.annotation.AnimRes;
+import androidx.annotation.AnimatorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -49,19 +51,21 @@ public class FragmentUtils {
                 fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
     }
 
-    public void replaceAndAnimateDown(@IdRes int containerViewId, @NonNull Fragment fragment, boolean addToBackStack) {
+    public void replaceAndAnimate(@IdRes int containerViewId, @NonNull Fragment fragment, boolean addToBackStack, @AnimatorRes @AnimRes int enter,
+                                  @AnimatorRes @AnimRes int exit) {
         FragmentManager manager = fragmentActivity.getSupportFragmentManager();
         if (addToBackStack)
-            manager.beginTransaction().setCustomAnimations(R.anim.scroll_down, R.anim.scroll_up).replace(containerViewId,
+            manager.beginTransaction().setCustomAnimations(enter, exit).replace(containerViewId,
                     fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
         else
-            manager.beginTransaction().setCustomAnimations(R.anim.scroll_down, R.anim.scroll_up).replace(containerViewId,
+            manager.beginTransaction().setCustomAnimations(enter, exit).replace(containerViewId,
                     fragment, fragment.getClass().getSimpleName()).commit();
     }
 
-    public void replaceAndAnimateDown(@IdRes int containerViewId, @NonNull Fragment fragment) {
+    public void replaceAndAnimate(@IdRes int containerViewId, @NonNull Fragment fragment, @AnimatorRes @AnimRes int enter,
+                                  @AnimatorRes @AnimRes int exit) {
         FragmentManager manager = fragmentActivity.getSupportFragmentManager();
-        manager.beginTransaction().setCustomAnimations(R.anim.scroll_down, R.anim.scroll_up).replace(containerViewId,
+        manager.beginTransaction().setCustomAnimations(enter, exit).replace(containerViewId,
                 fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
     }
 
