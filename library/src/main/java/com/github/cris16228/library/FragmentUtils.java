@@ -49,6 +49,22 @@ public class FragmentUtils {
                 fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
     }
 
+    public void replaceAndAnimateDown(@IdRes int containerViewId, @NonNull Fragment fragment, boolean addToBackStack) {
+        FragmentManager manager = fragmentActivity.getSupportFragmentManager();
+        if (addToBackStack)
+            manager.beginTransaction().setCustomAnimations(R.anim.scroll_down, R.anim.scroll_up).replace(containerViewId,
+                    fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
+        else
+            manager.beginTransaction().setCustomAnimations(R.anim.scroll_down, R.anim.scroll_up).replace(containerViewId,
+                    fragment, fragment.getClass().getSimpleName()).commit();
+    }
+
+    public void replaceAndAnimateDown(@IdRes int containerViewId, @NonNull Fragment fragment) {
+        FragmentManager manager = fragmentActivity.getSupportFragmentManager();
+        manager.beginTransaction().setCustomAnimations(R.anim.scroll_down, R.anim.scroll_up).replace(containerViewId,
+                fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commit();
+    }
+
     public void refreshFragment(FragmentActivity fragmentActivity, Fragment fragment) {
         FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
         ft.detach(fragment).attach(fragment).commit();
