@@ -104,7 +104,7 @@ public class StringUtils {
     }
 
 
-    public String convertToFirstUpper(String text) {
-        return text.substring(0, 1).toUpperCase() + text.substring(1).toUpperCase();
+    public static String convertToFirstUpper(String text) {
+        return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
     }
 }

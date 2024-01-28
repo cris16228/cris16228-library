@@ -17,6 +17,10 @@ public class ThemeUtils {
     public static final String LIGHT = "light";
     public static final String DARK = "dark";
     public static final String AUTO = "follow_system";
+    public static String[] themes = new String[]{
+            StringUtils.convertToFirstUpper(ThemeUtils.LIGHT), StringUtils.convertToFirstUpper(ThemeUtils.DARK),
+            StringUtils.convertToFirstUpper(ThemeUtils.AUTO).replace("_", " ")};
+
     public Theme theme;
     Context context;
     private PrefUtils prefUtils;
