@@ -103,7 +103,6 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         });
         uploadCrash.execute();
         try {
-            // Wait for the task to complete (timeout after 10 seconds)
             if (!latch.await(2, TimeUnit.SECONDS)) {
                 Log.e("UncaughtException", "Timeout waiting for AsyncTask to complete");
             }
