@@ -112,4 +112,8 @@ public class PackageUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public String getAppName(String pkg) {
+        return appFromPackage(pkg).applicationInfo.loadLabel(context.getPackageManager()).toString();
+    }
 }

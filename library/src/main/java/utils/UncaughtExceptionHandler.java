@@ -1,6 +1,7 @@
 package utils;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.FileUtils;
 import com.github.cris16228.library.NetworkUtils;
 import com.github.cris16228.library.StringUtils;
+import com.github.cris16228.library.deviceutils.PackageUtils;
 import com.github.cris16228.library.http.HttpUtils;
 
 import java.io.File;
@@ -72,6 +74,11 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         uploadCrash.execute();
         StackTraceElement[] arr = e.getStackTrace();
         StringBuilder report = new StringBuilder();
+        PackageManager packageManager = app.getPackageManager();
+        report.append("App: ").append(PackageUtils.with(app).getAppName(app.getPackageName())).append("\n");
+        report.append("Version: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).getLongVersionCode()).append("\n");
+        report.append("Package: ").append(app.getPackageName()).append("\n");
+        report.append("VersionCode: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).versionName).append("\n");
         report.append(e).append("\n").append("\n");
         report.append("-------------------------------- Stack trace --------------------------------").append("\n");
         for (StackTraceElement stackTraceElement : arr) {
