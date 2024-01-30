@@ -1,4 +1,4 @@
-package utils;
+package com.github.cris16228.library.utils;
 
 import android.app.Activity;
 import android.util.Log;
@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUEH;
@@ -37,6 +39,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+        CountDownLatch latch = new CountDownLatch(1);
         AsyncUtils uploadCrash = AsyncUtils.get();
         uploadCrash.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
@@ -61,42 +64,52 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
                             String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath())));
                             Log.d("Response", result);
                         }
+                        latch.countDown();
                     }
                 }
             }
 
             @Override
             public void postDelayed() {
+                StackTraceElement[] arr = e.getStackTrace();
+                StringBuilder report = new StringBuilder();
+                report.append("\n");
+                report.append("App: ").append(PackageUtils.with(app).getAppName(app.getPackageName())).append("\n");
+                report.append("Version: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).getLongVersionCode()).append("\n");
+                report.append("Package: ").append(app.getPackageName()).append("\n");
+                report.append("VersionCode: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).versionName).append("\n");
+                report.append("Error: ").append(e).append("\n").append("\n");
+                report.append("-------------------------------- Stack trace --------------------------------").append("\n");
+                for (StackTraceElement stackTraceElement : arr) {
+                    report.append(stackTraceElement.toString()).append("\n");
+                }
+                report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
+
+                Throwable cause = e.getCause();
+                if (cause != null) {
+                    report.append("----------------------------------- Cause -----------------------------------").append("\n");
+                    report.append(cause).append("\n");
+                    arr = cause.getStackTrace();
+                    for (StackTraceElement stackTraceElement : arr) {
+                        report.append(stackTraceElement.toString()).append("\n");
+                    }
+                    report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
+                }
+                String dateTime = new SimpleDateFormat("dd-MM-yyyy_hh.mm.ss", Locale.getDefault()).format(new Date());
+                String fileName = "/crash-reports/crash_" + dateTime + ".log";
+                FileUtils.with(app).debugLog(report.toString(), fileName);
 
             }
         });
         uploadCrash.execute();
-        StackTraceElement[] arr = e.getStackTrace();
-        StringBuilder report = new StringBuilder();
-        report.append("App: ").append(PackageUtils.with(app).getAppName(app.getPackageName())).append("\n");
-        report.append("Version: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).getLongVersionCode()).append("\n");
-        report.append("Package: ").append(app.getPackageName()).append("\n");
-        report.append("VersionCode: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).versionName).append("\n");
-        report.append(e).append("\n").append("\n");
-        report.append("-------------------------------- Stack trace --------------------------------").append("\n");
-        for (StackTraceElement stackTraceElement : arr) {
-            report.append(stackTraceElement.toString()).append("\n");
-        }
-        report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
-
-        Throwable cause = e.getCause();
-        if (cause != null) {
-            report.append("----------------------------------- Cause -----------------------------------").append("\n");
-            report.append(cause).append("\n");
-            arr = cause.getStackTrace();
-            for (StackTraceElement stackTraceElement : arr) {
-                report.append(stackTraceElement.toString()).append("\n");
+        try {
+            // Wait for the task to complete (timeout after 10 seconds)
+            if (!latch.await(2, TimeUnit.SECONDS)) {
+                Log.e("UncaughtException", "Timeout waiting for AsyncTask to complete");
             }
-            report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
+        } catch (InterruptedException ex) {
+            Log.e("UncaughtException", "InterruptedException while waiting for AsyncTask", ex);
         }
-        String dateTime = new SimpleDateFormat("dd-MM-yyyy_hh.mm.ss", Locale.getDefault()).format(new Date());
-        String fileName = "/crash-reports/crash_" + dateTime + ".log";
-        FileUtils.with(app).debugLog(report.toString(), fileName);
         defaultUEH.uncaughtException(t, e);
     }
 }
