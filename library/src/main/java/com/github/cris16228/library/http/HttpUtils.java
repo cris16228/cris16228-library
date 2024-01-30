@@ -286,7 +286,7 @@ public class HttpUtils {
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Accept-Charset", "UTF-8");
             if (!StringUtils.isEmpty(bearer)) {
-                conn.addRequestProperty("Authorization", "Bearer" + bearer);
+                conn.addRequestProperty("Authorization", "Bearer " + bearer);
             }
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(50000);
