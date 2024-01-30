@@ -8,11 +8,11 @@ import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.FileUtils;
 import com.github.cris16228.library.NetworkUtils;
 import com.github.cris16228.library.http.HttpUtils;
-import com.github.cris16228.library.http.ServerUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
@@ -40,7 +40,10 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
                     if (NetworkUtils.with(app).isConnectedTo(app)) {
                         File crashFile = FileUtils.with(app).getNewestFile(crashPath);
                         HttpUtils httpUtils = HttpUtils.get();
-                        httpUtils.uploadFile(ServerUtils.get(app).getValidURL("/upload.php"), httpUtils.defaultParams(), httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("app", app.getPackageName());
+                        params.put("action", "crash");
+                        httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", httpUtils.defaultParams(), httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
                     }
                 }
             }

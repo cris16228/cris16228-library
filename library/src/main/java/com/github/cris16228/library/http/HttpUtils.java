@@ -270,6 +270,10 @@ public class HttpUtils {
     }
 
     public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files) {
+        return uploadFile(_url, params, files, "");
+    }
+
+    public JSONObject uploadFile(String _url, HashMap<String, String> params, HashMap<String, String> files, String bearer) {
         if (TextUtils.isEmpty(_url))
             url = _url;
         result = new StringBuilder();
