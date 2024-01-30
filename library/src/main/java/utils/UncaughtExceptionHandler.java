@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.github.cris16228.library.AsyncUtils;
 import com.github.cris16228.library.FileUtils;
 import com.github.cris16228.library.NetworkUtils;
+import com.github.cris16228.library.StringUtils;
 import com.github.cris16228.library.http.HttpUtils;
 
 import java.io.File;
@@ -19,10 +20,18 @@ import java.util.Locale;
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUEH;
     private final Activity app;
+    private final String bearer;
 
     public UncaughtExceptionHandler(Activity app) {
         this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         this.app = app;
+        this.bearer = "";
+    }
+
+    public UncaughtExceptionHandler(Activity app, String bearer) {
+        this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+        this.app = app;
+        this.bearer = bearer;
     }
 
     @Override
@@ -44,8 +53,13 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
                         HashMap<String, String> params = new HashMap<>();
                         params.put("app", app.getPackageName());
                         params.put("action", "crash");
-                        String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath())));
-                        Log.d("Response", result);
+                        if (!StringUtils.isEmpty(bearer)) {
+                            String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath()), bearer));
+                            Log.d("Response", result);
+                        } else {
+                            String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath())));
+                            Log.d("Response", result);
+                        }
                     }
                 }
             }
