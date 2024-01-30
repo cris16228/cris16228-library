@@ -52,32 +52,33 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
             @Override
             public void postDelayed() {
+                StackTraceElement[] arr = e.getStackTrace();
+                StringBuilder report = new StringBuilder();
+                report.append(e).append("\n").append("\n");
+                report.append("-------------------------------- Stack trace --------------------------------").append("\n");
+                for (StackTraceElement stackTraceElement : arr) {
+                    report.append(stackTraceElement.toString()).append("\n");
+                }
+                report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
 
+                Throwable cause = e.getCause();
+                if (cause != null) {
+                    report.append("----------------------------------- Cause -----------------------------------").append("\n");
+                    report.append(cause).append("\n");
+                    arr = cause.getStackTrace();
+                    for (StackTraceElement stackTraceElement : arr) {
+                        report.append(stackTraceElement.toString()).append("\n");
+                    }
+                    report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
+                }
+                String dateTime = new SimpleDateFormat("dd-MM-yyyy_hh.mm.ss", Locale.getDefault()).format(new Date());
+                String fileName = "/crash-reports/crash_" + dateTime + ".log";
+                FileUtils.with(app).debugLog(report.toString(), fileName);
+                if (defaultUEH != null) {
+                    defaultUEH.uncaughtException(t, e);
+                }
             }
         });
         uploadCrash.execute();
-        StackTraceElement[] arr = e.getStackTrace();
-        StringBuilder report = new StringBuilder();
-        report.append(e).append("\n").append("\n");
-        report.append("-------------------------------- Stack trace --------------------------------").append("\n");
-        for (StackTraceElement stackTraceElement : arr) {
-            report.append(stackTraceElement.toString()).append("\n");
-        }
-        report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
-
-        Throwable cause = e.getCause();
-        if (cause != null) {
-            report.append("----------------------------------- Cause -----------------------------------").append("\n");
-            report.append(cause).append("\n");
-            arr = cause.getStackTrace();
-            for (StackTraceElement stackTraceElement : arr) {
-                report.append(stackTraceElement.toString()).append("\n");
-            }
-            report.append("-----------------------------------------------------------------------------").append("\n").append("\n");
-        }
-        String dateTime = new SimpleDateFormat("dd-MM-yyyy_hh.mm.ss", Locale.getDefault()).format(new Date());
-        String fileName = "/crash-reports/crash_" + dateTime + ".log";
-        FileUtils.with(app).debugLog(report.toString(), fileName);
-        defaultUEH.uncaughtException(t, e);
     }
 }
