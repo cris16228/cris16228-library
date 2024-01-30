@@ -285,6 +285,9 @@ public class HttpUtils {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Accept-Charset", "UTF-8");
+            if (!StringUtils.isEmpty(bearer)) {
+                conn.addRequestProperty("Authorization", "Bearer" + bearer);
+            }
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(50000);
             if (files != null) {
