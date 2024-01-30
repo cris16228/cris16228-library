@@ -1,6 +1,7 @@
 package utils;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -43,7 +44,8 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
                         HashMap<String, String> params = new HashMap<>();
                         params.put("app", app.getPackageName());
                         params.put("action", "crash");
-                        httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", httpUtils.defaultParams(), httpUtils.defaultFileParams(crashFile.getAbsolutePath()));
+                        String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath())));
+                        Log.d("Response", result);
                     }
                 }
             }
