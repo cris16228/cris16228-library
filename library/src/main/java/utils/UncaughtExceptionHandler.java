@@ -1,7 +1,6 @@
 package utils;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -74,7 +73,6 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         uploadCrash.execute();
         StackTraceElement[] arr = e.getStackTrace();
         StringBuilder report = new StringBuilder();
-        PackageManager packageManager = app.getPackageManager();
         report.append("App: ").append(PackageUtils.with(app).getAppName(app.getPackageName())).append("\n");
         report.append("Version: ").append(PackageUtils.with(app).appFromPackage(app.getPackageName()).getLongVersionCode()).append("\n");
         report.append("Package: ").append(app.getPackageName()).append("\n");
