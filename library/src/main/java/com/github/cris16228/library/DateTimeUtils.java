@@ -14,6 +14,13 @@ import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -132,6 +139,29 @@ public class DateTimeUtils {
             timePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
         });
         datePicker.show(activity.getSupportFragmentManager(), context.getClass().getSimpleName());
+    }
+
+    public LocalDateTime convertToDateTime(long milliseconds) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault());
+        return zonedDateTime.with(LocalTime.MIDNIGHT).toLocalDateTime();
+    }
+
+    public long calculateDaysLeft(long nextBillingDateInMillis) {
+        Instant currentDateInstant = Instant.now();
+        currentDateInstant = currentDateInstant.atZone(ZoneOffset.systemDefault()).withHour(0).withMinute(0).withSecond(0).withNano(0).toInstant();
+        Instant nextBillingDateInstant = Instant.ofEpochMilli(nextBillingDateInMillis);
+        Duration duration = Duration.between(currentDateInstant, nextBillingDateInstant);
+        return duration.toDays();
+    }
+
+    public long convertToMillis(LocalDateTime dateTime) {
+        return dateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+    }
+
+    public boolean isAfter(long checked, long toCheck) {
+        ZonedDateTime checkedTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(checked), ZoneId.of("UTC"));
+        ZonedDateTime toCheckTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(toCheck), ZoneId.of("UTC"));
+        return checkedTime.isAfter(toCheckTime);
     }
 
     public void getDate(AppCompatActivity activity, Object datetime, long initValue, boolean isHint, onDateTimeSet onDateTimeSet) {

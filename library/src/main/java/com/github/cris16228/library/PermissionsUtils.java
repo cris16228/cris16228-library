@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -13,14 +15,28 @@ import java.util.List;
 
 public class PermissionsUtils {
 
-    private Context context;
+    private final Context context;
     private Activity activity;
 
+    public PermissionsUtils(Context context) {
+        this.context = context;
+    }
+
     public static PermissionsUtils get(Context context, Activity activity) {
-        PermissionsUtils permissionsUtils = new PermissionsUtils();
-        permissionsUtils.context = context;
+        PermissionsUtils permissionsUtils = new PermissionsUtils(context);
+
         permissionsUtils.activity = activity;
         return permissionsUtils;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public boolean checkNotificationsPermission() {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public boolean checkSetExactAlarmPermission() {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED;
     }
 
     public void checkPermission(String permission, int requestCode, permissionResult permissionResult) {
