@@ -44,33 +44,6 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         uploadCrash.onExecuteListener(new AsyncUtils.onExecuteListener() {
             @Override
             public void preExecute() {
-
-            }
-
-            @Override
-            public void doInBackground() {
-                String crashPath = FileUtils.with(app).getPersonalSpace(app) + "/crash-reports/";
-                if (FileUtils.with(app).getNewestFile(crashPath) != null) {
-                    if (NetworkUtils.with(app).isConnectedTo(app)) {
-                        File crashFile = FileUtils.with(app).getNewestFile(crashPath);
-                        HttpUtils httpUtils = HttpUtils.get();
-                        HashMap<String, String> params = new HashMap<>();
-                        params.put("app", app.getPackageName());
-                        params.put("action", "crash");
-                        if (!StringUtils.isEmpty(bearer)) {
-                            String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath()), bearer));
-                            Log.d("Response", result);
-                        } else {
-                            String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath())));
-                            Log.d("Response", result);
-                        }
-                        latch.countDown();
-                    }
-                }
-            }
-
-            @Override
-            public void postDelayed() {
                 StackTraceElement[] arr = e.getStackTrace();
                 StringBuilder report = new StringBuilder();
                 report.append("\n");
@@ -98,7 +71,32 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
                 String dateTime = new SimpleDateFormat("dd-MM-yyyy_hh.mm.ss", Locale.getDefault()).format(new Date());
                 String fileName = "/crash-reports/crash_" + dateTime + ".log";
                 FileUtils.with(app).debugLog(report.toString(), fileName);
+            }
 
+            @Override
+            public void doInBackground() {
+                String crashPath = FileUtils.with(app).getPersonalSpace(app) + "/crash-reports/";
+                if (FileUtils.with(app).getNewestFile(crashPath) != null) {
+                    if (NetworkUtils.with(app).isConnectedTo(app)) {
+                        File crashFile = FileUtils.with(app).getNewestFile(crashPath);
+                        HttpUtils httpUtils = HttpUtils.get();
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("app", app.getPackageName());
+                        params.put("action", "crash");
+                        if (!StringUtils.isEmpty(bearer)) {
+                            String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath()), bearer));
+                            Log.d("Response", result);
+                        } else {
+                            String result = String.valueOf(httpUtils.uploadFile("https://analytics.cris16228.com/upload.php", params, httpUtils.defaultFileParams(crashFile.getAbsolutePath())));
+                            Log.d("Response", result);
+                        }
+                        latch.countDown();
+                    }
+                }
+            }
+
+            @Override
+            public void postDelayed() {
             }
         });
         uploadCrash.execute();
