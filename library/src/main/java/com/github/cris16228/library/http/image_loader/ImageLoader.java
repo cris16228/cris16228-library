@@ -32,11 +32,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ImageLoader {
 
@@ -49,6 +51,7 @@ public class ImageLoader {
     private Context context;
     private boolean asBitmap = false;
     private Handler handler;
+    private final Map<Uri, Future<?>> loadingTasks = new HashMap<>();
 
     public static ImageLoader with(Context context, String path) {
         ImageLoader loader = new ImageLoader();
@@ -202,13 +205,14 @@ public class ImageLoader {
     }
 
     public void loadVideoThumbnail(Uri videoUri, ImageView imageView, LoadImage loadImage) {
+        cancelLoadingTask(videoUri);
         try {
             imageView.setImageBitmap(null);
             imageView.setImageDrawable(null);
         } catch (Exception e) {
             Log.d("loadVideoThumbnail", e.toString());
         }
-        executor.submit(() -> {
+        Future<?> loadingTask = executor.submit(() -> {
             File file = fileCache.getFile(videoUri.getPath());
             Bitmap thumbnail = fileUtils.decodeFile(file);
 
@@ -230,6 +234,22 @@ public class ImageLoader {
                 }
             });
         });
+        loadingTasks.put(videoUri, loadingTask);
+    }
+
+    public void cancelAllLoadingTasks() {
+        for (Future<?> loadingTask : loadingTasks.values()) {
+            loadingTask.cancel(true);
+        }
+        loadingTasks.clear();
+    }
+
+    private void cancelLoadingTask(Uri videoUri) {
+        Future<?> loadingTask = loadingTasks.get(videoUri);
+        if (loadingTask != null) {
+            loadingTask.cancel(true);
+            loadingTasks.remove(videoUri);
+        }
     }
 
     private Bitmap getVideoThumbnail(Uri videoUri) {
