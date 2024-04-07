@@ -232,6 +232,7 @@ public class ImageLoader {
             Log.d("loadVideoThumbnail", e.toString());
         }
         File file = fileCache.getFile(videoUri.getPath());
+        Log.d("paths", videoUri.getPath() + " - " + file.getPath());
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null) {
             imageView.setImageBitmap(_image);
