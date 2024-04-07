@@ -201,21 +201,17 @@ public class ImageLoader {
     }
 
     public void loadVideoThumbnail(Uri videoUri, ImageView imageView, LoadImage loadImage) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
         File file = fileCache.getFile(videoUri.getPath());
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null) {
-            queuePhoto(videoUri.getPath(), imageView, loadImage);
+            imageView.setImageBitmap(_image);
+            imageView.invalidate();
+
         } else {
-            Bitmap thumbnail = getVideoThumbnail(videoUri);
-            if (thumbnail != null) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageView.setImageBitmap(thumbnail);
-                    }
-                });
-                imageViews.put(imageView, videoUri.getPath());
-            }
+            queuePhoto(videoUri.getPath(), imageView, loadImage);
+            imageViews.put(imageView, videoUri.getPath());
         }
     }
 
