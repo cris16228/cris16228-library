@@ -210,29 +210,6 @@ public class ImageLoader {
             Log.d("loadVideoThumbnail", e.toString());
         }
         File file = fileCache.getFile(videoUri.getPath());
-        Bitmap _image = fileUtils.decodeFile(file);
-        if (_image != null) {
-            queuePhoto(videoUri.getPath(), imageView, loadImage);
-        } else {
-            Bitmap thumbnail = getVideoThumbnail(videoUri);
-            if (thumbnail != null) {
-                handler.post(() -> {
-                    imageView.setImageBitmap(thumbnail);
-                    imageView.invalidate();
-                });
-                imageViews.put(imageView, videoUri.getPath());
-            }
-        }
-    }
-
-    public void loadVideoThumbnailV1(Uri videoUri, ImageView imageView, LoadImage loadImage) {
-        try {
-            imageView.setImageBitmap(null);
-            imageView.setImageDrawable(null);
-        } catch (Exception e) {
-            Log.d("loadVideoThumbnail", e.toString());
-        }
-        File file = fileCache.getFile(videoUri.getPath());
         AtomicReference<Bitmap> thumbnail = new AtomicReference<>(fileUtils.decodeFile(file));
         if (thumbnail.get() != null) {
             Bitmap finalThumbnail = thumbnail.get();
