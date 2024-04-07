@@ -194,16 +194,23 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
     }
 
-    public void loadVideoThumbnail(Context context, Uri videoUri, ImageView imageView) {
-        Bitmap thumbnail = getVideoThumbnail(context, videoUri);
-        if (thumbnail != null) {
-            imageView.setImageBitmap(thumbnail);
+    public void loadVideoThumbnail(Uri videoUri, ImageView imageView) {
+        imageView.setImageBitmap(null);
+        imageView.setImageDrawable(null);
+        File file = fileCache.getFile(videoUri.getPath());
+        Bitmap _image = fileUtils.decodeFile(file);
+        if (_image != null) {
+            imageView.setImageBitmap(_image);
+            imageViews.put(imageView, videoUri.getPath());
         } else {
-            // Handle failure, e.g., set a placeholder image
+            Bitmap thumbnail = getVideoThumbnail(videoUri);
+            if (thumbnail != null) {
+                imageView.setImageBitmap(thumbnail);
+            }
         }
     }
 
-    private Bitmap getVideoThumbnail(Context context, Uri videoUri) {
+    private Bitmap getVideoThumbnail(Uri videoUri) {
         Bitmap thumbnail = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
@@ -214,6 +221,7 @@ public class ImageLoader {
         } finally {
             try {
                 retriever.release();
+                retriever.close();
             } catch (RuntimeException | IOException e) {
                 e.printStackTrace();
             }
