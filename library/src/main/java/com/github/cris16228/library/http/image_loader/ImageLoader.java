@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ImageLoader {
 
@@ -232,18 +233,21 @@ public class ImageLoader {
             Log.d("loadVideoThumbnail", e.toString());
         }
         File file = fileCache.getFile(videoUri.getPath());
-        Bitmap thumbnail = fileUtils.decodeFile(file);
-        Log.d("paths", videoUri.getPath() + " - " + file.getPath());
-        Log.d("_image", (thumbnail == null) + " - ");
-        if (thumbnail != null) {
-            imageView.setImageBitmap(thumbnail);
-            imageView.postInvalidate();
+        AtomicReference<Bitmap> thumbnail = new AtomicReference<>(fileUtils.decodeFile(file));
+        if (thumbnail.get() != null) {
+            Bitmap finalThumbnail = thumbnail.get();
+            handler.post(() -> {
+                imageView.setImageBitmap(finalThumbnail);
+                imageView.postInvalidate();
+            });
         } else {
-            thumbnail = getVideoThumbnail(videoUri);
-            imageView.setImageBitmap(thumbnail);
-            imageView.postInvalidate();
-            imageViews.put(imageView, videoUri.getPath());
-            memoryCache.put(videoUri.getPath(), thumbnail);
+            handler.post(() -> {
+                thumbnail.set(getVideoThumbnail(videoUri));
+                imageView.setImageBitmap(thumbnail.get());
+                imageView.postInvalidate();
+                imageViews.put(imageView, videoUri.getPath());
+                memoryCache.put(videoUri.getPath(), thumbnail.get());
+            });
         }
     }
 
