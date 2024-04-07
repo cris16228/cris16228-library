@@ -238,16 +238,17 @@ public class ImageLoader {
             Bitmap finalThumbnail = thumbnail.get();
             handler.post(() -> {
                 imageView.setImageBitmap(finalThumbnail);
-                imageView.postInvalidate();
+//                imageView.postInvalidate();
             });
         } else {
             handler.post(() -> {
                 thumbnail.set(getVideoThumbnail(videoUri));
                 imageView.setImageBitmap(thumbnail.get());
-                imageView.postInvalidate();
+//                imageView.postInvalidate();
+            });
                 imageViews.put(imageView, videoUri.getPath());
                 memoryCache.put(videoUri.getPath(), thumbnail.get());
-            });
+
         }
     }
 
