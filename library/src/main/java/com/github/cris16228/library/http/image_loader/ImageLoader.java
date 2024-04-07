@@ -3,6 +3,8 @@ package com.github.cris16228.library.http.image_loader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
@@ -190,6 +192,33 @@ public class ImageLoader {
     private void queuePhoto(String url, LoadImage loadImage, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
         PhotoToLoad photoToLoad = new PhotoToLoad(url);
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
+    }
+
+    public void loadVideoThumbnail(Context context, Uri videoUri, ImageView imageView) {
+        Bitmap thumbnail = getVideoThumbnail(context, videoUri);
+        if (thumbnail != null) {
+            imageView.setImageBitmap(thumbnail);
+        } else {
+            // Handle failure, e.g., set a placeholder image
+        }
+    }
+
+    private Bitmap getVideoThumbnail(Context context, Uri videoUri) {
+        Bitmap thumbnail = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(context, videoUri);
+            thumbnail = retriever.getFrameAtIndex(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return thumbnail;
     }
 
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {

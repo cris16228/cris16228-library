@@ -24,6 +24,7 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DateTimeUtils {
@@ -312,6 +313,23 @@ public class DateTimeUtils {
         dateTime.append(new SimpleDateFormat(DEFAULT_FORMAT_DATE, Locale.getDefault()).format(new Date(getDate())));
         dateTime.append(timePicker(timePicker));
         return dateTime.toString();
+    }
+
+    public String videoTimeConvert(String millis) {
+        if (StringUtils.isEmpty(millis)) {
+            return String.format("%02d:%02d", 0, 0);
+        } else {
+            long value = Long.parseLong(millis);
+            long hours = TimeUnit.MILLISECONDS.toHours(value);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(value) % 60;
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(value) % 60;
+
+            if (hours > 0) {
+                return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            } else {
+                return String.format("%02d:%02d", minutes, seconds);
+            }
+        }
     }
 
     public long getMilliseconds(String date) {
