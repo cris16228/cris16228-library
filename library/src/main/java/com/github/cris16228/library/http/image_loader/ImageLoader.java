@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.DrawableRes;
@@ -205,7 +206,7 @@ public class ImageLoader {
             imageView.setImageBitmap(null);
             imageView.setImageDrawable(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("loadVideoThumbnail", e.toString());
         }
         File file = fileCache.getFile(videoUri.getPath());
         Bitmap _image = fileUtils.decodeFile(file);
