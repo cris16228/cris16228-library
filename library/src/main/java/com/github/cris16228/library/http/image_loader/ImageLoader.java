@@ -207,11 +207,11 @@ public class ImageLoader {
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null) {
             queuePhoto(videoUri.getPath(), imageView, loadImage);
-            imageViews.put(imageView, videoUri.getPath());
         } else {
             Bitmap thumbnail = getVideoThumbnail(videoUri);
             if (thumbnail != null) {
                 imageView.setImageBitmap(thumbnail);
+                imageViews.put(imageView, videoUri.getPath());
             }
         }
     }
