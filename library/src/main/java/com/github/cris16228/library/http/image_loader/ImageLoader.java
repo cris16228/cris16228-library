@@ -359,7 +359,7 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             Displacer displacer;
-            if (urls != null && urls.size() > 0) {
+            if (urls != null && !urls.isEmpty()) {
                 displacer = new Displacer(urls, bitmap, photoToLoad, loadImage, connectionErrors);
             } else {
                 displacer = new Displacer(bitmap, photoToLoad, loadImage);
@@ -402,7 +402,7 @@ public class ImageLoader {
                     if (photoToLoad.imageView != null) {
                         photoToLoad.imageView.setImageBitmap(bitmap);
                         photoToLoad.imageView.invalidate();
-                        if (urls != null && urls.size() > 0) {
+                        if (urls != null && !urls.isEmpty()) {
                             load(urls, photoToLoad.imageView, loadImage, connectionErrors);
                         }
                     }
