@@ -201,8 +201,12 @@ public class ImageLoader {
     }
 
     public void loadVideoThumbnail(Uri videoUri, ImageView imageView, LoadImage loadImage) {
-        imageView.setImageBitmap(null);
-        imageView.setImageDrawable(null);
+        try {
+            imageView.setImageBitmap(null);
+            imageView.setImageDrawable(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         File file = fileCache.getFile(videoUri.getPath());
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null) {
