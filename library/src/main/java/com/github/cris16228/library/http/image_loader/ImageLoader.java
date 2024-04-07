@@ -231,19 +231,19 @@ public class ImageLoader {
         } catch (Exception e) {
             Log.d("loadVideoThumbnail", e.toString());
         }
-        String videoId = videoUri.getLastPathSegment();
-
-        // Fetch thumbnail from the cache using the video ID
-        File file = fileCache.getFile(videoId);
+        File file = fileCache.getFile(videoUri.getPath());
         Bitmap thumbnail = fileUtils.decodeFile(file);
-        Log.d("paths", videoUri.getPath() + " - " + file.getPath() + " - " + videoId);
+        Log.d("paths", videoUri.getPath() + " - " + file.getPath());
         Log.d("_image", (thumbnail == null) + " - ");
         if (thumbnail != null) {
             imageView.setImageBitmap(thumbnail);
             imageView.postInvalidate();
         } else {
-            queuePhoto(videoUri.getPath(), imageView, loadImage);
-            imageViews.put(imageView, videoId);
+            thumbnail = getVideoThumbnail(videoUri);
+            imageView.setImageBitmap(thumbnail);
+            imageView.postInvalidate();
+            imageViews.put(imageView, videoUri.getPath());
+            memoryCache.put(videoUri.getPath(), thumbnail);
         }
     }
 
@@ -359,11 +359,11 @@ public class ImageLoader {
         DownloadProgress downloadProgress;
 
 
-        PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors, DownloadProgress downloadProgress) {
+        PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors, DownloadProgress _downloadProgress) {
             photoToLoad = _photoToLoad;
             loadImage = _loadImage;
             connectionErrors = _connectionErrors;
-            this.downloadProgress = downloadProgress;
+            downloadProgress = _downloadProgress;
         }
 
         PhotoLoader(List<Object> _urls, PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors) {
