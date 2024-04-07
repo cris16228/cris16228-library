@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ImageLoader {
 
@@ -209,24 +208,28 @@ public class ImageLoader {
         } catch (Exception e) {
             Log.d("loadVideoThumbnail", e.toString());
         }
-        File file = fileCache.getFile(videoUri.getPath());
-        AtomicReference<Bitmap> thumbnail = new AtomicReference<>(fileUtils.decodeFile(file));
-        if (thumbnail.get() != null) {
-            Bitmap finalThumbnail = thumbnail.get();
-            handler.post(() -> {
-                imageView.setImageBitmap(finalThumbnail);
-//                imageView.postInvalidate();
-            });
-        } else {
-            handler.post(() -> {
-                thumbnail.set(getVideoThumbnail(videoUri));
-                imageView.setImageBitmap(thumbnail.get());
-//                imageView.postInvalidate();
-            });
-                imageViews.put(imageView, videoUri.getPath());
-                memoryCache.put(videoUri.getPath(), thumbnail.get());
+        executor.submit(() -> {
+            File file = fileCache.getFile(videoUri.getPath());
+            Bitmap thumbnail = fileUtils.decodeFile(file);
 
-        }
+            if (thumbnail == null) {
+                thumbnail = getVideoThumbnail(videoUri);
+                if (thumbnail != null) {
+                    // Cache the thumbnail
+                    memoryCache.put(videoUri.getPath(), thumbnail);
+                }
+            }
+
+            // Update the UI on the main UI thread
+            Bitmap finalThumbnail = thumbnail;
+            handler.post(() -> {
+                if (finalThumbnail != null) {
+                    imageView.setImageBitmap(finalThumbnail);
+                } else {
+                    // Handle failure, e.g., set a placeholder image
+                }
+            });
+        });
     }
 
     private Bitmap getVideoThumbnail(Uri videoUri) {
