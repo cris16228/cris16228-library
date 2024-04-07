@@ -210,7 +210,12 @@ public class ImageLoader {
         } else {
             Bitmap thumbnail = getVideoThumbnail(videoUri);
             if (thumbnail != null) {
-                imageView.setImageBitmap(thumbnail);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(thumbnail);
+                    }
+                });
                 imageViews.put(imageView, videoUri.getPath());
             }
         }
