@@ -212,7 +212,6 @@ public class ImageLoader {
         if (_image != null) {
             imageView.setImageBitmap(_image);
             imageView.invalidate();
-
         } else {
             queuePhoto(videoUri.getPath(), imageView, loadImage);
             imageViews.put(imageView, videoUri.getPath());
