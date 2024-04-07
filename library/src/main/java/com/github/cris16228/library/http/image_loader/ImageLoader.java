@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
@@ -179,6 +180,11 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
     }
 
+    public void queuePhoto(String path, ImageView imageView, LoadImage loadImage) {
+        PhotoToLoad photoToLoad = new PhotoToLoad(path, imageView);
+        executor.submit(new PhotoLoader(photoToLoad, loadImage, null, null));
+    }
+
     public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
         PhotoToLoad photoToLoad = new PhotoToLoad(bytes, imageView);
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
@@ -194,13 +200,13 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
     }
 
-    public void loadVideoThumbnail(Uri videoUri, ImageView imageView) {
+    public void loadVideoThumbnail(Uri videoUri, ImageView imageView, LoadImage loadImage) {
         imageView.setImageBitmap(null);
         imageView.setImageDrawable(null);
         File file = fileCache.getFile(videoUri.getPath());
         Bitmap _image = fileUtils.decodeFile(file);
         if (_image != null) {
-            imageView.setImageBitmap(_image);
+            queuePhoto(videoUri.getPath(), imageView, loadImage);
             imageViews.put(imageView, videoUri.getPath());
         } else {
             Bitmap thumbnail = getVideoThumbnail(videoUri);
@@ -221,7 +227,9 @@ public class ImageLoader {
         } finally {
             try {
                 retriever.release();
-                retriever.close();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    retriever.close();
+                }
             } catch (RuntimeException | IOException e) {
                 e.printStackTrace();
             }
