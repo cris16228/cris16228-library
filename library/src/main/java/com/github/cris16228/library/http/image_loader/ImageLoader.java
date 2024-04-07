@@ -231,16 +231,19 @@ public class ImageLoader {
         } catch (Exception e) {
             Log.d("loadVideoThumbnail", e.toString());
         }
-        File file = fileCache.getFile(videoUri.getPath());
-        Log.d("paths", videoUri.getPath() + " - " + file.getPath());
-        Bitmap _image = fileUtils.decodeFile(file);
-        Log.d("_image", (_image == null) + " - ");
-        if (_image != null) {
-            imageView.setImageBitmap(_image);
+        String videoId = videoUri.getLastPathSegment();
+
+        // Fetch thumbnail from the cache using the video ID
+        File file = fileCache.getFile(videoId);
+        Bitmap thumbnail = fileUtils.decodeFile(file);
+        Log.d("paths", videoUri.getPath() + " - " + file.getPath() + " - " + videoId);
+        Log.d("_image", (thumbnail == null) + " - ");
+        if (thumbnail != null) {
+            imageView.setImageBitmap(thumbnail);
             imageView.postInvalidate();
         } else {
             queuePhoto(videoUri.getPath(), imageView, loadImage);
-            imageViews.put(imageView, videoUri.getPath());
+            imageViews.put(imageView, videoId);
         }
     }
 
