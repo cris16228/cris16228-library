@@ -21,13 +21,11 @@ public class AboutFragment extends Fragment {
     private ImageView aboutImage;
     private TextView aboutAppTitle, aboutAppDescription, aboutAppVersion;
     private final @StringRes int appDescription;
-    private final String appVersion;
     private final @DrawableRes int appImage;
 
-    public AboutFragment(PackageInfo packageInfo, int appDescription, String appVersion, int appImage) {
+    public AboutFragment(PackageInfo packageInfo, int appDescription, int appImage) {
         this.packageInfo = packageInfo;
         this.appDescription = appDescription;
-        this.appVersion = appVersion;
         this.appImage = appImage;
     }
 
