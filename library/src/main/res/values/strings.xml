@@ -148,4 +148,7 @@
     <string name="finish">Finish</string>
     <string name="press_back_twice">Press back again to close the app</string>
     <string name="image_download_progress">%s%%</string>
+    <string name="hints_bug_suggestion_title">Give the %s a title…</string>
+    <string name="hints_bug_suggestion_body">Describe the %s shortly…</string>
+    <string name="about_version" translatable="false">%s (%s)</string>
 </resources>

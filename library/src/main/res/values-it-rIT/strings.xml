@@ -48,4 +48,6 @@
     <string name="use_fingerprint_summary">Protegge l\'app con l\'impronta</string>
     <string name="security_header">Sicurezza app</string>
     <string name="fingerprint_title">Autenticati con l\'impronta</string>
+    <string name="hints_bug_suggestion_title">Dai un titolo…</string>
+    <string name="hints_bug_suggestion_body">Descrivi brevemente…</string>
 </resources>
