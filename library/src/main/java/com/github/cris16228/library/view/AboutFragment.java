@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
@@ -21,11 +22,13 @@ public class AboutFragment extends Fragment {
     private TextView aboutAppTitle, aboutAppDescription, aboutAppVersion;
     private final @StringRes int appDescription;
     private final String appVersion;
+    private final @DrawableRes int appImage;
 
-    public AboutFragment(PackageInfo packageInfo, int appDescription, String appVersion) {
+    public AboutFragment(PackageInfo packageInfo, int appDescription, String appVersion, int appImage) {
         this.packageInfo = packageInfo;
         this.appDescription = appDescription;
         this.appVersion = appVersion;
+        this.appImage = appImage;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class AboutFragment extends Fragment {
         aboutAppTitle = view.findViewById(R.id.aboutAppTitle);
         aboutAppDescription = view.findViewById(R.id.aboutAppDescription);
         aboutAppVersion = view.findViewById(R.id.aboutAppVersion);
+        aboutImage.setImageResource(appImage);
         aboutAppTitle.setText(PackageUtils.with(requireContext()).getAppName(packageInfo.packageName));
         aboutAppDescription.setText(appDescription);
         aboutAppVersion.setText(requireContext().getResources().getString(R.string.about_version, packageInfo.versionName, String.valueOf(packageInfo.getLongVersionCode())));
