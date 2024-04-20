@@ -22,6 +22,8 @@ import com.github.cris16228.library.QueueUtils;
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
 import com.github.cris16228.library.http.image_loader.interfaces.LoadImage;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,6 +32,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -186,7 +189,7 @@ public class ImageLoader {
 
     public void queuePhoto(String path, ImageView imageView, LoadImage loadImage) {
         PhotoToLoad photoToLoad = new PhotoToLoad(path, imageView);
-        executor.submit(new PhotoLoader(photoToLoad, loadImage, null, null));
+        executor.submit(new PhotoLoader(photoToLoad, loadImage, true));
     }
 
     public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
@@ -214,25 +217,14 @@ public class ImageLoader {
         }
         Future<?> loadingTask = executor.submit(() -> {
             File file = fileCache.getFile(videoUri.getPath());
-            Bitmap thumbnail = fileUtils.decodeFile(file);
 
-            if (thumbnail == null) {
-                thumbnail = getVideoThumbnail(videoUri);
-                if (thumbnail != null) {
-                    // Cache the thumbnail
-                    memoryCache.put(videoUri.getPath(), thumbnail);
-                }
+            Bitmap thumbnail = memoryCache.get(videoUri.getPath());
+            if (thumbnail != null) {
+                handler.post(() -> imageView.setImageBitmap(thumbnail));
+            } else {
+                imageViews.put(imageView, videoUri.getPath());
+                queuePhoto(videoUri.getPath(), imageView, loadImage);
             }
-
-            // Update the UI on the main UI thread
-            Bitmap finalThumbnail = thumbnail;
-            handler.post(() -> {
-                if (finalThumbnail != null) {
-                    imageView.setImageBitmap(finalThumbnail);
-                } else {
-                    // Handle failure, e.g., set a placeholder image
-                }
-            });
         });
         loadingTasks.put(videoUri, loadingTask);
     }
@@ -252,12 +244,30 @@ public class ImageLoader {
         }
     }
 
+    private InputStream bitmapToInputStream(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        byte[] bitmapArray = outputStream.toByteArray();
+        return new ByteArrayInputStream(bitmapArray);
+    }
+
     private Bitmap getVideoThumbnail(Uri videoUri) {
-        Bitmap thumbnail = null;
+        File file = fileCache.getFile(videoUri.getPath());
+        Bitmap thumbnail;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             retriever.setDataSource(context, videoUri);
+
+            Bitmap _image = fileUtils.decodeFile(file);
+            if (_image != null)
+                return _image;
             thumbnail = retriever.getFrameAtIndex(0);
+            assert thumbnail != null;
+            InputStream is = bitmapToInputStream(thumbnail);
+            OutputStream os = Files.newOutputStream(file.toPath());
+            fileUtils.copyStream(is, os, is.available());
+            is.close();
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -270,7 +280,7 @@ public class ImageLoader {
                 e.printStackTrace();
             }
         }
-        return thumbnail;
+        return fileUtils.decodeFile(file);
     }
 
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
@@ -362,6 +372,8 @@ public class ImageLoader {
         LoadImage loadImage;
         ConnectionErrors connectionErrors;
         DownloadProgress downloadProgress;
+        private Bitmap bitmap;
+        private boolean local;
 
 
         PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors, DownloadProgress _downloadProgress) {
@@ -369,6 +381,13 @@ public class ImageLoader {
             loadImage = _loadImage;
             connectionErrors = _connectionErrors;
             downloadProgress = _downloadProgress;
+        }
+
+        PhotoLoader(PhotoToLoad _photoToLoad, LoadImage _loadImage, boolean _local) {
+            photoToLoad = _photoToLoad;
+            loadImage = _loadImage;
+            local = _local;
+            bitmap = getVideoThumbnail(Uri.parse(_photoToLoad.url));
         }
 
         PhotoLoader(List<Object> _urls, PhotoToLoad _photoToLoad, LoadImage _loadImage, ConnectionErrors _connectionErrors) {
@@ -380,17 +399,21 @@ public class ImageLoader {
 
         @Override
         public void run() {
-            if (imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad)) {
                 return;
-            Bitmap bitmap;
+            }
             if (asBitmap) {
                 bitmap = getBitmap(photoToLoad.bytes);
                 Base64Utils.Base64Encoder encoder = new Base64Utils.Base64Encoder();
                 String bytes = encoder.encrypt(Arrays.toString(photoToLoad.bytes), Base64.NO_WRAP, null);
                 memoryCache.put(bytes, bitmap);
             } else {
-                bitmap = getBitmap(photoToLoad.url, connectionErrors, downloadProgress);
-                memoryCache.put(photoToLoad.url, bitmap);
+                if (local) {
+                    memoryCache.put(photoToLoad.url, bitmap);
+                } else {
+                    bitmap = getBitmap(photoToLoad.url, connectionErrors, downloadProgress);
+                    memoryCache.put(photoToLoad.url, bitmap);
+                }
             }
             if (imageViewReused(photoToLoad))
                 return;
