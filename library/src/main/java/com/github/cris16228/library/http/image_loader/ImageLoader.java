@@ -251,7 +251,7 @@ public class ImageLoader {
         return new ByteArrayInputStream(bitmapArray);
     }
 
-    private Bitmap getVideoThumbnail(Uri videoUri) {
+    public Bitmap getVideoThumbnail(Uri videoUri) {
         File file = fileCache.getFile(videoUri.getPath());
         Bitmap thumbnail;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
