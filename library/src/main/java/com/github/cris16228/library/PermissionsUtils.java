@@ -55,7 +55,7 @@ public class PermissionsUtils {
     }
 
     public void checkPermission(List<String> permissions, int requestCode) {
-        if (permissions.size() > 0) {
+        if (!permissions.isEmpty()) {
             String permission = permissions.get(0);
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);

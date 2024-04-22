@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -251,6 +252,10 @@ public class ImageLoader {
         return new ByteArrayInputStream(bitmapArray);
     }
 
+    public Bitmap getVideoThumbnail(Uri videoUri, boolean randomFrames) {
+        return getVideoThumbnail(videoUri);
+    }
+
     public Bitmap getVideoThumbnail(Uri videoUri) {
         File file = fileCache.getFile(videoUri.getPath());
         Bitmap thumbnail;
@@ -261,7 +266,7 @@ public class ImageLoader {
             Bitmap _image = fileUtils.decodeFile(file);
             if (_image != null)
                 return _image;
-            thumbnail = retriever.getFrameAtIndex(0);
+            thumbnail = retriever.getFrameAtIndex(new Random().nextInt(15000) + 5000);
             assert thumbnail != null;
             InputStream is = bitmapToInputStream(thumbnail);
             OutputStream os = Files.newOutputStream(file.toPath());
