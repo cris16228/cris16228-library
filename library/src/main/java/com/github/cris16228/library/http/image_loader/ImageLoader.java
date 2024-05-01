@@ -268,9 +268,7 @@ public class ImageLoader {
             Bitmap _image = fileUtils.decodeFile(file);
             if (_image != null)
                 return _image;
-            long microSecondsPerSecond = 5000000;
-            long randomTimeMicroseconds = (long) (new Random().nextInt(10000) + 5000) * microSecondsPerSecond;
-            Log.i("randomTimeMicroseconds", "" + randomTimeMicroseconds);
+            long randomTimeMicroseconds = (long) (new Random().nextInt(10000) + 5000) * 1000;
             thumbnail = retriever.getFrameAtTime(5000000);
             assert thumbnail != null;
             InputStream is = bitmapToInputStream(thumbnail);

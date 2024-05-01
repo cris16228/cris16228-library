@@ -1,16 +1,21 @@
 package com.github.cris16228.library;
 
+import android.app.RecoverableSecurityException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
 
 import com.github.cris16228.library.http.image_loader.ImageLoader;
 import com.github.cris16228.library.http.image_loader.interfaces.ConnectionErrors;
@@ -226,6 +231,24 @@ public class FileUtils {
             os.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void deleteVideo(Uri uri, ActivityResultLauncher<IntentSenderRequest> deleteResultLauncher) {
+        ContentResolver contentResolver = context.getContentResolver();
+        try {
+            contentResolver.delete(uri, null, null);
+        } catch (SecurityException securityException) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                RecoverableSecurityException recoverableSecurityException = (RecoverableSecurityException) securityException;
+                IntentSenderRequest senderRequest = new IntentSenderRequest.Builder(recoverableSecurityException.getUserAction()
+                        .getActionIntent().getIntentSender()).build();
+                deleteResultLauncher.launch(senderRequest);
+            } else {
+                File file = new File(uri.getPath());
+                if (file.exists())
+                    file.delete();
+            }
         }
     }
 
