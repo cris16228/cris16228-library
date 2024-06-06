@@ -288,6 +288,43 @@ public class ImageLoader {
         return fileUtils.decodeFile(file);
     }
 
+    public Bitmap getFileThumbnail(Uri uri) {
+        File file = fileCache.getFile(uri.getPath());
+        Bitmap thumbnail;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+
+        try {
+            Bitmap _image = fileUtils.decodeFile(file);
+            if (_image != null)
+                return _image;
+            inputStream = context.getContentResolver().openInputStream(uri);
+            if (inputStream != null) {
+                thumbnail = BitmapFactory.decodeStream(inputStream);
+                InputStream is = bitmapToInputStream(thumbnail);
+                outputStream = Files.newOutputStream(file.toPath());
+                fileUtils.copyStream(is, outputStream, is.available());
+                is.close();
+                outputStream.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return fileUtils.decodeFile(file);
+    }
+
     private Bitmap getBitmap(String url, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
         File file = fileCache.getFile(url);
         Bitmap _image = fileUtils.decodeFile(file);
