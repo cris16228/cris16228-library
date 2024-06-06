@@ -45,11 +45,6 @@ import java.util.concurrent.Future;
 
 public class ImageLoader {
 
-    public void queuePhoto(String path, ImageView imageView, LoadImage loadImage, FileType fileType) {
-        PhotoToLoad photoToLoad = new PhotoToLoad(path, imageView);
-        executor.submit(new PhotoLoader(photoToLoad, loadImage, true, fileType));
-    }
-
     private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<>());
     private static final int THREAD_POOL_SIZE = 3;
     private MemoryCache memoryCache;
@@ -192,28 +187,6 @@ public class ImageLoader {
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
     }
 
-    public void loadFileThumbnail(Uri uri, ImageView imageView, LoadImage loadImage, FileType fileType) {
-        cancelLoadingTask(uri);
-        try {
-            imageView.setImageBitmap(null);
-            imageView.setImageDrawable(null);
-        } catch (Exception e) {
-            Log.d("loadFileThumbnail", e.toString());
-        }
-        Future<?> loadingTask = executor.submit(() -> {
-            File file = fileCache.getFile(uri.getPath());
-
-            Bitmap thumbnail = memoryCache.get(uri.getPath());
-            if (thumbnail != null) {
-                handler.post(() -> imageView.setImageBitmap(thumbnail));
-            } else {
-                imageViews.put(imageView, uri.getPath());
-                queuePhoto(uri.getPath(), imageView, loadImage, fileType);
-            }
-        });
-        loadingTasks.put(uri, loadingTask);
-    }
-
     public void queuePhoto(byte[] bytes, ImageView imageView, LoadImage loadImage, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
         PhotoToLoad photoToLoad = new PhotoToLoad(bytes, imageView);
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
@@ -227,6 +200,11 @@ public class ImageLoader {
     private void queuePhoto(String url, LoadImage loadImage, ConnectionErrors connectionErrors, DownloadProgress downloadProgress) {
         PhotoToLoad photoToLoad = new PhotoToLoad(url);
         executor.submit(new PhotoLoader(photoToLoad, loadImage, connectionErrors, downloadProgress));
+    }
+
+    public void queuePhoto(String path, ImageView imageView, LoadImage loadImage, FileType fileType) {
+        PhotoToLoad photoToLoad = new PhotoToLoad(path, imageView);
+        executor.submit(new PhotoLoader(photoToLoad, loadImage, true, fileType));
     }
 
     private void cancelLoadingTask(Uri uri) {
@@ -244,9 +222,40 @@ public class ImageLoader {
         loadingTasks.clear();
     }
 
+    public void loadFileThumbnail(Uri uri, ImageView imageView, LoadImage loadImage, FileType fileType) {
+        cancelLoadingTask(uri);
+        try {
+            imageView.setImageBitmap(null);
+            imageView.setImageDrawable(null);
+        } catch (Exception e) {
+            Log.d("loadFileThumbnail", e.toString());
+        }
+
+        Future<?> loadingTask = executor.submit(() -> {
+            File file = fileCache.getFile(uri.getPath());
+            Bitmap thumbnail = memoryCache.get(uri.getPath());
+
+            if (thumbnail != null) {
+                Log.d("loadFileThumbnail", "Thumbnail found in memory cache for URI: " + uri);
+                handler.post(() -> imageView.setImageBitmap(thumbnail));
+            } else {
+                Log.d("loadFileThumbnail", "Thumbnail not found in memory cache for URI: " + uri);
+                imageViews.put(imageView, uri.getPath());
+                queuePhoto(uri.getPath(), imageView, loadImage, fileType);
+            }
+        });
+        loadingTasks.put(uri, loadingTask);
+    }
+
     public Bitmap getFileThumbnail(Uri uri, FileType fileType) {
         if (fileType == FileType.VIDEO)
             return getVideoThumbnail(uri);
+        if (fileType == FileType.IMAGE)
+            return getImageThumbnail(uri);
+        return null;
+    }
+
+    private Bitmap getImageThumbnail(Uri uri) {
         File file = fileCache.getFile(uri.getPath());
         Bitmap thumbnail;
         InputStream inputStream = null;
@@ -263,13 +272,18 @@ public class ImageLoader {
             }
             if (inputStream != null) {
                 thumbnail = BitmapFactory.decodeStream(inputStream);
-                InputStream is = bitmapToInputStream(thumbnail);
-                outputStream = Files.newOutputStream(file.toPath());
-                fileUtils.copyStream(is, outputStream, is.available());
-                is.close();
-                outputStream.close();
+                if (thumbnail != null) {
+                    InputStream is = bitmapToInputStream(thumbnail);
+                    outputStream = Files.newOutputStream(file.toPath());
+                    fileUtils.copyStream(is, outputStream, is.available());
+                    is.close();
+                    outputStream.close();
+                } else {
+                    Log.e("getFileThumbnail", "Failed to decode bitmap from input stream for URI: " + uri);
+                }
+            } else {
+                Log.e("getFileThumbnail", "Input stream is null for URI: " + uri);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -284,6 +298,8 @@ public class ImageLoader {
                 e.printStackTrace();
             }
         }
+
+        Log.d(getClass().getName(), "file is " + file.exists() + "\n" + file.length());
         return fileUtils.decodeFile(file);
     }
 
