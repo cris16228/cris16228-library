@@ -256,7 +256,7 @@ public class ImageLoader {
     }
 
     private Bitmap getImageThumbnail(Uri uri) {
-        File file = fileCache.getFile(uri.getPath());
+        File file = new File(uri.getPath());
         Bitmap thumbnail;
         InputStream inputStream = null;
         OutputStream outputStream = null;
