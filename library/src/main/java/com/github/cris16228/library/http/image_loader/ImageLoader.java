@@ -348,7 +348,7 @@ public class ImageLoader {
         matrix.postScale(scalePercent, scalePercent);
 
         // Recreate the new bitmap
-        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        return Bitmap.createBitmap(bitmap, 0, 0, targetWidth, targetHeight, matrix, true);
     }
 
 
