@@ -3,6 +3,7 @@ package com.github.cris16228.library.http.image_loader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Handler;
@@ -256,6 +257,10 @@ public class ImageLoader {
     }
 
     private Bitmap getImageThumbnail(Uri uri) {
+        return getImageThumbnail(uri, 25);
+    }
+
+    private Bitmap getImageThumbnail(Uri uri, float scalePercent) {
         File file = new File(uri.getPath());
         Bitmap thumbnail;
         InputStream inputStream = null;
@@ -282,13 +287,27 @@ public class ImageLoader {
                 return null;
             }
             if (inputStream != null) {
-                thumbnail = BitmapFactory.decodeStream(inputStream);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(inputStream, null, options);
+                int width = options.outWidth;
+                int height = options.outHeight;
+                int targetWidth = (int) (width * scalePercent);
+                int targetHeight = (int) (height * scalePercent);
+                // Calculate inSampleSize
+                options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
+                inputStream.close();
+                inputStream = context.getContentResolver().openInputStream(uri);
+                options.inJustDecodeBounds = false;
+                thumbnail = BitmapFactory.decodeStream(inputStream, null, options);
                 if (thumbnail != null) {
                     InputStream is = bitmapToInputStream(thumbnail);
                     outputStream = Files.newOutputStream(file.toPath());
                     fileUtils.copyStream(is, outputStream, is.available());
                     is.close();
                     outputStream.close();
+                    if (targetWidth < 100 && targetHeight < 100)
+                        return scaleBitmap(thumbnail, scalePercent);
                 } else {
                     Log.e("getFileThumbnail", "Failed to decode bitmap from input stream for URI: " + uri);
                 }
@@ -312,6 +331,45 @@ public class ImageLoader {
 
         Log.d(getClass().getName(), "file is " + file.exists() + "\n" + file.length());
         return fileUtils.decodeFile(file);
+    }
+
+    private Bitmap scaleBitmap(Bitmap bitmap, float scalePercent) {
+        if (bitmap == null) return null;
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        // Calculate the scaled width and height
+        int targetWidth = (int) (width * scalePercent);
+        int targetHeight = (int) (height * scalePercent);
+
+        // Create a matrix for the scaling and translate
+        Matrix matrix = new Matrix();
+        matrix.postScale(scalePercent, scalePercent);
+
+        // Recreate the new bitmap
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+    }
+
+
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     private InputStream bitmapToInputStream(Bitmap bitmap) {
