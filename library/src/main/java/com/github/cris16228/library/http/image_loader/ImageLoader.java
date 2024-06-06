@@ -271,12 +271,12 @@ public class ImageLoader {
                 inputStream = context.getContentResolver().openInputStream(uri);
             } else if ("file".equals(uri.getScheme()) || uri.getScheme() == null) {
                 // Handle both "file" scheme and URIs with no scheme (file paths)
-//                if (file.exists()) {
+                if (file.exists()) {
                     inputStream = Files.newInputStream(file.toPath());
-//                } else {
-//                    Log.e("getFileThumbnail", "File does not exist: " + uri.getPath());
-//                    return null;
-//                }
+                } else {
+                    Log.e("getFileThumbnail", "File does not exist: " + uri.getPath());
+                    return null;
+                }
             } else {
                 Log.e("getFileThumbnail", "Unsupported URI scheme: " + uri.getScheme());
                 return null;
