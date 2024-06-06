@@ -256,7 +256,11 @@ public class ImageLoader {
             Bitmap _image = fileUtils.decodeFile(file);
             if (_image != null)
                 return _image;
-            inputStream = context.getContentResolver().openInputStream(uri);
+            if ("content".equals(uri.getScheme())) {
+                inputStream = context.getContentResolver().openInputStream(uri);
+            } else if ("file".equals(uri.getScheme())) {
+                inputStream = Files.newInputStream(new File(uri.getPath()).toPath());
+            }
             if (inputStream != null) {
                 thumbnail = BitmapFactory.decodeStream(inputStream);
                 InputStream is = bitmapToInputStream(thumbnail);
@@ -289,13 +293,6 @@ public class ImageLoader {
         byte[] bitmapArray = outputStream.toByteArray();
         return new ByteArrayInputStream(bitmapArray);
     }
-
-//    public Bitmap getVideoThumbnail(Uri videoUri, boolean randomFrames) {
-//        return getVideoThumbnail(videoUri);
-//    }
-//    public Bitmap getVideoImage(Uri videoUri, boolean randomFrames) {
-//        return getVideoThumbnail(videoUri);
-//    }
 
     public Bitmap getVideoThumbnail(Uri videoUri) {
         File file = fileCache.getFile(videoUri.getPath());
