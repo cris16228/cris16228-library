@@ -265,6 +265,8 @@ public class ImageLoader {
             Bitmap _image = fileUtils.decodeFile(file);
             if (_image != null)
                 return _image;
+
+            Log.e("getFileThumbnail", "URI scheme: " + uri.getScheme());
             if ("content".equals(uri.getScheme())) {
                 inputStream = context.getContentResolver().openInputStream(uri);
             } else if ("file".equals(uri.getScheme())) {
