@@ -18,8 +18,8 @@
 
             <ImageView
                 android:id="@+id/lock"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center|center_horizontal"
                 android:src="@drawable/lock" />
 
@@ -31,7 +31,7 @@
                 android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/_17ssp" />
+                android:textSize="17sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,40 +43,40 @@
 
             <View
                 android:id="@+id/dot_1"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="38dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_background" />
 
             <View
                 android:id="@+id/dot_2"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_background" />
 
             <View
                 android:id="@+id/dot_3"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_background" />
 
             <View
                 android:id="@+id/dot_4"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/passcode_background" />
 
             <ImageView
                 android:id="@+id/btn_delete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/ic_cancel" />
         </LinearLayout>
@@ -84,13 +84,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="100dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="65dp"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="80dp"
@@ -116,7 +116,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_1"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -139,7 +139,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_2"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -162,7 +162,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_3"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -170,7 +170,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="65dp"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="80dp"
@@ -197,7 +197,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_4"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -220,7 +220,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_5"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -243,7 +243,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_6"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -251,7 +251,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="65dp"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="80dp"
@@ -278,7 +278,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_7"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -301,7 +301,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_8"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -324,7 +324,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_9"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -332,7 +332,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="65dp"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="80dp"
@@ -371,7 +371,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/number_0"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
 

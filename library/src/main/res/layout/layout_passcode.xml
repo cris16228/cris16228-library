@@ -17,8 +17,8 @@
 
             <ImageView
                 android:id="@+id/lock"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center|center_horizontal"
                 android:src="@drawable/lock" />
 
@@ -30,7 +30,7 @@
                 android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/_17ssp" />
+                android:textSize="17sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,12 +77,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="50dp"
                 android:weightSum="3">
 
                 <com.google.android.material.button.MaterialButton
@@ -93,7 +93,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_1"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -104,7 +104,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_2"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -115,14 +115,14 @@
                     android:background="@color/transparent"
                     android:text="@string/number_3"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="50dp"
                 android:weightSum="3">
 
                 <com.google.android.material.button.MaterialButton
@@ -133,7 +133,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_4"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -144,7 +144,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_5"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -155,14 +155,14 @@
                     android:background="@color/transparent"
                     android:text="@string/number_6"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="50dp"
                 android:weightSum="3">
 
                 <com.google.android.material.button.MaterialButton
@@ -173,7 +173,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_7"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -184,7 +184,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_8"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -195,13 +195,13 @@
                     android:background="@color/transparent"
                     android:text="@string/number_9"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="50dp"
                 android:weightSum="3">
 
                 <com.google.android.material.button.MaterialButton
@@ -220,7 +220,7 @@
                     android:background="@color/transparent"
                     android:text="@string/number_0"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -232,7 +232,7 @@
                     android:background="@color/transparent"
                     android:text="@string/clear"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
