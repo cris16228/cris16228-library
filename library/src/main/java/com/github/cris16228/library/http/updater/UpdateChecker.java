@@ -1,6 +1,5 @@
 package com.github.cris16228.library.http.updater;
 
-import android.Manifest;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,17 +12,10 @@ import com.github.cris16228.library.NetworkUtils;
 import com.github.cris16228.library.R;
 import com.github.cris16228.library.http.HttpUtils;
 import com.github.cris16228.library.http.json_model.Store;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -124,9 +116,8 @@ public class UpdateChecker {
                 System.out.println("Version " + version + " (" + patch + ")");*/
                 if (patch == -1) {
                     Snackbar.make(activity.findViewById(android.R.id.content).getRootView(), "Error occurred while trying to check for updates", Snackbar.LENGTH_LONG).show();
-                    return;
                 }
-                if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
+                /*if (!TextUtils.isEmpty(version) && !version.equals(app_version) && download == Download.JSON) {
                     MaterialAlertDialogBuilder new_update = new MaterialAlertDialogBuilder(activity);
                     new_update.setTitle(activity.getApplicationContext().getResources().getString(R.string.new_update_title_app, version));
                     new_update.setMessage(activity.getApplicationContext().getResources().getString(R.string.new_update_message,
@@ -191,7 +182,7 @@ public class UpdateChecker {
                     }).create();
 
                     new_update.create().show();
-                }
+                }*/
             });
         });
     }
