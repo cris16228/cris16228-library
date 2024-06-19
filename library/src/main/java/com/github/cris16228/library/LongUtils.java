@@ -117,11 +117,9 @@ public class LongUtils {
     }
 
     public static String toReadableTimeFull(long timeInMillis, String timeFormat) {
-        boolean full = StringUtils.isEmpty(timeFormat);
-        char[] units = {'y', 'M', 'w', 'd', 'h', 'm', 's'}; // Reordered units
-        boolean[] addUnit = new boolean[units.length];
-        long[] divisor = {365 * 24 * 60 * 60 * 1000L, 30 * 24 * 60 * 60 * 1000L, 7 * 24 * 60 * 60 * 1000L, 24 * 60 * 60 * 1000L, 60 * 60 * 1000L, 60 * 1000L, 1000L}; // Updated divisors for reordered units
-        String[] unitNames = {" years", " months", " weeks", " days", " hours", " minutes", " seconds"}; // Updated unit names
+        char[] units = {'y', 'M', 'w', 'd', 'h', 'm', 's'};
+        long[] divisor = {365 * 24 * 60 * 60 * 1000L, 30 * 24 * 60 * 60 * 1000L, 7 * 24 * 60 * 60 * 1000L, 24 * 60 * 60 * 1000L, 60 * 60 * 1000L, 60 * 1000L, 1000L};
+        String[] unitNames = {" years", " months", " weeks", " days", " hours", " minutes", " seconds"};
         boolean past = timeInMillis < 0;
         if (past) timeInMillis *= -1;
         StringBuilder timeBuf = new StringBuilder();
@@ -130,7 +128,6 @@ public class LongUtils {
             char currentUnit = timeFormat.charAt(i);
             int unitIndex = -1;
 
-            // Find the index of the current unit in the units array
             for (int j = 0; j < units.length; j++) {
                 if (units[j] == currentUnit) {
                     unitIndex = j;
@@ -138,10 +135,10 @@ public class LongUtils {
                 }
             }
 
-            if (unitIndex != -1) { // If the unit is found
+            if (unitIndex != -1) {
                 long time = timeInMillis / divisor[unitIndex];
                 if (time > 0) {
-                    timeInMillis -= time * divisor[unitIndex]; // Subtract the time used by this unit
+                    timeInMillis -= time * divisor[unitIndex];
 
                     prependTimeAndUnit(timeBuf, time, time > 1 ? unitNames[unitIndex] : unitNames[unitIndex].substring(0, unitNames[unitIndex].length() - 1));
                 }
@@ -154,7 +151,7 @@ public class LongUtils {
     }
 
     private static void prependTimeAndUnit(StringBuilder timeBuf, long time, String unit) {
-        timeBuf.insert(0, time + unit + " "); // Adjusted spacing
+        timeBuf.insert(0, time + unit + " ");
     }
 
     /*private void prependTimeAndUnit(StringBuilder buffer, long value, String unit) {
