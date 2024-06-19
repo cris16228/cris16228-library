@@ -116,51 +116,44 @@ public class LongUtils {
         return toReadableTimeFull(timeInMillis, "");
     }
 
-    public String toReadableTimeFull(long timeInMillis, String timeFormat) {
+    public static String toReadableTimeFull(long timeInMillis, String timeFormat) {
         boolean full = StringUtils.isEmpty(timeFormat);
         char[] units = {'y', 'M', 'w', 'd', 'h', 'm', 's'}; // Reordered units
         boolean[] addUnit = new boolean[units.length];
-
-        for (int i = 0; i < units.length; i++) {
-            char currentUnit = units[i];
-            if (timeFormat.indexOf(currentUnit) != -1) {
-                addUnit[i] = true;
-            }
-        }
-
-        boolean past = timeInMillis < 0;
-        if (past) timeInMillis = -timeInMillis;
-
-        StringBuilder timeBuf = new StringBuilder();
-
         long[] divisor = {365 * 24 * 60 * 60 * 1000L, 30 * 24 * 60 * 60 * 1000L, 7 * 24 * 60 * 60 * 1000L, 24 * 60 * 60 * 1000L, 60 * 60 * 1000L, 60 * 1000L, 1000L}; // Updated divisors for reordered units
         String[] unitNames = {" years", " months", " weeks", " days", " hours", " minutes", " seconds"}; // Updated unit names
+        boolean past = timeInMillis < 0;
+        if (past) timeInMillis *= -1;
+        StringBuilder timeBuf = new StringBuilder();
 
-        for (int i = 0; i < divisor.length; i++) {
-            long time = timeInMillis / divisor[i];
-            if (time > 0) {
-                long currentValue;
-                if (i == divisor.length - 1) {
-                    currentValue = time; // For the last unit, noneed for modulo
-                } else {
-                    currentValue = time % (divisor[i + 1] / divisor[i]);
+        for (int i = 0; i < timeFormat.length(); i++) {
+            char currentUnit = timeFormat.charAt(i);
+            int unitIndex = -1;
+
+            // Find the index of the current unit in the units array
+            for (int j = 0; j < units.length; j++) {
+                if (units[j] == currentUnit) {
+                    unitIndex = j;
+                    break;
                 }
-                timeInMillis -= currentValue * divisor[i];
+            }
 
-                if (addUnit[i] || full) {
-                    prependTimeAndUnit(timeBuf, currentValue, currentValue > 1 ? unitNames[i] : unitNames[i].substring(0, unitNames[i].length() - 1));
+            if (unitIndex != -1) { // If the unit is found
+                long time = timeInMillis / divisor[unitIndex];
+                if (time > 0) {
+                    timeInMillis -= time * divisor[unitIndex]; // Subtract the time used by this unit
+
+                    prependTimeAndUnit(timeBuf, time, time > 1 ? unitNames[unitIndex] : unitNames[unitIndex].substring(0, unitNames[unitIndex].length() - 1));
                 }
             }
         }
-
         if (past) {
             timeBuf.append("ago");
         }
-
         return timeBuf.toString().trim();
     }
 
-    private void prependTimeAndUnit(StringBuilder timeBuf, long time, String unit) {
+    private static void prependTimeAndUnit(StringBuilder timeBuf, long time, String unit) {
         timeBuf.insert(0, time + unit + " "); // Adjusted spacing
     }
 
