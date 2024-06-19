@@ -138,8 +138,13 @@ public class LongUtils {
 
         for (int i = 0; i < divisor.length; i++) {
             long time = timeInMillis / divisor[i];
-            if (time > 0) { // Only include units that are present
-                long currentValue = time % (i == divisor.length - 1 ? Long.MAX_VALUE : divisor[i + 1] / divisor[i]);
+            if (time > 0) {
+                long currentValue;
+                if (i == divisor.length - 1) {
+                    currentValue = time; // For the last unit, noneed for modulo
+                } else {
+                    currentValue = time % (divisor[i + 1] / divisor[i]);
+                }
                 timeInMillis -= currentValue * divisor[i];
 
                 if (addUnit[i] || full) {
