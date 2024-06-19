@@ -118,7 +118,7 @@ public class LongUtils {
 
     public String toReadableTimeFull(long timeInMillis, String timeFormat) {
         boolean full = StringUtils.isEmpty(timeFormat);
-        char[] units = {'s', 'm', 'h', 'd', 'w', 'M', 'y'};
+        char[] units = {'y', 'M', 'w', 'd', 'h', 'm', 's'}; // Reordered units
         boolean[] addUnit = new boolean[units.length];
 
         for (int i = 0; i < units.length; i++) {
@@ -133,37 +133,33 @@ public class LongUtils {
 
         StringBuilder timeBuf = new StringBuilder();
 
-        long[] divisor = {1000, 60, 60, 24, 7, 30, 365}; // Updated divisors
-        String[] unitNames = {" seconds", " minutes", " hours", " days", "weeks", " months", " years"}; // Updated unit names
+        long[] divisor = {365 * 24 * 60 * 60 * 1000L, 30 * 24 * 60 * 60 * 1000L, 7 * 24 * 60 * 60 * 1000L, 24 * 60 * 60 * 1000L, 60 * 60 * 1000L, 60 * 1000L, 1000L}; // Updated divisors for reordered units
+        String[] unitNames = {" years", " months", " weeks", " days", " hours", " minutes", " seconds"}; // Updated unit names
 
         for (int i = 0; i < divisor.length; i++) {
             long time = timeInMillis / divisor[i];
-            if (time < 1) {
-                break;
-            }
-
-            long currentValue;
-            if (i == 3) { // Special handling for days (index 3)
-                currentValue = time;
-                timeInMillis = 0; // Reset for accurate remaining calculations
-            } else {
-                currentValue = time % (i == divisor.length - 1 ? Long.MAX_VALUE : divisor[i + 1]);
+            if (time > 0) { // Only include units that are present
+                long currentValue = time % (i == divisor.length - 1 ? Long.MAX_VALUE : divisor[i + 1] / divisor[i]);
                 timeInMillis -= currentValue * divisor[i];
-            }
 
-            if (addUnit[i] || full) {
-                prependTimeAndUnit(timeBuf, currentValue, currentValue > 1 ? unitNames[i] : unitNames[i].substring(0, unitNames[i].length() - 1)); // Use substring for singular
+                if (addUnit[i] || full) {
+                    prependTimeAndUnit(timeBuf, currentValue, currentValue > 1 ? unitNames[i] : unitNames[i].substring(0, unitNames[i].length() - 1));
+                }
             }
         }
 
         if (past) {
-            timeBuf.append(" ago");
+            timeBuf.append("ago");
         }
 
         return timeBuf.toString().trim();
     }
 
-    private void prependTimeAndUnit(StringBuilder buffer, long value, String unit) {
-        buffer.insert(0, value + unit + " ");
+    private void prependTimeAndUnit(StringBuilder timeBuf, long time, String unit) {
+        timeBuf.insert(0, time + unit + " "); // Adjusted spacing
     }
+
+    /*private void prependTimeAndUnit(StringBuilder buffer, long value, String unit) {
+        buffer.insert(0, value + unit + " ");
+    }*/
 }
