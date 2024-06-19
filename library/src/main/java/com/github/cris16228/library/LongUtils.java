@@ -117,11 +117,12 @@ public class LongUtils {
     }
 
     public String toReadableTimeFull(long timeInMillis, String timeFormat) {
-        boolean full = StringUtils.isEmpty(timeFormat);char[] units = {'s', 'm', 'h', 'd', 'w', 'M', 'y'};
+        boolean full = StringUtils.isEmpty(timeFormat);
+        char[] units = {'s', 'm', 'h', 'd', 'w', 'M', 'y'};
         boolean[] addUnit = new boolean[units.length];
 
         for (int i = 0; i < units.length; i++) {
-            char currentUnit =units[i];
+            char currentUnit = units[i];
             if (timeFormat.indexOf(currentUnit) != -1) {
                 addUnit[i] = true;
             }
