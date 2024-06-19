@@ -117,12 +117,11 @@ public class LongUtils {
     }
 
     public String toReadableTimeFull(long timeInMillis, String timeFormat) {
-        boolean full = StringUtils.isEmpty(timeFormat);
-        char[] units = {'s', 'm', 'h', 'd', 'y'};
-        boolean[] addUnit = new boolean[5];
+        boolean full = StringUtils.isEmpty(timeFormat);char[] units = {'s', 'm', 'h', 'd', 'w', 'M', 'y'};
+        boolean[] addUnit = new boolean[units.length];
 
         for (int i = 0; i < units.length; i++) {
-            char currentUnit = units[i];
+            char currentUnit =units[i];
             if (timeFormat.indexOf(currentUnit) != -1) {
                 addUnit[i] = true;
             }
@@ -133,8 +132,8 @@ public class LongUtils {
 
         StringBuilder timeBuf = new StringBuilder();
 
-        long[] divisor = {1000, 60, 60, 24, 365};
-        String[] unitNames = {" seconds", " minutes", " hours", " days", " years"};
+        long[] divisor = {1000, 60, 60, 24, 7, 30, 365}; // Updated divisors
+        String[] unitNames = {" seconds", " minutes", " hours", " days", "weeks", " months", " years"}; // Updated unit names
 
         for (int i = 0; i < divisor.length; i++) {
             long time = timeInMillis / divisor[i];
@@ -142,14 +141,22 @@ public class LongUtils {
                 break;
             }
 
-            long currentValue = time % (i == 4 ? Long.MAX_VALUE : divisor[i + 1]);
+            long currentValue;
+            if (i == 3) { // Special handling for days (index 3)
+                currentValue = time;
+                timeInMillis = 0; // Reset for accurate remaining calculations
+            } else {
+                currentValue = time % (i == divisor.length - 1 ? Long.MAX_VALUE : divisor[i + 1]);
+                timeInMillis -= currentValue * divisor[i];
+            }
+
             if (addUnit[i] || full) {
-                prependTimeAndUnit(timeBuf, currentValue, currentValue > 1 ? unitNames[i] : unitNames[i].replace("s", ""));
+                prependTimeAndUnit(timeBuf, currentValue, currentValue > 1 ? unitNames[i] : unitNames[i].substring(0, unitNames[i].length() - 1)); // Use substring for singular
             }
         }
 
         if (past) {
-            timeBuf.append("ago");
+            timeBuf.append(" ago");
         }
 
         return timeBuf.toString().trim();
