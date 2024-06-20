@@ -112,10 +112,6 @@ public class LongUtils {
         return timeBuf.toString();
     }
 
-    public String toReadableTimeFull(long timeInMillis) {
-        return toReadableTimeFull(timeInMillis, "");
-    }
-
     public static String toReadableTimeFull(long timeInMillis, String timeFormat) {
         char[] units = {'y', 'M', 'w', 'd', 'h', 'm', 's'};
         long[] divisor = {365 * 24 * 60 * 60 * 1000L, 30 * 24 * 60 * 60 * 1000L, 7 * 24 * 60 * 60 * 1000L, 24 * 60 * 60 * 1000L, 60 * 60 * 1000L, 60 * 1000L, 1000L};
@@ -137,10 +133,9 @@ public class LongUtils {
 
             if (unitIndex != -1) {
                 long time = timeInMillis / divisor[unitIndex];
-                if (time > 0) {
+                if (time > 0L) {
                     timeInMillis -= time * divisor[unitIndex];
-
-                    prependTimeAndUnit(timeBuf, time, time > 1 ? unitNames[unitIndex] : unitNames[unitIndex].substring(0, unitNames[unitIndex].length() - 1));
+                    prependTimeAndUnit(timeBuf, time, time > 1L ? unitNames[unitIndex] : unitNames[unitIndex].substring(0, unitNames[unitIndex].length() - 1));
                 }
             }
         }
@@ -151,7 +146,11 @@ public class LongUtils {
     }
 
     private static void prependTimeAndUnit(StringBuilder timeBuf, long time, String unit) {
-        timeBuf.insert(0, time + unit + " ");
+        timeBuf.append(time).append(unit).append(" ");
+    }
+
+    public String toReadableTimeFull(long timeInMillis) {
+        return toReadableTimeFull(timeInMillis, "dhm");
     }
 
     /*private void prependTimeAndUnit(StringBuilder buffer, long value, String unit) {
